@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+
+<AnchorPane fx:id="root" prefHeight="35.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.ToolBarController">
+   <children>
+      <ToolBar fx:id="toolBar" prefHeight="35.0" prefWidth="800.0">
+         <items>
+            <ToggleButton fx:id="selection" mnemonicParsing="false" text="Selection" />
+            <Spinner fx:id="brushSize" amountToStepBy="1" editable="true" initialValue="6" max="20" min="0" />
+            <ColorPicker fx:id="fillColor" promptText="Fill">
+            	<value>
+            		<Color blue="0.0" green="0.0" opacity="0.0" red="0.0" />
+            	</value>
+            </ColorPicker>
+            <ColorPicker fx:id="strokeColor" promptText="Stroke">
+            	<value>
+            		<Color blue="0.0" green="0.0" red="0.0" />
+            	</value>
+            </ColorPicker>
+            <ToggleButton fx:id="fillRect" mnemonicParsing="false" text="Rectangle" />
+            <ToggleButton fx:id="fillCircle" mnemonicParsing="false" text="Circle" />
+            <ToggleButton fx:id="line" mnemonicParsing="false" text="Line" />
+            <ToggleButton fx:id="fillHeart" mnemonicParsing="false" text="Heart" />
+         </items>
+      </ToolBar>
+   </children>
+</AnchorPane>

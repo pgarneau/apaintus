@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.CanvasController">
+   <children>
+   		<Canvas fx:id="canvas" height="600.0" width="800.0" />
+   		<Canvas fx:id="drawLayer" height="600.0" mouseTransparent="true" width="800.0" />
+   </children>
+</AnchorPane>
