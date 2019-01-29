@@ -1,7 +1,6 @@
 package apaintus.models.shapes;
 
 public class ShapeAttributes {
-    private ShapeType shapeType;
     private double[] coordinates;
     private double[] destinationCoordinates;
     private double width;
@@ -14,7 +13,6 @@ public class ShapeAttributes {
     private ShapeAttributes() {}
 
     public ShapeAttributes(Builder builder) {
-        this.shapeType = builder.shapeType;
         this.coordinates = builder.coordinates;
         this.destinationCoordinates = builder.destinationCoordinates;
         this.width = builder.width;
@@ -24,8 +22,6 @@ public class ShapeAttributes {
         this.fillColor = builder.fillColor;
         this.strokeColor = builder.strokeColor;
     }
-
-    public ShapeType getShapeType() { return shapeType; }
 
     public double[] getCoordinates() {
         return coordinates;
@@ -64,7 +60,6 @@ public class ShapeAttributes {
     }
 
     public static class Builder {
-        private ShapeType shapeType;
         private double[] coordinates;
         private double[] destinationCoordinates;
         private double width;
@@ -75,11 +70,6 @@ public class ShapeAttributes {
         private String strokeColor;
 
         private Builder() {}
-
-        public Builder withShapeType(ShapeType shapeType) {
-            this.shapeType = shapeType;
-            return this;
-        }
 
         public Builder withCoordinates(double[] coordinates) {
             this.coordinates = coordinates;

@@ -63,7 +63,6 @@ public class XmlFileService implements FileService<List<Shape>, List<Shape>> {
                 alert.setContentText("Could not load data from file:\n" + file.getPath());
 
                 alert.showAndWait();
-
             }
         }
 
