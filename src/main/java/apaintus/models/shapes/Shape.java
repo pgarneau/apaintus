@@ -8,11 +8,9 @@ public abstract class Shape {
 
     public Shape() {}
 
-    public Shape(ShapeAttributes shapeAttributes) {
+    public void update(ShapeAttributes shapeAttributes) {
         this.shapeAttributes = shapeAttributes;
     }
-
-    public abstract void update(ShapeAttributes shapeAttributes);
 
     public ShapeAttributes getShapeAttributes() {
         return shapeAttributes;

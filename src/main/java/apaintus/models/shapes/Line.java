@@ -6,9 +6,4 @@ public class Line extends DrawableShape {
     public Line(ShapeAttributes shapeAttributes) {
         this.shapeAttributes = shapeAttributes;
     }
-
-    @Override
-    public void update(ShapeAttributes shapeAttributes) {
-        this.shapeAttributes = shapeAttributes;
-    }
 }

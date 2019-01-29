@@ -6,9 +6,4 @@ public class Circle extends DrawableShape {
     public Circle(ShapeAttributes shapeAttributes) {
         this.shapeAttributes = shapeAttributes;
     }
-
-    @Override
-    public void update(ShapeAttributes shapeAttributes) {
-        this.shapeAttributes = shapeAttributes;
-    }
 }
