@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.AttributeController">
+   <children>
+      <ToolBar fx:id="bar" layoutY="7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <items>
+            <Label text="X" />
+            <Spinner fx:id="shapeX" prefHeight="25.0" prefWidth="75.0" />
+            <Label text="Y" />
+            <Spinner fx:id="shapeY" prefHeight="25.0" prefWidth="74.0" />
+            <Label text="Orientation" />
+         	<Spinner fx:id="shapeOrientation" prefHeight="25.0" prefWidth="70.0" />
+            <Label text="Width" />
+            <Spinner fx:id="shapeWidth" prefHeight="25.0" prefWidth="75.0" />
+            <Label text="Height" />
+            <Spinner fx:id="shapeHeight" prefHeight="25.0" prefWidth="75.0" />
+        </items>
+      </ToolBar>
+   </children>
+</AnchorPane>

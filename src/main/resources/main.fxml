@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="mainPane" minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.Controller">
+   <children>
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <fx:include fx:id="menu" source="Menu.fxml" />
+            <fx:include fx:id="toolBar" source="ToolBar.fxml" />
+            <ScrollPane fx:id="scrollPane" style="-fx-border-color: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+               <content>
+                  <fx:include fx:id="canvas" source="Canvas.fxml" />
+               </content>
+            </ScrollPane>
+            <fx:include fx:id="attribute" source="Attribute.fxml" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

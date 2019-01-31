@@ -10,6 +10,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +35,10 @@ public class MenuController implements ChildController<Controller> {
 		this.menuService = new MenuService();
 	}
 
-//	public void bindTo(AnchorPane mainPane) {
-//		menuBar.prefWidthProperty().bind(mainPane.widthProperty());
-//	}
+	// Binds the Menubar's size to the main anchorpane
+	public void bindTo(AnchorPane anchorPane) {
+		menuBar.prefWidthProperty().bind(anchorPane.widthProperty());
+	}
 
 	public void newCanvas() {
 	    if (hasUnsavedWork()) {
@@ -53,13 +55,13 @@ public class MenuController implements ChildController<Controller> {
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(w -> {
 			String[] dims = w.split("x");
-			controller.getCanvasController().newCanvas(dims);
+//			controller.getCanvasController().newCanvas(dims);
 		});
 
 	}
 
 	public void savePng() {
-		pngFileService.save(controller.getCanvasController().getCanvas());
+//		pngFileService.save(controller.getCanvasController().getCanvas());
 	}
 
 	public Image loadPng() {
@@ -72,7 +74,7 @@ public class MenuController implements ChildController<Controller> {
 	}
 
 	public void exportXml() {
-		xmlFileService.save(controller.getCanvasController().getShapes());
+//		xmlFileService.save(controller.getCanvasController().getShapes());
 	}
 
 	public List<Shape> importXml() {
@@ -85,13 +87,13 @@ public class MenuController implements ChildController<Controller> {
 	}
 
 	public void clearButtonClicked() {
-		controller.getCanvasController().clear();
-		controller.getCanvasController().clearDrawnShapeHistory();
+//		controller.getCanvasController().clear();
+//		controller.getCanvasController().clearDrawnShapeHistory();
 	}
 
 	public boolean hasUnsavedWork() {
-		if (controller.getCanvasController().getShapes().isEmpty())
-			return false;
+//		if (controller.getCanvasController().getShapes().isEmpty())
+//			return false;
 		return true;
 	}
 

@@ -1,17 +1,22 @@
 package apaintus.models.shapes;
 
+import apaintus.models.Point;
+
 public class ShapeFactory {
     private static double[] dimensions;
+    private static Point coordinates;
+    private static double orientation;
+    private static double width;
 
-    public static Shape createShape(ShapeType shapeType, double[] mousePosition, double[] lastMouseClickPosition, String fillColor, String strokeColor, int strokeSize) {
+    public static DrawableShape createShape(ShapeType shapeType, Point mousePosition, Point lastMouseClickPosition, String fillColor, String strokeColor, double strokeSize) {
         switch (shapeType) {
             case RECTANGLE:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
                 return new Rectangle(
                         ShapeAttributes
                                 .builder()
-                                .withShapeType(ShapeType.RECTANGLE)
-                                .withCoordinates(computeCoordinates(mousePosition, lastMouseClickPosition))
+                                .withCoordinates(coordinates)
                                 .withWidth(dimensions[0])
                                 .withHeight(dimensions[1])
                                 .withOrientation(0)
@@ -23,11 +28,11 @@ public class ShapeFactory {
 
             case CIRCLE:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
                 return new Circle(
                         ShapeAttributes
                                 .builder()
-                                .withShapeType(ShapeType.CIRCLE)
-                                .withCoordinates(computeCoordinates(mousePosition, lastMouseClickPosition))
+                                .withCoordinates(coordinates)
                                 .withWidth(dimensions[0])
                                 .withHeight(dimensions[1])
                                 .withOrientation(0)
@@ -38,14 +43,16 @@ public class ShapeFactory {
                 );
 
             case LINE:
+                orientation = computeOrientation(mousePosition, lastMouseClickPosition);
+                width = computeLineWidth(mousePosition, lastMouseClickPosition, strokeSize);
                 return new Line(
                         ShapeAttributes
                                 .builder()
-                                .withShapeType(ShapeType.LINE)
                                 .withCoordinates(lastMouseClickPosition)
                                 .withDestinationCoordinates(mousePosition)
-                                .withWidth(computeLineWidth(mousePosition, lastMouseClickPosition, strokeSize))
-                                .withOrientation(computeOrientation(mousePosition, lastMouseClickPosition))
+                                .withWidth(width)
+                                .withHeight(strokeSize)
+                                .withOrientation(orientation)
                                 .withStrokeColor(strokeColor)
                                 .withStrokeSize(strokeSize)
                                 .build()
@@ -56,15 +63,15 @@ public class ShapeFactory {
         }
     }
 
-    public static void updateShape(Shape shape, double[] mousePosition, double[] lastMouseClickPosition, String fillColor, String strokeColor, int strokeSize) {
-        switch (shape.getShapeAttributes().getShapeType()) {
+    public static void updateShape(Shape shape, Point mousePosition, Point lastMouseClickPosition, String fillColor, String strokeColor, double strokeSize) {
+        switch (shape.getShapeType()) {
             case RECTANGLE:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
                 shape.update(
                         ShapeAttributes
                                 .builder()
-                                .withShapeType(ShapeType.RECTANGLE)
-                                .withCoordinates(computeCoordinates(mousePosition, lastMouseClickPosition))
+                                .withCoordinates(coordinates)
                                 .withWidth(dimensions[0])
                                 .withHeight(dimensions[1])
                                 .withOrientation(0)
@@ -77,11 +84,11 @@ public class ShapeFactory {
 
             case CIRCLE:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
                 shape.update(
                         ShapeAttributes
                                 .builder()
-                                .withShapeType(ShapeType.CIRCLE)
-                                .withCoordinates(computeCoordinates(mousePosition, lastMouseClickPosition))
+                                .withCoordinates(coordinates)
                                 .withWidth(dimensions[0])
                                 .withHeight(dimensions[1])
                                 .withOrientation(0)
@@ -93,14 +100,16 @@ public class ShapeFactory {
                 break;
 
             case LINE:
+                orientation = computeOrientation(mousePosition, lastMouseClickPosition);
+                width = computeLineWidth(mousePosition, lastMouseClickPosition, strokeSize);
                 shape.update(
                         ShapeAttributes
                                 .builder()
-                                .withShapeType(ShapeType.LINE)
                                 .withCoordinates(lastMouseClickPosition)
                                 .withDestinationCoordinates(mousePosition)
-                                .withWidth(computeLineWidth(mousePosition, lastMouseClickPosition, strokeSize))
-                                .withOrientation(computeOrientation(mousePosition, lastMouseClickPosition))
+                                .withWidth(width)
+                                .withHeight(strokeSize)
+                                .withOrientation(orientation)
                                 .withStrokeColor(strokeColor)
                                 .withStrokeSize(strokeSize)
                                 .build()
@@ -109,46 +118,46 @@ public class ShapeFactory {
         }
     }
 
-    private static double[] computeCoordinates(double[] mousePosition, double[] lastMouseClickPosition) {
-        double[] coordinates;
+    private static Point computeCoordinates(Point mousePosition, Point lastMouseClickPosition) {
+        Point coordinates;
 
-        boolean upMotion = mousePosition[1] - lastMouseClickPosition[1] <= 0.0;
-        boolean rightMotion = mousePosition[0] - lastMouseClickPosition[0] > 0.0;
+        boolean upMotion = mousePosition.getY() - lastMouseClickPosition.getY() <= 0.0;
+        boolean rightMotion = mousePosition.getX() - lastMouseClickPosition.getX() > 0.0;
 
         if (upMotion && !rightMotion) {
             coordinates = mousePosition;
         } else if (upMotion && rightMotion) {
-            coordinates = new double[] {lastMouseClickPosition[0], mousePosition[1]};
+            coordinates = new Point(lastMouseClickPosition.getX(), mousePosition.getY());
         } else if (!upMotion && rightMotion) {
             coordinates = lastMouseClickPosition;
         } else if (!upMotion && !rightMotion) {
-            coordinates = new double[] {mousePosition[0], lastMouseClickPosition[1]};
+            coordinates = new Point(mousePosition.getX(), lastMouseClickPosition.getY());
         } else {
             System.err.print(
                     "this should not happen in any case. This probably means that the lastMouseClickPosition is null");
-            coordinates = new double[] {0, 0};
+            coordinates = new Point(0, 0);
         }
 
         return coordinates;
     }
 
-    private static double[] computeDimensions(double[] mousePosition, double[] lastMouseClickPosition) {
+    private static double[] computeDimensions(Point mousePosition, Point lastMouseClickPosition) {
         // Width is index 0
         // Height is index 1
-        return new double[] {Math.abs(mousePosition[0] - lastMouseClickPosition[0]),
-                Math.abs(mousePosition[1] - lastMouseClickPosition[1])};
+        return new double[] {Math.abs(mousePosition.getX() - lastMouseClickPosition.getX()),
+                Math.abs(mousePosition.getY() - lastMouseClickPosition.getY())};
     }
 
-    private static double computeLineWidth(double[] mousePosition, double[] lastMouseClickPosition, int strokeSize) {
-        double deltaX = mousePosition[0] - lastMouseClickPosition[0];
-        double deltaY = mousePosition[1] - lastMouseClickPosition[1];
+    private static double computeLineWidth(Point mousePosition, Point lastMouseClickPosition, double strokeSize) {
+        double deltaX = mousePosition.getX() - lastMouseClickPosition.getX();
+        double deltaY = mousePosition.getY() - lastMouseClickPosition.getY();
 
         return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)) + strokeSize / 2;
     }
 
-    private static double computeOrientation(double[] mousePosition, double[] lastMouseClickPosition) {
-        double orientation = Math.toDegrees(Math.atan2(lastMouseClickPosition[1] - mousePosition[1],
-                mousePosition[0] - lastMouseClickPosition[0]));
+    private static double computeOrientation(Point mousePosition, Point lastMouseClickPosition) {
+        double orientation = Math.toDegrees(Math.atan2(lastMouseClickPosition.getY() - mousePosition.getY(),
+                mousePosition.getX() - lastMouseClickPosition.getX()));
 
         if (orientation < 0.0) {
             orientation += 360.0;

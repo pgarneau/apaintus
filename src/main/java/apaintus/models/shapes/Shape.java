@@ -1,14 +1,17 @@
 package apaintus.models.shapes;
 
+import apaintus.models.Point;
+import apaintus.services.draw.DrawService;
+
 import javax.xml.bind.annotation.XmlTransient;
 
 @XmlTransient
 public abstract class Shape {
     protected ShapeType shapeType;
-    protected double[] coordinates;
+    protected Point coordinates;
     protected double orientation;
     protected String strokeColor;
-    protected int strokeSize;
+    protected double strokeSize;
 
     public Shape() {}
 
@@ -20,6 +23,15 @@ public abstract class Shape {
         this.strokeSize = shapeAttributes.getStrokeSize();
     }
 
+    public void update(ShapeAttributes shapeAttributes) {
+        this.coordinates = shapeAttributes.getCoordinates();
+        this.orientation = shapeAttributes.getOrientation();
+        this.strokeColor = shapeAttributes.getStrokeColor();
+        this.strokeSize = shapeAttributes.getStrokeSize();
+    }
+
+    public abstract DrawService getDrawService();
+
     public ShapeType getShapeType() {
         return shapeType;
     }
@@ -28,11 +40,11 @@ public abstract class Shape {
         this.shapeType = shapeType;
     }
 
-    public double[] getCoordinates() {
+    public Point getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(double[] coordinates) {
+    public void setCoordinates(Point coordinates) {
         this.coordinates = coordinates;
     }
 
@@ -52,18 +64,11 @@ public abstract class Shape {
         this.strokeColor = strokeColor;
     }
 
-    public int getStrokeSize() {
+    public double getStrokeSize() {
         return strokeSize;
     }
 
-    public void setStrokeSize(int strokeSize) {
+    public void setStrokeSize(double strokeSize) {
         this.strokeSize = strokeSize;
-    }
-
-    public void update(ShapeAttributes shapeAttributes) {
-        this.coordinates = shapeAttributes.getCoordinates();
-        this.orientation = shapeAttributes.getOrientation();
-        this.strokeColor = shapeAttributes.getStrokeColor();
-        this.strokeSize = shapeAttributes.getStrokeSize();
     }
 }

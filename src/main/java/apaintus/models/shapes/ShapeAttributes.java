@@ -1,12 +1,14 @@
 package apaintus.models.shapes;
 
+import apaintus.models.Point;
+
 public class ShapeAttributes {
-    private double[] coordinates;
-    private double[] destinationCoordinates;
+    private Point coordinates;
+    private Point destinationCoordinates;
     private double width;
     private double height;
     private double orientation;
-    private int strokeSize;
+    private double strokeSize;
     private String fillColor;
     private String strokeColor;
 
@@ -23,11 +25,11 @@ public class ShapeAttributes {
         this.strokeColor = builder.strokeColor;
     }
 
-    public double[] getCoordinates() {
+    public Point getCoordinates() {
         return coordinates;
     }
 
-    public double[] getDestinationCoordinates() {
+    public Point getDestinationCoordinates() {
         return destinationCoordinates;
     }
 
@@ -39,7 +41,7 @@ public class ShapeAttributes {
         return strokeColor;
     }
 
-    public int getStrokeSize() {
+    public double getStrokeSize() {
         return strokeSize;
     }
 
@@ -60,23 +62,23 @@ public class ShapeAttributes {
     }
 
     public static class Builder {
-        private double[] coordinates;
-        private double[] destinationCoordinates;
+        private Point coordinates;
+        private Point destinationCoordinates;
         private double width;
         private double height;
         private double orientation;
-        private int strokeSize;
+        private double strokeSize;
         private String fillColor;
         private String strokeColor;
 
         private Builder() {}
 
-        public Builder withCoordinates(double[] coordinates) {
+        public Builder withCoordinates(Point coordinates) {
             this.coordinates = coordinates;
             return this;
         }
 
-        public Builder withDestinationCoordinates(double[] destinationCoordinates) {
+        public Builder withDestinationCoordinates(Point destinationCoordinates) {
             this.destinationCoordinates = destinationCoordinates;
             return this;
         }
@@ -96,7 +98,7 @@ public class ShapeAttributes {
             return this;
         }
 
-        public Builder withStrokeSize(int strokeSize) {
+        public Builder withStrokeSize(double strokeSize) {
             this.strokeSize = strokeSize;
             return this;
         }
