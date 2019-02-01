@@ -67,7 +67,6 @@ public class CanvasController implements ChildController<Controller> {
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
                 canvasService.updateShape(activeShape, event, lastMouseClickPosition);
                 canvasService.draw(drawLayer.getGraphicsContext2D(), activeShape);
-
             }
         });
     }

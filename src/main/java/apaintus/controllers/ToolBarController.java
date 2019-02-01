@@ -4,10 +4,7 @@ import apaintus.models.Attribute;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
 import javafx.fxml.FXML;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 

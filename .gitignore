@@ -2,4 +2,6 @@
 .settings/
 .classpath
 .idea/
+build/
+out/
 

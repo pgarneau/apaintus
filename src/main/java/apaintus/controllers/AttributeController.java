@@ -39,7 +39,6 @@ public class AttributeController implements ChildController<Controller> {
 
 	@Override
 	public void initialize() {
-		bar.setStyle("-fx-border-color:lightgrey");
 
 //		createValueFactory();
 //		setSpinnerChangeListener();

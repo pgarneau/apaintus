@@ -58,6 +58,23 @@ public class ShapeFactory {
                                 .build()
                 );
 
+            case SMILEY:
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
+                return new Smiley(
+                        ShapeAttributes
+                                .builder()
+                                .withCoordinates(coordinates)
+                                .withWidth(dimensions[0])
+                                .withHeight(dimensions[1])
+                                .withOrientation(0)
+                                .withFillColor(fillColor)
+                                .withStrokeColor(strokeColor)
+                                .withStrokeSize(strokeSize)
+                                .build()
+                );
+
+
             default:
                 return null;
         }
@@ -115,6 +132,24 @@ public class ShapeFactory {
                                 .build()
                 );
                 break;
+
+            case SMILEY:
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
+                shape.update(
+                        ShapeAttributes
+                                .builder()
+                                .withCoordinates(coordinates)
+                                .withWidth(dimensions[0])
+                                .withHeight(dimensions[1])
+                                .withOrientation(0)
+                                .withFillColor(fillColor)
+                                .withStrokeColor(strokeColor)
+                                .withStrokeSize(strokeSize)
+                                .build()
+                );
+                break;
+
         }
     }
 

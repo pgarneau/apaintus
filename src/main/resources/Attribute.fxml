@@ -9,7 +9,7 @@
    <children>
       <ToolBar fx:id="bar" layoutY="7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <items>
-            <Label text="X" />
+            <Label style="-fx-border-color: lightgrey;" text="X" />
             <Spinner fx:id="shapeX" prefHeight="25.0" prefWidth="75.0" />
             <Label text="Y" />
             <Spinner fx:id="shapeY" prefHeight="25.0" prefWidth="74.0" />
