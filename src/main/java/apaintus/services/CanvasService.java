@@ -6,8 +6,12 @@ import apaintus.models.shapes.*;
 import apaintus.models.shapes.Shape;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.draw.DrawService;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 public class CanvasService {
     ToolBarController toolBarController;
@@ -61,11 +65,29 @@ public class CanvasService {
     }
 
     public void draw(GraphicsContext context, DrawableShape shape) {
-        clear(context);
         DrawService drawService = shape.getDrawService();
-        DrawService tempDrawService = shape.getBoundingBox().getDrawService();
         drawService.draw(context);
-        tempDrawService.draw(context);
+        if (shape.isSelected()) {
+            DrawService tempDrawService = shape.getBoundingBox().getDrawService();
+            tempDrawService.draw(context);
+        }
+    }
+
+    public void saveState(GraphicsContext canvasContext, WritableImage image) {
+            // Dunno what this does
+//            if (topLeft[0] < 0)
+//                topLeft = new double[] {0, topLeft[1]};
+//            if (topLeft[1] < 0)
+//                topLeft = new double[] {topLeft[0], 0};
+
+            canvasContext.drawImage(image, 0, 0);
+    }
+
+    public WritableImage convertCanvasToImage(Canvas canvas) {
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+
+        return canvas.snapshot(params, null);
     }
 
     public void clear(GraphicsContext context) {

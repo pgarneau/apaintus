@@ -3,6 +3,7 @@ package apaintus.models.shapes;
 import apaintus.models.Point;
 
 public abstract class DrawableShape extends Shape {
+    protected boolean selected = true;
     protected BoundingBox boundingBox;
 
     protected DrawableShape(ShapeType shapeType, ShapeAttributes shapeAttributes) {
@@ -28,5 +29,13 @@ public abstract class DrawableShape extends Shape {
 
     public BoundingBox getBoundingBox() {
         return boundingBox;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

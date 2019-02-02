@@ -13,6 +13,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasController implements ChildController<Controller> {
@@ -29,7 +30,7 @@ public class CanvasController implements ChildController<Controller> {
 
     Point lastMouseClickPosition;
     DrawableShape activeShape;
-    List<Shape> drawnShapes;
+    List<DrawableShape> drawnShapes = new ArrayList<>();
 
     @Override
     public void injectParentController(Controller controller) {
@@ -47,18 +48,28 @@ public class CanvasController implements ChildController<Controller> {
 
             ActiveTool activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT) {
+                if (activeShape != null) {
+                    activeShape.setSelected(false);
+                    redrawCanvas();
+                }
                 activeShape = canvasService.createShape(activeTool, event);
-                // SET SHAPE TO SELECTED
             } else {
-                // SET SHAPE TO SELECTED IF FOUND
+                for (DrawableShape shape : drawnShapes) {
+                    if (shape.contains(lastMouseClickPosition)) {
+                        activeShape.setSelected(false);
+
+                        activeShape = shape;
+                        activeShape.setSelected(true);
+                        redrawCanvas();
+                    }
+                }
             }
         });
 
         canvas.setOnMouseReleased(event -> {
             if (event.getX() != lastMouseClickPosition.getX() && event.getY() != lastMouseClickPosition.getY()) {
-                // SAVE THE STATE
-            } else {
-                activeShape = null;
+                saveDrawLayer();
+                redrawCanvas();
             }
         });
 
@@ -66,9 +77,37 @@ public class CanvasController implements ChildController<Controller> {
             ActiveTool activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
                 canvasService.updateShape(activeShape, event, lastMouseClickPosition);
+
+                clearDrawLayer();
+
                 canvasService.draw(drawLayer.getGraphicsContext2D(), activeShape);
             }
         });
+    }
+
+    public void redrawCanvas() {
+        clearCanvas();
+        for (DrawableShape shape : drawnShapes) {
+            canvasService.draw(canvas.getGraphicsContext2D(), shape);
+        }
+    }
+
+    public void clearCanvas() {
+        canvasService.clear(canvas.getGraphicsContext2D());
+    }
+
+    public void clearDrawLayer() {
+        canvasService.clear(drawLayer.getGraphicsContext2D());
+    }
+
+    private void saveDrawLayer() {
+        if (activeShape != null) {
+            drawnShapes.add(activeShape);
+
+            canvasService.saveState(canvas.getGraphicsContext2D(), canvasService.convertCanvasToImage(drawLayer));
+
+            clearDrawLayer();
+        }
     }
 
     public class ColorChangeListener implements ChangeListener<Color> {
