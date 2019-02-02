@@ -41,6 +41,10 @@ public class CanvasService {
             case SMILEY:
                 shapeType = ShapeType.SMILEY;
                 break;
+                
+            case TEXTBOX:
+                shapeType = ShapeType.TEXTBOX;
+                break;
         }
 
         return ShapeFactory.createShape(

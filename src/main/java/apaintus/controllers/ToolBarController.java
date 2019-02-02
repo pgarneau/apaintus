@@ -23,6 +23,7 @@ public class ToolBarController implements ChildController<Controller> {
     @FXML private ToggleButton circle;
     @FXML private ToggleButton line;
     @FXML private ToggleButton smiley;
+    @FXML private ToggleButton textBox;
 
     private Controller controller;
     private CanvasController canvasController;
@@ -54,6 +55,7 @@ public class ToolBarController implements ChildController<Controller> {
         activeToolToggleGroup.add(circle);
         activeToolToggleGroup.add(line);
         activeToolToggleGroup.add(smiley);
+        activeToolToggleGroup.add(textBox);
 
         select.setOnMouseClicked(event -> {
             toolBarService.toggle(select, activeToolToggleGroup);
@@ -78,6 +80,11 @@ public class ToolBarController implements ChildController<Controller> {
         smiley.setOnMouseClicked(event -> {
             toolBarService.toggle(smiley, activeToolToggleGroup);
             activeTool = ActiveTool.SMILEY;
+        });
+        
+        textBox.setOnMouseClicked(event -> {
+            toolBarService.toggle(textBox, activeToolToggleGroup);
+            activeTool = ActiveTool.TEXTBOX;
         });
 
 
