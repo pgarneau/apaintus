@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class CanvasController implements ChildController<Controller> {
     @FXML private AnchorPane root;
@@ -54,13 +55,16 @@ public class CanvasController implements ChildController<Controller> {
                 }
                 activeShape = canvasService.createShape(activeTool, event);
             } else {
-                for (DrawableShape shape : drawnShapes) {
+            	ListIterator<DrawableShape> iterator = drawnShapes.listIterator(drawnShapes.size());
+                while(iterator.hasPrevious()) {
+                	DrawableShape shape = (DrawableShape)iterator.previous();
                     if (shape.contains(lastMouseClickPosition)) {
                         activeShape.setSelected(false);
 
                         activeShape = shape;
                         activeShape.setSelected(true);
                         redrawCanvas();
+                        break; // we found the first shape, no need to 
                     }
                 }
             }
