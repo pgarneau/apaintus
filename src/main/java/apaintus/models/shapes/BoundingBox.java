@@ -26,7 +26,7 @@ public class BoundingBox extends Shape {
         this.height = shapeAttributes.getHeight();
         this.shapeStrokeSize = shapeAttributes.getStrokeSize();
 
-        this.vertices = computeVertices(shapeAttributes.getCoordinates(), this.width, this.height);
+        this.vertices = computeVertices(coordinates, orientation, width, height);
     }
 
     public void update(ShapeAttributes shapeAttributes) {
@@ -40,7 +40,7 @@ public class BoundingBox extends Shape {
         this.height = shapeAttributes.getHeight();
         this.shapeStrokeSize = shapeAttributes.getStrokeSize();
 
-        this.vertices = computeVertices(shapeAttributes.getCoordinates(), this.width, this.height);
+        this.vertices = computeVertices(coordinates, orientation, width, height);
     }
 
     @Override
@@ -48,12 +48,17 @@ public class BoundingBox extends Shape {
         return new BoundingBoxDrawService(this);
     }
 
-    private Point[] computeVertices(Point coordinates, double width, double height) {
+    private Point[] computeVertices(Point coordinates, double orientation, double width, double height) {
         return new Point[]{
                 coordinates,
-                new Point(coordinates.getX() + width, coordinates.getY()),
-                new Point(coordinates.getX() + width, coordinates.getY() + height),
-                new Point(coordinates.getX(), coordinates.getY() + height)};
+                computeCorner(coordinates, width, 0, orientation),
+                computeCorner(coordinates, width, height, orientation),
+                computeCorner(coordinates, 0, height, orientation)};
+    }
+
+    private Point computeCorner(Point origin, double x, double y, double orientation) {
+        orientation = Math.toRadians(orientation);
+        return new Point(origin.getX() + (x * Math.cos(orientation) + y * Math.sin(orientation)), origin.getY() - (x * Math.sin(orientation) - y * Math.cos(orientation)));
     }
 
     public int getLineDashSize() {
