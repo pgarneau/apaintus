@@ -38,7 +38,7 @@ public class CanvasController implements ChildController<Controller> {
         this.controller = controller;
         this.toolBarController = this.controller.getToolBarController();
 
-        this.canvasService = new CanvasService(this.toolBarController,this);
+        this.canvasService = new CanvasService(this.toolBarController);
     }
 
 

@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
 public class CanvasService {
     ToolBarController toolBarController;
 
-    public CanvasService(ToolBarController toolBarController,CanvasController canvasController) {
+    public CanvasService(ToolBarController toolBarController) {
         this.toolBarController = toolBarController;
     }
 
