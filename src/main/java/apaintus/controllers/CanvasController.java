@@ -80,7 +80,7 @@ public class CanvasController implements ChildController<Controller> {
         canvas.setOnMouseDragged(event -> {
             ActiveTool activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
-                canvasService.updateShape(activeShape, event, lastMouseClickPosition);
+                canvasService.updateShape(activeShape, event, lastMouseClickPosition,getCanvasDimension());
 
                 clearDrawLayer();
 
@@ -112,6 +112,14 @@ public class CanvasController implements ChildController<Controller> {
 
             clearDrawLayer();
         }
+    }
+    
+    public double[] getCanvasDimension() {
+    	double[] dimension = new double[2];
+    	dimension[0]=canvas.getWidth();
+    	dimension[1]=canvas.getHeight();
+    	
+    	return dimension;
     }
 
     public class ColorChangeListener implements ChangeListener<Color> {

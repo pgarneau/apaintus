@@ -96,4 +96,8 @@ public class BoundingBox extends Shape {
     public void setVertices(Point[] vertices) {
         this.vertices = vertices;
     }
+    
+    public static double getBoundingboxStrokeSize() {
+    	return STROKE_SIZE;
+    }
 }
