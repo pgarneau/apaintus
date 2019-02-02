@@ -38,7 +38,7 @@ public class CanvasController implements ChildController<Controller> {
         this.controller = controller;
         this.toolBarController = this.controller.getToolBarController();
 
-        this.canvasService = new CanvasService(this.toolBarController);
+        this.canvasService = new CanvasService(this.toolBarController,this);
     }
 
 
@@ -112,6 +112,14 @@ public class CanvasController implements ChildController<Controller> {
 
             clearDrawLayer();
         }
+    }
+    
+    public double[] getCanvasDimension() {
+    	double[] dimension = new double[2];
+    	dimension[0]=canvas.getWidth();
+    	dimension[1]=canvas.getHeight();
+    	
+    	return dimension;
     }
 
     public class ColorChangeListener implements ChangeListener<Color> {

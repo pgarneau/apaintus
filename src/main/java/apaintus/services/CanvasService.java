@@ -1,5 +1,6 @@
 package apaintus.services;
 
+import apaintus.controllers.CanvasController;
 import apaintus.controllers.ToolBarController;
 import apaintus.models.Point;
 import apaintus.models.shapes.*;
@@ -15,9 +16,11 @@ import javafx.scene.paint.Color;
 
 public class CanvasService {
     ToolBarController toolBarController;
+    CanvasController canvasController;
 
-    public CanvasService(ToolBarController toolBarController) {
+    public CanvasService(ToolBarController toolBarController,CanvasController canvasController) {
         this.toolBarController = toolBarController;
+        this.canvasController = canvasController;
     }
 
     public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent) {
@@ -54,10 +57,24 @@ public class CanvasService {
 
     public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition) {
         Point mousePosition = getMousePosition(mouseEvent);
+        double[] canvasDimension = canvasController.getCanvasDimension();
+        double strokeSize = toolBarController.getStrokeSize()/2 + BoundingBox.getBoundingboxStrokeSize();
 
+		double xPos = mousePosition.getX() > canvasDimension[0] ? canvasDimension[0] : mousePosition.getX();
+		double yPos = mousePosition.getY() > canvasDimension[1] ? canvasDimension[1] : mousePosition.getY(); 
+		
+        xPos -= strokeSize;
+        yPos -= strokeSize;
+
+		if (xPos - strokeSize <= 0)
+			xPos = strokeSize;
+		if (yPos - strokeSize <= 0)
+			yPos = strokeSize;        
+		
+        Point maxPos = new Point(xPos,yPos);
         ShapeFactory.updateShape(
                 shape,
-                mousePosition,
+                maxPos,
                 lastMouseClickPosition,
                 toolBarController.getFillColor().toString(),
                 toolBarController.getStrokeColor().toString(),
