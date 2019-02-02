@@ -80,7 +80,7 @@ public class CanvasController implements ChildController<Controller> {
         canvas.setOnMouseDragged(event -> {
             ActiveTool activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
-                canvasService.updateShape(activeShape, event, lastMouseClickPosition);
+                canvasService.updateShape(activeShape, event, lastMouseClickPosition,getCanvasDimension());
 
                 clearDrawLayer();
 

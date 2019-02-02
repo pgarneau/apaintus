@@ -16,11 +16,9 @@ import javafx.scene.paint.Color;
 
 public class CanvasService {
     ToolBarController toolBarController;
-    CanvasController canvasController;
 
     public CanvasService(ToolBarController toolBarController,CanvasController canvasController) {
         this.toolBarController = toolBarController;
-        this.canvasController = canvasController;
     }
 
     public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent) {
@@ -55,9 +53,8 @@ public class CanvasService {
 
     }
 
-    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition) {
+    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double [] canvasDimension) {
         Point mousePosition = getMousePosition(mouseEvent);
-        double[] canvasDimension = canvasController.getCanvasDimension();
         double strokeSize = toolBarController.getStrokeSize()/2 + BoundingBox.getBoundingboxStrokeSize();
 
 		double xPos = mousePosition.getX() > canvasDimension[0] ? canvasDimension[0] : mousePosition.getX();
