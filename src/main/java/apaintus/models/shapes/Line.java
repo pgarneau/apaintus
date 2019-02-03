@@ -3,8 +3,6 @@ package apaintus.models.shapes;
 import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
 import apaintus.services.draw.line.LineDrawService;
-import apaintus.services.update.Line.LineUpdateService;
-import apaintus.services.update.UpdateService;
 
 public class Line extends DrawableShape {
     private Point destinationCoordinates;
@@ -34,10 +32,5 @@ public class Line extends DrawableShape {
 
     public void setDestinationCoordinates(Point destinationCoordinates) {
         this.destinationCoordinates = destinationCoordinates;
-    }
-
-    @Override
-    public UpdateService getUpdateService() {
-        return new LineUpdateService(this);
     }
 }

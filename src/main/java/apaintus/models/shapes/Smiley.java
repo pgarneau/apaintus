@@ -1,8 +1,6 @@
 package apaintus.models.shapes;
 
 import apaintus.services.draw.smiley.SmileyDrawService;
-import apaintus.services.update.UpdateService;
-import apaintus.services.update.smiley.SmileyUpdateService;
 
 public class Smiley extends DrawableShape {
     private double width;
@@ -34,10 +32,5 @@ public class Smiley extends DrawableShape {
 
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
-    }
-
-    @Override
-    public UpdateService getUpdateService() {
-        return new SmileyUpdateService(this);
     }
 }

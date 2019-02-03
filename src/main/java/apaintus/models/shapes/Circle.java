@@ -2,8 +2,6 @@ package apaintus.models.shapes;
 
 import apaintus.services.draw.DrawService;
 import apaintus.services.draw.circle.CircleDrawService;
-import apaintus.services.update.UpdateService;
-import apaintus.services.update.circle.CircleUpdateService;
 
 public class Circle extends DrawableShape {
     private double width;
@@ -35,10 +33,5 @@ public class Circle extends DrawableShape {
 
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
-    }
-
-    @Override
-    public UpdateService getUpdateService() {
-        return new CircleUpdateService(this);
     }
 }

@@ -73,17 +73,19 @@ public class AttributeController implements ChildController<Controller> {
         spinners.put(Attribute.HEIGHT, shapeHeight.getValueFactory());
     }
 
-
 //	public void bindTo(AnchorPane mainPane) {
 //		bar.prefWidthProperty().bind(mainPane.prefWidthProperty());
 //	}
-//
-    public synchronized void update(DrawableShape shape) {
+
+    public double getAttributeValue(Attribute attribute) {
+        return spinners.get(attribute).getValue();
+    }
+
+    public void update(DrawableShape shape) {
         resetSpinners();
         updateSpinners(shape);
     }
 
-    //
     public void resetSpinners() {
         for (Map.Entry<Attribute, SpinnerValueFactory<Double>> entry : spinners.entrySet()) {
             entry.getValue().setValue(0.0);

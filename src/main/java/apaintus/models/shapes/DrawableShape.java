@@ -1,8 +1,6 @@
 package apaintus.models.shapes;
 
 import apaintus.models.Point;
-import apaintus.services.update.UpdateService;
-import apaintus.services.update.rectangle.RectangleUpdateService;
 
 public abstract class DrawableShape extends Shape {
     protected boolean selected = true;
@@ -28,8 +26,6 @@ public abstract class DrawableShape extends Shape {
 
         return result;
     }
-
-    public abstract UpdateService getUpdateService();
 
     public BoundingBox getBoundingBox() {
         return boundingBox;

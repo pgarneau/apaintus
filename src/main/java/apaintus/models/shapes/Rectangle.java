@@ -1,9 +1,6 @@
 package apaintus.models.shapes;
 
-import apaintus.services.draw.DrawService;
 import apaintus.services.draw.rectangle.RectangleDrawService;
-import apaintus.services.update.UpdateService;
-import apaintus.services.update.rectangle.RectangleUpdateService;
 
 import static apaintus.models.shapes.ShapeType.RECTANGLE;
 
@@ -37,10 +34,5 @@ public class Rectangle extends DrawableShape {
 
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
-    }
-
-    @Override
-    public UpdateService getUpdateService() {
-        return new RectangleUpdateService(this);
     }
 }
