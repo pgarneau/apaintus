@@ -27,8 +27,6 @@ public class CanvasController implements ChildController<Controller> {
 
     private CanvasService canvasService;
 
-    private boolean newImage = true;
-
     Point lastMouseClickPosition;
     DrawableShape activeShape;
     List<DrawableShape> drawnShapes = new ArrayList<>();
@@ -41,7 +39,6 @@ public class CanvasController implements ChildController<Controller> {
         this.canvasService = new CanvasService(this.toolBarController);
     }
 
-
     @Override
     public void initialize() {
         canvas.setOnMousePressed(event -> {
@@ -51,6 +48,7 @@ public class CanvasController implements ChildController<Controller> {
             if (activeTool != ActiveTool.SELECT) {
                 if (activeShape != null) {
                     activeShape.setSelected(false);
+                    this.controller.getAttributeController().resetSpinners();
                     redrawCanvas();
                 }
                 activeShape = canvasService.createShape(activeTool, event);
@@ -62,6 +60,8 @@ public class CanvasController implements ChildController<Controller> {
                         activeShape.setSelected(false);
 
                         activeShape = shape;
+                        this.controller.getAttributeController().update(activeShape);
+                        toolBarController.update(activeShape);
                         activeShape.setSelected(true);
                         redrawCanvas();
                         break; // we found the first shape, no need to 
@@ -80,7 +80,8 @@ public class CanvasController implements ChildController<Controller> {
         canvas.setOnMouseDragged(event -> {
             ActiveTool activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
-                canvasService.updateShape(activeShape, event, lastMouseClickPosition,getCanvasDimension());
+                canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension());
+                this.controller.getAttributeController().update(activeShape);
 
                 clearDrawLayer();
 
@@ -131,7 +132,10 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void changed(ObservableValue<? extends Color> observableValue, Color oldValue, Color newValue) {
-            System.out.println("DO SOME SHIT WITH " + attribute);
+            if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
+                activeShape.getUpdateService().update(attribute, newValue.toString());
+                redrawCanvas();
+            }
         }
     }
 
@@ -144,7 +148,10 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-            System.out.println("DO SOME SHIT WITH " + attribute);
+            if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
+                activeShape.getUpdateService().update(attribute, newValue);
+                redrawCanvas();
+            }
         }
     }
 }

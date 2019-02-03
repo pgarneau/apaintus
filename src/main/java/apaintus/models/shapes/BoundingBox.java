@@ -9,8 +9,6 @@ public class BoundingBox extends Shape {
     private static String STROKE_COLOR = "#000000";
     private static int LINE_DASH_SIZE = 4;
 
-    private double width;
-    private double height;
     private double shapeStrokeSize;
     private Point[] vertices;
 
@@ -20,10 +18,10 @@ public class BoundingBox extends Shape {
                 .withOrientation(shapeAttributes.getOrientation())
                 .withStrokeColor(STROKE_COLOR)
                 .withStrokeSize(STROKE_SIZE)
+                .withWidth(shapeAttributes.getWidth())
+                .withHeight(shapeAttributes.getHeight())
                 .build());
 
-        this.width = shapeAttributes.getWidth();
-        this.height = shapeAttributes.getHeight();
         this.shapeStrokeSize = shapeAttributes.getStrokeSize();
 
         this.vertices = computeVertices(coordinates, orientation, width, height);
@@ -34,10 +32,10 @@ public class BoundingBox extends Shape {
                 .withCoordinates(shapeAttributes.getCoordinates())
                 .withOrientation(shapeAttributes.getOrientation())
                 .withStrokeColor(STROKE_COLOR).withStrokeSize(STROKE_SIZE)
+                .withWidth(shapeAttributes.getWidth())
+                .withHeight(shapeAttributes.getHeight())
                 .build());
 
-        this.width = shapeAttributes.getWidth();
-        this.height = shapeAttributes.getHeight();
         this.shapeStrokeSize = shapeAttributes.getStrokeSize();
 
         this.vertices = computeVertices(coordinates, orientation, width, height);
@@ -63,22 +61,6 @@ public class BoundingBox extends Shape {
 
     public int getLineDashSize() {
         return LINE_DASH_SIZE;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
     }
 
     public double getShapeStrokeSize() {

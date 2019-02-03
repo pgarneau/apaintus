@@ -12,8 +12,11 @@ public abstract class Shape {
     protected double orientation;
     protected String strokeColor;
     protected double strokeSize;
+    protected double width;
+    protected double height;
 
-    public Shape() {}
+    public Shape() {
+    }
 
     public Shape(ShapeType shapeType, ShapeAttributes shapeAttributes) {
         this.shapeType = shapeType;
@@ -21,6 +24,8 @@ public abstract class Shape {
         this.orientation = shapeAttributes.getOrientation();
         this.strokeColor = shapeAttributes.getStrokeColor();
         this.strokeSize = shapeAttributes.getStrokeSize();
+        this.width = shapeAttributes.getWidth();
+        this.height = shapeAttributes.getHeight();
     }
 
     public void update(ShapeAttributes shapeAttributes) {
@@ -28,6 +33,8 @@ public abstract class Shape {
         this.orientation = shapeAttributes.getOrientation();
         this.strokeColor = shapeAttributes.getStrokeColor();
         this.strokeSize = shapeAttributes.getStrokeSize();
+        this.width = shapeAttributes.getWidth();
+        this.height = shapeAttributes.getHeight();
     }
 
     public abstract DrawService getDrawService();
@@ -70,5 +77,21 @@ public abstract class Shape {
 
     public void setStrokeSize(double strokeSize) {
         this.strokeSize = strokeSize;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
     }
 }
