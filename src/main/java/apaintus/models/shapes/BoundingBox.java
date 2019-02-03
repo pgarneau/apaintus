@@ -4,6 +4,9 @@ import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
 import apaintus.services.draw.bounding_box.BoundingBoxDrawService;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+//@XmlRootElement
 public class BoundingBox extends Shape {
     private static int STROKE_SIZE = 2;
     private static String STROKE_COLOR = "#000000";
@@ -13,6 +16,10 @@ public class BoundingBox extends Shape {
     private double height;
     private double shapeStrokeSize;
     private Point[] vertices;
+
+//    protected BoundingBox() {
+//        super();
+//    }
 
     public BoundingBox(ShapeAttributes shapeAttributes) {
         super(ShapeType.BOUNDING_BOX, ShapeAttributes.builder()

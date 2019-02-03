@@ -10,6 +10,10 @@ public class Rectangle extends DrawableShape {
     private double height;
     private String fillColor;
 
+    private Rectangle() {
+        super();
+    }
+
     public Rectangle(ShapeAttributes shapeAttributes) {
         super(RECTANGLE, shapeAttributes);
 

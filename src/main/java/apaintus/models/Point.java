@@ -1,8 +1,13 @@
 package apaintus.models;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Point {
-    private final double x;
-    private final double y;
+    private double x;
+    private double y;
+
+    public Point() {}
 
     public Point(double x, double y) {
         this.x = x;
@@ -13,7 +18,15 @@ public class Point {
         return x;
     }
 
+    public void setX(double x) {
+        this.x = x;
+    }
+
     public double getY() {
         return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
     }
 }

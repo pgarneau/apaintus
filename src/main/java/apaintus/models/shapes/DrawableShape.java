@@ -2,9 +2,14 @@ package apaintus.models.shapes;
 
 import apaintus.models.Point;
 
+import javax.xml.bind.annotation.XmlTransient;
+
+@XmlTransient
 public abstract class DrawableShape extends Shape {
     protected boolean selected = true;
     protected BoundingBox boundingBox;
+
+    protected DrawableShape() {}
 
     protected DrawableShape(ShapeType shapeType, ShapeAttributes shapeAttributes) {
         super(shapeType, shapeAttributes);
@@ -29,6 +34,10 @@ public abstract class DrawableShape extends Shape {
 
     public BoundingBox getBoundingBox() {
         return boundingBox;
+    }
+
+    public void setBoundingBox(BoundingBox boundingBox) {
+        this.boundingBox = boundingBox;
     }
 
     public boolean isSelected() {
