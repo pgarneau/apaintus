@@ -1,5 +1,5 @@
 package apaintus.models.toolbar;
 
 public enum ActiveTool {
-    SELECT, RECTANGLE, CIRCLE, LINE, SMILEY, TEXTBOX
+    SELECT, RECTANGLE, CIRCLE, LINE, SMILEY, TEXT_BOX
 }

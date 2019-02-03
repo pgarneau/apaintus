@@ -42,8 +42,8 @@ public class CanvasService {
                 shapeType = ShapeType.SMILEY;
                 break;
                 
-            case TEXTBOX:
-                shapeType = ShapeType.TEXTBOX;
+            case TEXT_BOX:
+                shapeType = ShapeType.TEXT_BOX;
                 break;
         }
 

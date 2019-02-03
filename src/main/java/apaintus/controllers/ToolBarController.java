@@ -84,7 +84,7 @@ public class ToolBarController implements ChildController<Controller> {
         
         textBox.setOnMouseClicked(event -> {
             toolBarService.toggle(textBox, activeToolToggleGroup);
-            activeTool = ActiveTool.TEXTBOX;
+            activeTool = ActiveTool.TEXT_BOX;
         });
 
 

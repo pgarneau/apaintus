@@ -74,7 +74,7 @@ public class ShapeFactory {
                                 .build()
                 );
                 
-            case TEXTBOX:
+            case TEXT_BOX:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
                 return new TextBox(
@@ -166,7 +166,7 @@ public class ShapeFactory {
                 );
                 break;
                 
-            case TEXTBOX:
+            case TEXT_BOX:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
                 shape.update(

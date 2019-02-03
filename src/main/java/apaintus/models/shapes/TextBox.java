@@ -2,7 +2,7 @@ package apaintus.models.shapes;
 
 import apaintus.services.draw.textbox.TextBoxDrawService;
 
-import static apaintus.models.shapes.ShapeType.TEXTBOX;
+import static apaintus.models.shapes.ShapeType.TEXT_BOX;
 
 public class TextBox extends DrawableShape {
     private double width;
@@ -11,7 +11,7 @@ public class TextBox extends DrawableShape {
     private String text;
 
     public TextBox(ShapeAttributes shapeAttributes) {
-        super(TEXTBOX, shapeAttributes);
+        super(TEXT_BOX, shapeAttributes);
 
         text = new String("Enter text down below \n"
         		+ "dab on the haters in the attributes");
