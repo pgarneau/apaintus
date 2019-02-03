@@ -41,7 +41,7 @@
                   </ColorPicker>
                </children>
             </VBox>
-            <VBox prefHeight="34.0" prefWidth="236.0">
+            <VBox prefHeight="34.0" prefWidth="242.0">
                <children>
                   <Label text="Shapes" textAlignment="CENTER" />
                   <HBox prefHeight="100.0" prefWidth="200.0">
@@ -50,6 +50,7 @@
                         <ToggleButton fx:id="circle" mnemonicParsing="false" text="Circle" />
                         <ToggleButton fx:id="line" mnemonicParsing="false" text="Line" />
                         <ToggleButton fx:id="smiley" mnemonicParsing="false" text="Smiley" />
+                        <ToggleButton fx:id="textBox" mnemonicParsing="false" text="Text" />
                      </children>
                   </HBox>
                </children>

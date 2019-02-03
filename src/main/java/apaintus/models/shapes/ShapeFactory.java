@@ -73,6 +73,22 @@ public class ShapeFactory {
                                 .withStrokeSize(strokeSize)
                                 .build()
                 );
+                
+            case TEXT_BOX:
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
+                return new TextBox(
+                        ShapeAttributes
+                                .builder()
+                                .withCoordinates(coordinates)
+                                .withWidth(dimensions[0])
+                                .withHeight(dimensions[1])
+                                .withOrientation(0)
+                                .withFillColor(fillColor)
+                                .withStrokeColor(strokeColor)
+                                .withStrokeSize(strokeSize)
+                                .build()
+                );
 
 
             default:
@@ -134,6 +150,23 @@ public class ShapeFactory {
                 break;
 
             case SMILEY:
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
+                shape.update(
+                        ShapeAttributes
+                                .builder()
+                                .withCoordinates(coordinates)
+                                .withWidth(dimensions[0])
+                                .withHeight(dimensions[1])
+                                .withOrientation(0)
+                                .withFillColor(fillColor)
+                                .withStrokeColor(strokeColor)
+                                .withStrokeSize(strokeSize)
+                                .build()
+                );
+                break;
+                
+            case TEXT_BOX:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
                 shape.update(
