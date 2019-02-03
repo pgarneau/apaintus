@@ -18,12 +18,8 @@ public class MenuService {
         alert.setContentText(
                 "Are you sure that you want to close this file without saving ?\nUnsaved changes will be lost.");
 
-        // Add save button if the canvas has unsaved work
-        ButtonType save = new ButtonType("Save");
-        alert.getButtonTypes().add(save);
-
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.CANCEL) {
+        if (result.get() == ButtonType.YES) {
             return false;
         } else {
             return true;

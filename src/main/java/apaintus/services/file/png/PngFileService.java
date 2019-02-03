@@ -2,33 +2,23 @@ package apaintus.services.file.png;
 
 import apaintus.services.file.FileService;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
-public class PngFileService implements FileService<Canvas, Image> {
+public class PngFileService implements FileService<Image, Image> {
     public PngFileService() {}
 
     @Override
-    public void save(Canvas canvas) {
-        File file = getFile();
+    public void save(Image image) {
+        File file = getSaveFile();
 
         if (file != null) {
             try {
-                // Setup snapshot
-                SnapshotParameters snapshotParameters = new SnapshotParameters();
-                snapshotParameters.setFill(Color.TRANSPARENT);
-
-                Image snapshot = canvas.snapshot(snapshotParameters, null);
-
-                ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Failed to save png image: " + e);
@@ -38,7 +28,7 @@ public class PngFileService implements FileService<Canvas, Image> {
 
     @Override
     public Image load() {
-        File file = getFile();
+        File file = getLoadFile();
 
         if (file != null) {
             try {
@@ -55,14 +45,20 @@ public class PngFileService implements FileService<Canvas, Image> {
     }
 
     @Override
-    public File getFile() {
-        // Set extension filter
+    public File getSaveFile() {
+        return getFileChooser().showSaveDialog(null);
+    }
+
+    @Override
+    public File getLoadFile() {
+        return getFileChooser().showOpenDialog(null);
+    }
+
+    private FileChooser getFileChooser() {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("png files (*.png)", "*.png");
         fileChooser.getExtensionFilters().add(extensionFilter);
 
-        File file = fileChooser.showSaveDialog(null);
-
-        return file;
+        return fileChooser;
     }
 }

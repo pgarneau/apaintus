@@ -1,5 +1,8 @@
 package apaintus.models.shapes;
 
+import javax.xml.bind.annotation.XmlTransient;
+
+@XmlTransient
 public abstract class FillableShape extends DrawableShape {
     protected String fillColor;
 
