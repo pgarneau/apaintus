@@ -65,8 +65,8 @@ public class CanvasController implements ChildController<Controller> {
                         activeShape.setSelected(false);
 
                         activeShape = shape;
-                        this.attributeController.update(activeShape);
-                        toolBarController.update(activeShape);
+                        attributeController.update(activeShape.getShapeAttributes());
+                        toolBarController.update(activeShape.getShapeAttributes());
                         activeShape.setSelected(true);
                         redrawCanvas();
                         break; // we found the first shape, no need to 
@@ -86,7 +86,7 @@ public class CanvasController implements ChildController<Controller> {
             ActiveTool activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
                 canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension());
-                this.attributeController.update(activeShape);
+                attributeController.update(activeShape.getShapeAttributes());
 
                 clearDrawLayer();
 

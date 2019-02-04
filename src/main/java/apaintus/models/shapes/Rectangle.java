@@ -4,35 +4,17 @@ import apaintus.services.draw.rectangle.RectangleDrawService;
 
 import static apaintus.models.shapes.ShapeType.RECTANGLE;
 
-public class Rectangle extends DrawableShape {
-    private double width;
-    private double height;
-    private String fillColor;
-
+public class Rectangle extends FillableShape {
     public Rectangle(ShapeAttributes shapeAttributes) {
         super(RECTANGLE, shapeAttributes);
-
-        fillColor = shapeAttributes.getFillColor();
-        boundingBox = new BoundingBox(shapeAttributes);
     }
 
     public void update(ShapeAttributes shapeAttributes) {
         super.update(shapeAttributes);
-
-        fillColor = shapeAttributes.getFillColor();
-        boundingBox.update(shapeAttributes);
     }
 
     @Override
     public RectangleDrawService getDrawService() {
         return new RectangleDrawService(this);
-    }
-
-    public String getFillColor() {
-        return fillColor;
-    }
-
-    public void setFillColor(String fillColor) {
-        this.fillColor = fillColor;
     }
 }

@@ -2,6 +2,7 @@ package apaintus.controllers;
 
 import apaintus.models.Attribute;
 import apaintus.models.shapes.DrawableShape;
+import apaintus.models.shapes.ShapeAttributes;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
 import javafx.fxml.FXML;
@@ -88,9 +89,10 @@ public class ToolBarController implements ChildController<Controller> {
         activeTool = ActiveTool.SELECT;
     }
 
-    public void update(DrawableShape shape) {
-        strokeSize.getValueFactory().setValue(shape.getStrokeSize());
-        strokeColor.setValue(Color.valueOf(shape.getStrokeColor()));
+    public void update(ShapeAttributes shapeAttributes) {
+        strokeSize.getValueFactory().setValue(shapeAttributes.getStrokeSize());
+        setColorPicker(strokeColor, shapeAttributes.getStrokeColor());
+        setColorPicker(fillColor,  shapeAttributes.getFillColor());
     }
 
     // Binds the Toolbar's size to the main anchorpane
@@ -112,5 +114,11 @@ public class ToolBarController implements ChildController<Controller> {
 
     public ActiveTool getActiveTool() {
         return activeTool;
+    }
+
+    private void setColorPicker(ColorPicker colorPicker, String colorValue) {
+        if(!colorValue.isEmpty()) {
+            colorPicker.setValue(Color.valueOf(colorValue));
+        }
     }
 }

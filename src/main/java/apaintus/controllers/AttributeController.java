@@ -2,6 +2,8 @@ package apaintus.controllers;
 
 import apaintus.models.Attribute;
 import apaintus.models.shapes.DrawableShape;
+import apaintus.models.shapes.Shape;
+import apaintus.models.shapes.ShapeAttributes;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -81,9 +83,9 @@ public class AttributeController implements ChildController<Controller> {
         return spinners.get(attribute).getValue();
     }
 
-    public void update(DrawableShape shape) {
+    public void update(ShapeAttributes shapeAttributes) {
         resetSpinners();
-        updateSpinners(shape);
+        updateSpinners(shapeAttributes);
     }
 
     public void resetSpinners() {
@@ -92,11 +94,11 @@ public class AttributeController implements ChildController<Controller> {
         }
     }
 
-    private void updateSpinners(DrawableShape shape) {
-        spinners.get(Attribute.COORDINATE_X).setValue(shape.getCoordinates().getX());
-        spinners.get(Attribute.COORDINATE_Y).setValue(shape.getCoordinates().getY());
-        spinners.get(Attribute.ORIENTATION).setValue(shape.getOrientation());
-        spinners.get(Attribute.WIDTH).setValue(shape.getWidth());
-        spinners.get(Attribute.HEIGHT).setValue(shape.getHeight());
+    private void updateSpinners(ShapeAttributes shapeAttributes) {
+        spinners.get(Attribute.COORDINATE_X).setValue(shapeAttributes.getCoordinates().getX());
+        spinners.get(Attribute.COORDINATE_Y).setValue(shapeAttributes.getCoordinates().getY());
+        spinners.get(Attribute.ORIENTATION).setValue(shapeAttributes.getOrientation());
+        spinners.get(Attribute.WIDTH).setValue(shapeAttributes.getWidth());
+        spinners.get(Attribute.HEIGHT).setValue(shapeAttributes.getHeight());
     }
 }
