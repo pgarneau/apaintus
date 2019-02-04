@@ -33,6 +33,7 @@ public class CanvasController implements ChildController<Controller> {
     Point lastMouseClickPosition;
     DrawableShape activeShape;
     List<DrawableShape> drawnShapes = new ArrayList<>();
+    ActiveTool activeTool;
 
     @Override
     public void injectParentController(Controller controller) {
@@ -49,7 +50,7 @@ public class CanvasController implements ChildController<Controller> {
         canvas.setOnMousePressed(event -> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
 
-            ActiveTool activeTool = toolBarController.getActiveTool();
+            activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT) {
                 if (activeShape != null) {
                     activeShape.setSelected(false);
@@ -76,14 +77,15 @@ public class CanvasController implements ChildController<Controller> {
         });
 
         canvas.setOnMouseReleased(event -> {
-            if (event.getX() != lastMouseClickPosition.getX() && event.getY() != lastMouseClickPosition.getY()) {
+            activeTool = toolBarController.getActiveTool();
+            if (activeTool != ActiveTool.SELECT && event.getX() != lastMouseClickPosition.getX() && event.getY() != lastMouseClickPosition.getY()) {
                 saveDrawLayer();
                 redrawCanvas();
             }
         });
 
         canvas.setOnMouseDragged(event -> {
-            ActiveTool activeTool = toolBarController.getActiveTool();
+            activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
                 canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension());
                 attributeController.update(activeShape.getShapeAttributes());
