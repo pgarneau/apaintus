@@ -1,12 +1,15 @@
 package apaintus.controllers;
 
 import apaintus.models.Attribute;
+import apaintus.models.shapes.DrawableShape;
+import apaintus.models.shapes.ShapeAttributes;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +96,12 @@ public class ToolBarController implements ChildController<Controller> {
         activeTool = ActiveTool.SELECT;
     }
 
+    public void update(ShapeAttributes shapeAttributes) {
+        strokeSize.getValueFactory().setValue(shapeAttributes.getStrokeSize());
+        setColorPicker(strokeColor, shapeAttributes.getStrokeColor());
+        setColorPicker(fillColor,  shapeAttributes.getFillColor());
+    }
+
     // Binds the Toolbar's size to the main anchorpane
     public void bindTo(AnchorPane anchorPane) {
         toolBar.prefWidthProperty().bind(anchorPane.widthProperty());
@@ -112,5 +121,11 @@ public class ToolBarController implements ChildController<Controller> {
 
     public ActiveTool getActiveTool() {
         return activeTool;
+    }
+
+    private void setColorPicker(ColorPicker colorPicker, String colorValue) {
+        if(!colorValue.isEmpty()) {
+            colorPicker.setValue(Color.valueOf(colorValue));
+        }
     }
 }

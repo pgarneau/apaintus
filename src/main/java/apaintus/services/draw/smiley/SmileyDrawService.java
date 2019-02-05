@@ -35,5 +35,6 @@ public class SmileyDrawService extends DrawService {
         context.setFill(Paint.valueOf(smiley.getStrokeColor()));
         context.fillOval(coordinates.getX() + width / 4.5, coordinates.getY() + height / 4.5, width / 6 , height / 6);
         context.fillOval(coordinates.getX() + 16.5 / 27 * width, coordinates.getY() + height / 4.5, width / 6, height / 6);
+        context.restore();
     }
 }

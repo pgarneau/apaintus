@@ -9,7 +9,7 @@ public class Controller {
 	@FXML private CanvasController canvasController;
 	@FXML private MenuController menuController;
 	@FXML private ToolBarController toolBarController;
-//	@FXML private AttributeController attributeController;
+	@FXML private AttributeController attributeController;
 
 	@FXML private AnchorPane mainPane;
 	@FXML private ScrollPane scrollPane;
@@ -22,7 +22,7 @@ public class Controller {
 		canvasController.injectParentController(this);
 		menuController.injectParentController(this);
 		toolBarController.injectParentController(this);
-//		attributeController.injectParentController(this);
+		attributeController.injectParentController(this);
 //
 //		selectorController = new SelectorController();
 //		selectorController.injectParentController(this);
@@ -60,9 +60,10 @@ public class Controller {
 	public ToolBarController getToolBarController() {
 		return toolBarController;
 	}
-//	public AttributeController getAttributeController() {
-//		return attributeController;
-//	}
+
+	public AttributeController getAttributeController() {
+		return attributeController;
+	}
 //
 //	public SelectorController getSelectorController() {
 //		return selectorController;

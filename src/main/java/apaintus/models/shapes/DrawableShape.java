@@ -8,6 +8,12 @@ public abstract class DrawableShape extends Shape {
 
     protected DrawableShape(ShapeType shapeType, ShapeAttributes shapeAttributes) {
         super(shapeType, shapeAttributes);
+        boundingBox = new BoundingBox(shapeAttributes);
+    }
+
+    public void update(ShapeAttributes shapeAttributes) {
+        super.update(shapeAttributes);
+        boundingBox.update(shapeAttributes);
     }
 
     // Credit: https://stackoverflow.com/questions/8721406/how-to-determine-if-a-point-is-inside-a-2d-convex-polygon
@@ -37,5 +43,18 @@ public abstract class DrawableShape extends Shape {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public ShapeAttributes getShapeAttributes() {
+        return ShapeAttributes
+                .builder()
+                .withCoordinates(coordinates)
+                .withWidth(width)
+                .withHeight(height)
+                .withOrientation(orientation)
+                .withStrokeColor(strokeColor)
+                .withStrokeSize(strokeSize)
+                .withFillColor("")
+                .build();
     }
 }
