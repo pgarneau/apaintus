@@ -1,7 +1,11 @@
 package apaintus.services;
 
+import java.util.ArrayList;
+import java.util.Vector;
+
 import apaintus.controllers.CanvasController;
 import apaintus.controllers.ToolBarController;
+import apaintus.model.snapgrid.Snapgrid;
 import apaintus.models.Point;
 import apaintus.models.shapes.*;
 import apaintus.models.shapes.Shape;
@@ -77,6 +81,13 @@ public class CanvasService {
             DrawService tempDrawService = shape.getBoundingBox().getDrawService();
             tempDrawService.draw(context);
         }
+    }
+    public void draw(GraphicsContext context, Snapgrid snapgrid) {
+    	ArrayList<Vector<Integer>> points = snapgrid.getGridPoints();
+    	for(Vector<Integer>point : points) {
+    		int width = point.get(0);
+    		int height = point.get(1);
+    	}
     }
 
     public void saveState(GraphicsContext canvasContext, Image image) {

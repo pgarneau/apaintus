@@ -60,11 +60,11 @@ public class AttributeController implements ChildController<Controller> {
     }
 
     private void setSpinnerChangeListener() {
-        shapeX.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.COORDINATE_X));
-        shapeY.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.COORDINATE_Y));
-        shapeOrientation.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.ORIENTATION));
-        shapeWidth.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.WIDTH));
-        shapeHeight.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.HEIGHT));
+        shapeX.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.COORDINATE_X));
+        shapeY.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.COORDINATE_Y));
+        shapeOrientation.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.ORIENTATION));
+        shapeWidth.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.WIDTH));
+        shapeHeight.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.HEIGHT));
     }
 
     private void fillSpinnerMap() {

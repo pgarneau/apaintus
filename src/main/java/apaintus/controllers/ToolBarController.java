@@ -27,10 +27,11 @@ public class ToolBarController implements ChildController<Controller> {
     @FXML private ToggleButton line;
     @FXML private ToggleButton smiley;
     @FXML private ToggleButton textBox;
+    @FXML private ToggleButton snapgrid;
+    @FXML private Spinner<Double> spacing;
 
     private Controller controller;
     private CanvasController canvasController;
-
     private ToolBarService toolBarService;
 
     private List<ToggleButton> activeToolToggleGroup = new ArrayList<>();
@@ -43,10 +44,9 @@ public class ToolBarController implements ChildController<Controller> {
 
 
         fillColor.valueProperty().addListener(canvasController.new ColorChangeListener(Attribute.FILL_COLOR));
-
         strokeColor.valueProperty().addListener(canvasController.new ColorChangeListener(Attribute.STROKE_COLOR));
-
-        strokeSize.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.STROKE_SIZE));
+        strokeSize.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.STROKE_SIZE));
+        spacing.valueProperty().addListener(canvasController.new GridSpinnerChangeListener());
     }
 
     @Override
@@ -88,6 +88,10 @@ public class ToolBarController implements ChildController<Controller> {
         textBox.setOnMouseClicked(event -> {
             toolBarService.toggle(textBox, activeToolToggleGroup);
             activeTool = ActiveTool.TEXT_BOX;
+        });
+        
+        snapgrid.setOnMouseClicked(event ->{
+        	canvasController.activateSnapGrid();
         });
 
 

@@ -1,5 +1,6 @@
 package apaintus.controllers;
 
+import apaintus.model.snapgrid.Snapgrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.models.shapes.DrawableShape;
@@ -23,6 +24,9 @@ public class CanvasController implements ChildController<Controller> {
     @FXML private AnchorPane root;
     @FXML private Canvas drawLayer;
     @FXML private Canvas canvas;
+    
+    private Canvas snapgridCanvas;
+    private Snapgrid snapgrid;
 
     private Controller controller;
     private ToolBarController toolBarController;
@@ -50,6 +54,13 @@ public class CanvasController implements ChildController<Controller> {
 
     @Override
     public void initialize() {
+    	
+    	snapgrid = new Snapgrid(2,canvas.getWidth(),canvas.getHeight(),true);
+    	
+    	snapgridCanvas = new Canvas();
+    	snapgridCanvas.setId("snapgrid");
+    	root.getChildren().add(snapgridCanvas);
+    	
         canvas.setOnMousePressed(event -> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
 
@@ -168,6 +179,14 @@ public class CanvasController implements ChildController<Controller> {
     	
     	return dimension;
     }
+    
+    public void drawSnapgrid() {
+    	
+    }
+    
+    public void clearSnapGrid() {
+    	snapgridCanvas.getGraphicsContext2D().clearRect(0, 0, snapgridCanvas.getWidth(), snapgridCanvas.getHeight());
+    }
 
     public class ColorChangeListener implements ChangeListener<Color> {
         private Attribute attribute;
@@ -185,10 +204,10 @@ public class CanvasController implements ChildController<Controller> {
         }
     }
 
-    public class SpinnerChangeListener implements ChangeListener<Double> {
+    public class ShapeSpinnerChangeListener implements ChangeListener<Double> {
         private Attribute attribute;
 
-        public SpinnerChangeListener(Attribute attribute) {
+        public ShapeSpinnerChangeListener(Attribute attribute) {
             this.attribute = attribute;
         }
 
@@ -200,4 +219,26 @@ public class CanvasController implements ChildController<Controller> {
             }
         }
     }
+    
+    public class GridSpinnerChangeListener implements ChangeListener<Double>{
+    	
+    	public GridSpinnerChangeListener() {
+    	}
+    	
+    	@Override
+    	public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
+    		snapgrid.setSpacing(newValue);
+    	}
+    }
+
+	public void activateSnapGrid() {
+		if(snapgrid.isActive()) {
+			System.out.println("disabling grid");
+			snapgrid.setActive(false);
+		}
+		else {
+			System.out.println("enabling grid");
+			snapgrid.setActive(true);
+		}
+	}
 }

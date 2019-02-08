@@ -10,18 +10,29 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 
-<AnchorPane fx:id="root" prefHeight="65.0" prefWidth="589.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.ToolBarController">
+<AnchorPane fx:id="root" prefHeight="45.0" prefWidth="812.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.ToolBarController">
    <children>
-      <ToolBar fx:id="toolBar" prefHeight="67.0" prefWidth="613.0">
+      <ToolBar fx:id="toolBar" prefHeight="45.0" prefWidth="812.0">
          <items>
             <ToggleButton fx:id="select" mnemonicParsing="false" text="Select" />
-            <VBox prefHeight="11.0" prefWidth="100.0">
+            <VBox prefHeight="42.0" prefWidth="141.0">
+               <children>
+                  <Label alignment="TOP_LEFT" text="Spacing" />
+                  <HBox prefHeight="25.0" prefWidth="133.0">
+                     <children>
+                        <Spinner fx:id="spacing" amountToStepBy="1.0" editable="true" initialValue="6.0" max="20.0" min="0.0" prefHeight="25.0" prefWidth="51.0" />
+                        <ToggleButton fx:id="snapgrid" mnemonicParsing="false" text="Snap Grid" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="40.0" prefWidth="100.0">
                <children>
                   <Label text="Stroke Size" />
                   <Spinner fx:id="strokeSize" amountToStepBy="1.0" editable="true" initialValue="6.0" max="20.0" min="0.0" prefWidth="90.0" />
                </children>
             </VBox>
-            <VBox prefHeight="14.0" prefWidth="100.0">
+            <VBox prefHeight="40.0" prefWidth="100.0">
                <children>
                   <Label text="Fill Color" />
                   <ColorPicker fx:id="fillColor" promptText="Fill">
@@ -31,7 +42,7 @@
                   </ColorPicker>
                </children>
             </VBox>
-            <VBox prefHeight="49.0" prefWidth="100.0">
+            <VBox prefHeight="40.0" prefWidth="100.0">
                <children>
                   <Label text="Stroke Color" />
                   <ColorPicker fx:id="strokeColor" promptText="Stroke">
@@ -41,10 +52,10 @@
                   </ColorPicker>
                </children>
             </VBox>
-            <VBox prefHeight="34.0" prefWidth="252.0">
+            <VBox prefHeight="40.0" prefWidth="242.0">
                <children>
                   <Label text="Shapes" textAlignment="CENTER" />
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="51.0" prefWidth="242.0">
                      <children>
                         <ToggleButton fx:id="rectangle" mnemonicParsing="false" text="Rectangle" />
                         <ToggleButton fx:id="circle" mnemonicParsing="false" text="Circle" />
