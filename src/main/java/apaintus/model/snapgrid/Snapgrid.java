@@ -1,7 +1,7 @@
 package apaintus.model.snapgrid;
 
+import apaintus.models.Point;
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class Snapgrid {
 	
@@ -11,14 +11,14 @@ public class Snapgrid {
 	
 	private boolean isActive;
 	
-	private ArrayList<Vector<Integer>> snapgridPoints;
+	private ArrayList<Point> snapgridPoints;
 	
-	public Snapgrid(int spacing, double drawingAreaWidth, double drawingAreaHeight, boolean active){
+	public Snapgrid(double spacing, double drawingAreaWidth, double drawingAreaHeight, boolean active){
 		this.spacing = spacing;
 		this.drawingAreaWidth = drawingAreaWidth;
 		this.drawingAreaHeight = drawingAreaHeight;
 		this.isActive = active;
-		this.snapgridPoints = new ArrayList<Vector<Integer>>();
+		this.snapgridPoints = new ArrayList<Point>();
 		if(this.isActive){
 			//send directive to canvas to draw snapgrid.
 		}
@@ -29,13 +29,12 @@ public class Snapgrid {
 	private void computeAllPointInGrid() {
 		for (int i = 0; i < drawingAreaHeight; i+=spacing) {
 			for (int j = 0; j < drawingAreaWidth; j+=spacing) {
-				Vector<Integer> gridPoint = new Vector<Integer>(i,j);
-				snapgridPoints.add(gridPoint);
+				snapgridPoints.add(new Point(i,j));
 			}
 		}
 	}
 	
-	public ArrayList<Vector<Integer>> getGridPoints(){
+	public ArrayList<Point> getGridPoints(){
 		return snapgridPoints;
 	}
 	
@@ -52,5 +51,9 @@ public class Snapgrid {
 		
 		//we need to recompute all the points when the spacing has changed.
 		computeAllPointInGrid();
+	}
+
+	public double getSpacing() {
+		return spacing;
 	}
 }

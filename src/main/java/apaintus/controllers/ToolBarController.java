@@ -98,6 +98,8 @@ public class ToolBarController implements ChildController<Controller> {
         // DEFAULT SETTINGS
         select.setSelected(true);
         activeTool = ActiveTool.SELECT;
+        
+        snapgrid.setSelected(false);
     }
 
     public void update(ShapeAttributes shapeAttributes) {
@@ -132,4 +134,8 @@ public class ToolBarController implements ChildController<Controller> {
             colorPicker.setValue(Color.valueOf(colorValue));
         }
     }
+
+	public Double getGridSpacing() {
+		return spacing.getValue();
+	}
 }

@@ -45,7 +45,10 @@ public class CanvasController implements ChildController<Controller> {
     @Override
     public void injectParentController(Controller controller) {
         this.controller = controller;
+        
         this.toolBarController = this.controller.getToolBarController();
+        snapgrid = new Snapgrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),false);
+        
         this.attributeController = this.controller.getAttributeController();
 
         this.canvasService = new CanvasService(this.toolBarController);
@@ -54,9 +57,6 @@ public class CanvasController implements ChildController<Controller> {
 
     @Override
     public void initialize() {
-    	
-    	snapgrid = new Snapgrid(2,canvas.getWidth(),canvas.getHeight(),true);
-    	
     	snapgridCanvas = new Canvas();
     	snapgridCanvas.setId("snapgrid");
     	root.getChildren().add(snapgridCanvas);
@@ -181,7 +181,7 @@ public class CanvasController implements ChildController<Controller> {
     }
     
     public void drawSnapgrid() {
-    	
+    	canvasService.draw(snapgridCanvas.getGraphicsContext2D(), snapgrid);
     }
     
     public void clearSnapGrid() {
@@ -233,11 +233,11 @@ public class CanvasController implements ChildController<Controller> {
 
 	public void activateSnapGrid() {
 		if(snapgrid.isActive()) {
-			System.out.println("disabling grid");
+			clearSnapGrid();
 			snapgrid.setActive(false);
 		}
 		else {
-			System.out.println("enabling grid");
+			drawSnapgrid();
 			snapgrid.setActive(true);
 		}
 	}

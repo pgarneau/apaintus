@@ -1,5 +1,6 @@
 package apaintus.services;
 
+import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -18,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class CanvasService {
     ToolBarController toolBarController;
@@ -83,11 +85,18 @@ public class CanvasService {
         }
     }
     public void draw(GraphicsContext context, Snapgrid snapgrid) {
-    	ArrayList<Vector<Integer>> points = snapgrid.getGridPoints();
-    	for(Vector<Integer>point : points) {
-    		int width = point.get(0);
-    		int height = point.get(1);
-    	}
+    	ArrayList<Point> points = snapgrid.getGridPoints();
+    	double[] xPts = new double[points.size()];
+    	double[] yPts = new double[points.size()];
+    	int idx = 0;
+    	context.save();
+    	context.setStroke(Color.BLACK);
+    	context.setLineWidth(2);
+    	for(Point point : points) {
+    		System.out.println(point.getX()+":"+point.getY());
+		}
+    	context.strokeLine(0, snapgrid.getSpacing(), 0,800);
+    	context.restore();
     }
 
     public void saveState(GraphicsContext canvasContext, Image image) {
