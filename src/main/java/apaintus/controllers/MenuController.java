@@ -1,5 +1,6 @@
 package apaintus.controllers;
 
+import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.Shape;
 import apaintus.services.MenuService;
 import apaintus.services.file.FileService;
@@ -12,13 +13,16 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class MenuController implements ChildController<Controller> {
 	private Controller controller;
-	private FileService<Canvas, Image> pngFileService;
-	private FileService<List<Shape>, List<Shape>> xmlFileService;
+	private CanvasController canvasController;
+
+	private FileService<Image, Image> pngFileService;
+	private FileService<List<DrawableShape>, List<DrawableShape>> xmlFileService;
 	private MenuService menuService;
 
 	@FXML MenuBar menuBar;
@@ -26,6 +30,7 @@ public class MenuController implements ChildController<Controller> {
 	@Override
 	public void injectParentController(Controller controller) {
 		this.controller = controller;
+		this.canvasController = this.controller.getCanvasController();
 	}
 
 	@Override
@@ -61,40 +66,44 @@ public class MenuController implements ChildController<Controller> {
 	}
 
 	public void savePng() {
-//		pngFileService.save(controller.getCanvasController().getCanvas());
+		pngFileService.save(canvasController.getCanvasImage());
+		canvasController.setCanvasChanged(false);
 	}
 
-	public Image loadPng() {
+	public void loadPng() {
 		if (hasUnsavedWork()) {
 			if (menuService.saveRequested()) {
 				savePng();
 			}
 		}
-		return pngFileService.load();
+
+		canvasController.clearCanvas();
+		canvasController.drawImage(pngFileService.load());
 	}
 
 	public void exportXml() {
-//		xmlFileService.save(controller.getCanvasController().getShapes());
+		xmlFileService.save(canvasController.getDrawnShapes());
+		canvasController.setCanvasChanged(false);
 	}
 
-	public List<Shape> importXml() {
+	public void importXml() {
 	    if (hasUnsavedWork()) {
 	        if (menuService.saveRequested()) {
 	        	exportXml();
 			}
 		}
-	    return xmlFileService.load();
+
+		canvasController.clearCanvas();
+	    canvasController.setDrawnShapes(xmlFileService.load());
+	    canvasController.redrawCanvas();
 	}
 
 	public void clearButtonClicked() {
-//		controller.getCanvasController().clear();
-//		controller.getCanvasController().clearDrawnShapeHistory();
+		canvasController.clearCanvas();
 	}
 
 	public boolean hasUnsavedWork() {
-//		if (controller.getCanvasController().getShapes().isEmpty())
-//			return false;
-		return true;
+	    return canvasController.isCanvasChanged();
 	}
 
 	public MenuBar getMenuBar() {

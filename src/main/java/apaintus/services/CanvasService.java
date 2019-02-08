@@ -10,6 +10,7 @@ import apaintus.services.draw.DrawService;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -57,25 +58,12 @@ public class CanvasService {
 
     }
 
-    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double [] canvasDimension) {
-        Point mousePosition = getMousePosition(mouseEvent);
-        double strokeSize = toolBarController.getStrokeSize()/2 + BoundingBox.getBoundingboxStrokeSize();
+    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimensions) {
+        Point mousePosition = computeInboundMousePosition(getMousePosition(mouseEvent), canvasDimensions);
 
-		double xPos = mousePosition.getX() > canvasDimension[0] ? canvasDimension[0] : mousePosition.getX();
-		double yPos = mousePosition.getY() > canvasDimension[1] ? canvasDimension[1] : mousePosition.getY(); 
-		
-        xPos -= strokeSize;
-        yPos -= strokeSize;
-
-		if (xPos - strokeSize <= 0)
-			xPos = strokeSize;
-		if (yPos - strokeSize <= 0)
-			yPos = strokeSize;        
-		
-        Point maxPos = new Point(xPos,yPos);
         ShapeFactory.updateShape(
                 shape,
-                maxPos,
+                mousePosition,
                 lastMouseClickPosition,
                 toolBarController.getFillColor().toString(),
                 toolBarController.getStrokeColor().toString(),
@@ -91,13 +79,7 @@ public class CanvasService {
         }
     }
 
-    public void saveState(GraphicsContext canvasContext, WritableImage image) {
-            // Dunno what this does
-//            if (topLeft[0] < 0)
-//                topLeft = new double[] {0, topLeft[1]};
-//            if (topLeft[1] < 0)
-//                topLeft = new double[] {topLeft[0], 0};
-
+    public void saveState(GraphicsContext canvasContext, Image image) {
             canvasContext.drawImage(image, 0, 0);
     }
 
@@ -114,5 +96,22 @@ public class CanvasService {
 
     public Point getMousePosition(MouseEvent event) {
         return new Point(event.getX(), event.getY());
+    }
+
+    private Point computeInboundMousePosition(Point mousePosition, double[] dimensions) {
+        double strokeSize = toolBarController.getStrokeSize() / 2 + BoundingBox.getBoundingboxStrokeSize();
+
+        double xPos = mousePosition.getX() > dimensions[0] ? dimensions[0] : mousePosition.getX();
+        double yPos = mousePosition.getY() > dimensions[1] ? dimensions[1] : mousePosition.getY();
+
+        xPos -= strokeSize;
+        yPos -= strokeSize;
+
+        if (xPos - strokeSize <= 0)
+            xPos = strokeSize;
+        if (yPos - strokeSize <= 0)
+            yPos = strokeSize;
+
+        return new Point(xPos, yPos);
     }
 }

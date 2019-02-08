@@ -1,5 +1,6 @@
 package apaintus.services.file.xml;
 
+import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.Shape;
 import apaintus.models.xml.XmlContract;
 import apaintus.models.xml.XmlContractTranslator;
@@ -13,12 +14,12 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.util.List;
 
-public class XmlFileService implements FileService<List<Shape>, List<Shape>> {
+public class XmlFileService implements FileService<List<DrawableShape>, List<DrawableShape>> {
     public XmlFileService() {}
 
     @Override
-    public void save(List<Shape> shapeList) {
-        File file = getFile();
+    public void save(List<DrawableShape> shapeList) {
+        File file = getSaveFile();
 
         if (file != null) {
             try {
@@ -44,8 +45,8 @@ public class XmlFileService implements FileService<List<Shape>, List<Shape>> {
     }
 
     @Override
-    public List<Shape> load() {
-        File file = getFile();
+    public List<DrawableShape> load() {
+        File file = getLoadFile();
 
         if (file != null) {
             try {
@@ -70,14 +71,20 @@ public class XmlFileService implements FileService<List<Shape>, List<Shape>> {
     }
 
     @Override
-    public File getFile() {
-        // Set extension filter
+    public File getSaveFile() {
+        return getFileChooser().showSaveDialog(null);
+    }
+
+    @Override
+    public File getLoadFile() {
+        return getFileChooser().showOpenDialog(null);
+    }
+
+    private FileChooser getFileChooser() {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("xml files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extensionFilter);
 
-        File file = fileChooser.showSaveDialog(null);
-
-        return file;
+        return fileChooser;
     }
 }

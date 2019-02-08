@@ -4,6 +4,10 @@ import apaintus.services.draw.DrawService;
 import apaintus.services.draw.circle.CircleDrawService;
 
 public class Circle extends FillableShape {
+    private Circle() {
+        super();
+    }
+
     public Circle(ShapeAttributes shapeAttributes) {
         super(ShapeType.CIRCLE, shapeAttributes);
     }

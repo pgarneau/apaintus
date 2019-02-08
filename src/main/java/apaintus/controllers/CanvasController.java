@@ -11,6 +11,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
@@ -30,10 +31,12 @@ public class CanvasController implements ChildController<Controller> {
     private CanvasService canvasService;
     private UpdateService updateService;
 
-    Point lastMouseClickPosition;
-    DrawableShape activeShape;
-    List<DrawableShape> drawnShapes = new ArrayList<>();
-    ActiveTool activeTool;
+    private Point lastMouseClickPosition;
+    private DrawableShape activeShape;
+    private List<DrawableShape> drawnShapes = new ArrayList<>();
+    private Image baseImage;
+    private boolean canvasChanged;
+    private ActiveTool activeTool;
 
     @Override
     public void injectParentController(Controller controller) {
@@ -80,7 +83,7 @@ public class CanvasController implements ChildController<Controller> {
             activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && event.getX() != lastMouseClickPosition.getX() && event.getY() != lastMouseClickPosition.getY()) {
                 saveDrawLayer();
-                redrawCanvas();
+                canvasChanged = true;
             }
         });
 
@@ -90,7 +93,7 @@ public class CanvasController implements ChildController<Controller> {
                 canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension());
                 attributeController.update(activeShape.getShapeAttributes());
 
-                clearDrawLayer();
+                canvasService.clear(drawLayer.getGraphicsContext2D());
 
                 canvasService.draw(drawLayer.getGraphicsContext2D(), activeShape);
             }
@@ -98,18 +101,54 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public void redrawCanvas() {
-        clearCanvas();
+        canvasService.clear(canvas.getGraphicsContext2D());
+
+        if (baseImage != null) {
+            drawImage(baseImage);
+        }
+
         for (DrawableShape shape : drawnShapes) {
             canvasService.draw(canvas.getGraphicsContext2D(), shape);
         }
     }
 
+    public void drawImage(Image image) {
+        baseImage = image;
+        canvasService.saveState(canvas.getGraphicsContext2D(), image);
+    }
+
     public void clearCanvas() {
+        drawnShapes.clear();
+        canvasService.clear(drawLayer.getGraphicsContext2D());
         canvasService.clear(canvas.getGraphicsContext2D());
     }
 
-    public void clearDrawLayer() {
-        canvasService.clear(drawLayer.getGraphicsContext2D());
+    public List<DrawableShape> getDrawnShapes() {
+        return drawnShapes;
+    }
+
+    public void setDrawnShapes(List<DrawableShape> drawnShapes) {
+        this.drawnShapes = drawnShapes;
+    }
+
+    public boolean isCanvasChanged() {
+        return canvasChanged;
+    }
+
+    public Image getCanvasImage() {
+        // Remove the bounding box around the selected shape when saving canvas to image
+        activeShape.setSelected(false);
+        redrawCanvas();
+        Image image = canvasService.convertCanvasToImage(canvas);
+        activeShape.setSelected(true);
+        redrawCanvas();
+
+        return image;
+    }
+
+
+    public void setCanvasChanged(boolean canvasChanged) {
+        this.canvasChanged = canvasChanged;
     }
 
     private void saveDrawLayer() {
@@ -118,7 +157,7 @@ public class CanvasController implements ChildController<Controller> {
 
             canvasService.saveState(canvas.getGraphicsContext2D(), canvasService.convertCanvasToImage(drawLayer));
 
-            clearDrawLayer();
+            canvasService.clear(drawLayer.getGraphicsContext2D());
         }
     }
     

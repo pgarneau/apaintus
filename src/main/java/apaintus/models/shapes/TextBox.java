@@ -10,6 +10,10 @@ public class TextBox extends DrawableShape {
     private String fillColor;
     private String text;
 
+    private TextBox() {
+        super();
+    }
+
     public TextBox(ShapeAttributes shapeAttributes) {
         super(TEXT_BOX, shapeAttributes);
 

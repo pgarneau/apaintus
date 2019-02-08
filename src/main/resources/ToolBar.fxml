@@ -41,7 +41,7 @@
                   </ColorPicker>
                </children>
             </VBox>
-            <VBox prefHeight="34.0" prefWidth="242.0">
+            <VBox prefHeight="34.0" prefWidth="252.0">
                <children>
                   <Label text="Shapes" textAlignment="CENTER" />
                   <HBox prefHeight="100.0" prefWidth="200.0">

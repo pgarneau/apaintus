@@ -4,6 +4,10 @@ import apaintus.services.draw.DrawService;
 import apaintus.services.draw.line.LineDrawService;
 
 public class Line extends DrawableShape {
+    private Line() {
+        super();
+    }
+
     public Line(ShapeAttributes shapeAttributes) {
         super(ShapeType.LINE, shapeAttributes);
     }
