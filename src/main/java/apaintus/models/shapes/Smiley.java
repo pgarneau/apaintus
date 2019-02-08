@@ -3,6 +3,10 @@ package apaintus.models.shapes;
 import apaintus.services.draw.smiley.SmileyDrawService;
 
 public class Smiley extends FillableShape {
+    private Smiley() {
+        super();
+    }
+
     public Smiley(ShapeAttributes shapeAttributes) {
         super(ShapeType.SMILEY, shapeAttributes);
     }

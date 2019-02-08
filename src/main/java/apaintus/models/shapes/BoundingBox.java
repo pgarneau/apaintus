@@ -15,9 +15,9 @@ public class BoundingBox extends Shape {
     private double shapeStrokeSize;
     private Point[] vertices;
 
-//    protected BoundingBox() {
-//        super();
-//    }
+    private BoundingBox() {
+        super();
+    }
 
     public BoundingBox(ShapeAttributes shapeAttributes) {
         super(ShapeType.BOUNDING_BOX, ShapeAttributes.builder()

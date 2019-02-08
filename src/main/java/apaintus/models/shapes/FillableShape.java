@@ -6,6 +6,10 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class FillableShape extends DrawableShape {
     protected String fillColor;
 
+    protected FillableShape() {
+        super();
+    }
+
     protected FillableShape(ShapeType shapeType, ShapeAttributes shapeAttributes) {
         super(shapeType, shapeAttributes);
         fillColor = shapeAttributes.getFillColor();
