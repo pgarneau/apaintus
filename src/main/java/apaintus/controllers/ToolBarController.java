@@ -1,7 +1,6 @@
 package apaintus.controllers;
 
 import apaintus.models.Attribute;
-import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.ShapeAttributes;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
@@ -9,10 +8,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class ToolBarController implements ChildController<Controller> {
     @FXML private AnchorPane root;
@@ -32,7 +31,8 @@ public class ToolBarController implements ChildController<Controller> {
     private CanvasController canvasController;
 
     private ToolBarService toolBarService;
-
+    
+    private Properties properties = new Properties();
     private List<ToggleButton> activeToolToggleGroup = new ArrayList<>();
     private ActiveTool activeTool;
 
@@ -89,6 +89,18 @@ public class ToolBarController implements ChildController<Controller> {
             toolBarService.toggle(textBox, activeToolToggleGroup);
             activeTool = ActiveTool.TEXT_BOX;
         });
+        
+        strokeSize.setOnMouseClicked(event -> {
+            setPreferences();
+        });
+        
+        fillColor.setOnAction(event -> {
+            setPreferences();
+        });
+        
+        strokeColor.setOnMouseClicked(event -> {
+            setPreferences();
+        });
 
 
         // DEFAULT SETTINGS
@@ -127,5 +139,22 @@ public class ToolBarController implements ChildController<Controller> {
         if(!colorValue.isEmpty()) {
             colorPicker.setValue(Color.valueOf(colorValue));
         }
+    }
+    
+    public Properties getPreferences() {
+    	return properties;
+    }
+    
+    public void setPreferences(Properties properties) {
+    	this.properties = properties;
+    	strokeSize.getValueFactory().setValue(Double.valueOf(properties.getProperty("strokeSize")));
+    	setColorPicker(fillColor, properties.getProperty("fillColor"));
+    	setColorPicker(strokeColor, properties.getProperty("strokeColor"));
+    }
+    
+    private void setPreferences() {
+    	this.properties.setProperty("strokeColor", strokeColor.getValue().toString());
+    	this.properties.setProperty("fillColor", fillColor.getValue().toString());
+    	this.properties.setProperty("strokeSize", strokeSize.getValue().toString());
     }
 }
