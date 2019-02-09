@@ -1,15 +1,12 @@
 package apaintus.controllers;
 
 import apaintus.models.Attribute;
-import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.Shape;
 import apaintus.models.shapes.ShapeAttributes;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 
@@ -27,6 +24,8 @@ public class AttributeController implements ChildController<Controller> {
     private Spinner<Double> shapeWidth;
     @FXML
     private Spinner<Double> shapeHeight;
+    @FXML
+    private TextArea shapeText;
 
     @FXML
     private AnchorPane root;
@@ -42,7 +41,7 @@ public class AttributeController implements ChildController<Controller> {
         this.controller = controller;
         this.canvasController = this.controller.getCanvasController();
 
-        setSpinnerChangeListener();
+        setAttributeChangeListener();
     }
 
     @Override
@@ -59,12 +58,13 @@ public class AttributeController implements ChildController<Controller> {
         shapeOrientation.setValueFactory(new DoubleSpinnerValueFactory(0.0, 360.0, 0.0, 1));
     }
 
-    private void setSpinnerChangeListener() {
+    private void setAttributeChangeListener() {
         shapeX.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.COORDINATE_X));
         shapeY.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.COORDINATE_Y));
         shapeOrientation.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.ORIENTATION));
         shapeWidth.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.WIDTH));
         shapeHeight.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.HEIGHT));
+        shapeText.textProperty().addListener(canvasController.new TextFieldChangeListener(Attribute.TEXT));
     }
 
     private void fillSpinnerMap() {
@@ -79,13 +79,18 @@ public class AttributeController implements ChildController<Controller> {
 //		bar.prefWidthProperty().bind(mainPane.prefWidthProperty());
 //	}
 
-    public double getAttributeValue(Attribute attribute) {
+    public double getSpinnerValue(Attribute attribute) {
         return spinners.get(attribute).getValue();
+    }
+    
+    public String getTextAreaValue() {
+        return shapeText.getText();
     }
 
     public void update(ShapeAttributes shapeAttributes) {
         resetSpinners();
         updateSpinners(shapeAttributes);
+        updateTextArea(shapeAttributes.getText());
     }
 
     public void resetSpinners() {
@@ -100,5 +105,9 @@ public class AttributeController implements ChildController<Controller> {
         spinners.get(Attribute.ORIENTATION).setValue(shapeAttributes.getOrientation());
         spinners.get(Attribute.WIDTH).setValue(shapeAttributes.getWidth());
         spinners.get(Attribute.HEIGHT).setValue(shapeAttributes.getHeight());
+    }
+    
+    private void updateTextArea(String text) {
+    	shapeText.setText(text);;
     }
 }

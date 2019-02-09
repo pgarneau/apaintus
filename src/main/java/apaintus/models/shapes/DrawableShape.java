@@ -8,17 +8,20 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class DrawableShape extends Shape {
     protected boolean selected = true;
     protected BoundingBox boundingBox;
+    protected String text;
 
     protected DrawableShape() {}
 
     protected DrawableShape(ShapeType shapeType, ShapeAttributes shapeAttributes) {
         super(shapeType, shapeAttributes);
         boundingBox = new BoundingBox(shapeAttributes);
+        text = shapeAttributes.getText();
     }
 
     public void update(ShapeAttributes shapeAttributes) {
         super.update(shapeAttributes);
         boundingBox.update(shapeAttributes);
+        text = shapeAttributes.getText();
     }
 
     // Credit: https://stackoverflow.com/questions/8721406/how-to-determine-if-a-point-is-inside-a-2d-convex-polygon
@@ -64,6 +67,7 @@ public abstract class DrawableShape extends Shape {
                 .withStrokeColor(strokeColor)
                 .withStrokeSize(strokeSize)
                 .withFillColor("")
+                .withText(text)
                 .build();
     }
 }

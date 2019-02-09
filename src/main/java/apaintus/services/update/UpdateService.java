@@ -16,17 +16,18 @@ public class UpdateService {
     }
 
     public ShapeAttributes getAttributes() {
-        Point coordinates = new Point(attributeController.getAttributeValue(Attribute.COORDINATE_X), attributeController.getAttributeValue(Attribute.COORDINATE_Y));
+        Point coordinates = new Point(attributeController.getSpinnerValue(Attribute.COORDINATE_X), attributeController.getSpinnerValue(Attribute.COORDINATE_Y));
 
         return ShapeAttributes
                 .builder()
                 .withCoordinates(coordinates)
-                .withOrientation(attributeController.getAttributeValue(Attribute.ORIENTATION))
-                .withHeight(attributeController.getAttributeValue(Attribute.HEIGHT))
-                .withWidth(attributeController.getAttributeValue(Attribute.WIDTH))
+                .withOrientation(attributeController.getSpinnerValue(Attribute.ORIENTATION))
+                .withHeight(attributeController.getSpinnerValue(Attribute.HEIGHT))
+                .withWidth(attributeController.getSpinnerValue(Attribute.WIDTH))
                 .withStrokeSize(toolBarController.getStrokeSize())
                 .withStrokeColor(toolBarController.getStrokeColor().toString())
                 .withFillColor(toolBarController.getFillColor().toString())
+                .withText(attributeController.getTextAreaValue())
                 .build();
     }
 }

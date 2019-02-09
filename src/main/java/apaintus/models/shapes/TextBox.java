@@ -17,8 +17,7 @@ public class TextBox extends DrawableShape {
     public TextBox(ShapeAttributes shapeAttributes) {
         super(TEXT_BOX, shapeAttributes);
 
-        text = new String("Enter text down below \n"
-        		+ "dab on the haters in the attributes");
+        text = new String("Enter text down below");
         width = shapeAttributes.getWidth();
         height = shapeAttributes.getHeight();
         fillColor = shapeAttributes.getFillColor();
@@ -28,7 +27,8 @@ public class TextBox extends DrawableShape {
     public void update(ShapeAttributes shapeAttributes) {
         super.update(shapeAttributes);
 
-        //text = shapeAttributes.getText();
+        if (shapeAttributes.getText() != null )
+        	text = shapeAttributes.getText();
         width = shapeAttributes.getWidth();
         height = shapeAttributes.getHeight();
         fillColor = shapeAttributes.getFillColor();
