@@ -3,8 +3,8 @@ package apaintus.controllers;
 import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
-import apaintus.models.commands.Invoker;
 import apaintus.models.commands.DrawCommand;
+import apaintus.models.commands.Invoker;
 import apaintus.models.commands.UpdateCommand;
 import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.SelectionBox;
@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -75,10 +76,17 @@ public class CanvasController implements ChildController<Controller> {
             }
 
             activeTool = toolBarController.getActiveTool();
-            if (activeTool == ActiveTool.SELECT) {
+            if (activeTool != ActiveTool.SELECT) {
+                if (activeShape != null) {
+                    activeShape.setSelected(false);
+                    this.attributeController.resetSpinners();
+                    redrawCanvas();
+                }
+                activeShape = canvasService.createShape(activeTool, event);
+            } else {
                 ListIterator<DrawableShape> iterator = drawnShapes.listIterator(drawnShapes.size());
-                while(iterator.hasPrevious()) {
-                	DrawableShape shape = iterator.previous();
+                while (iterator.hasPrevious()) {
+                    DrawableShape shape = iterator.previous();
                     if (shape.contains(lastMouseClickPosition)) {
                         activeShape.setSelected(false);
 
@@ -162,6 +170,10 @@ public class CanvasController implements ChildController<Controller> {
         return canvasChanged;
     }
 
+    public void setCanvasChanged(boolean canvasChanged) {
+        this.canvasChanged = canvasChanged;
+    }
+
     public Image getCanvasImage() {
         // Remove the bounding box around the selected shape when saving canvas to image
         activeShape.setSelected(false);
@@ -173,16 +185,12 @@ public class CanvasController implements ChildController<Controller> {
         return image;
     }
 
-    public void setBaseImage(Image image) {
-        this.baseImage = image;
-    }
-
     public Image getBaseImage() {
         return baseImage;
     }
 
-    public void setCanvasChanged(boolean canvasChanged) {
-        this.canvasChanged = canvasChanged;
+    public void setBaseImage(Image image) {
+        this.baseImage = image;
     }
 
     public void saveDrawLayer() {
@@ -226,11 +234,19 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public double[] getCanvasDimension() {
-    	double[] dimension = new double[2];
-    	dimension[0]=canvas.getWidth();
-    	dimension[1]=canvas.getHeight();
-    	
-    	return dimension;
+        double[] dimension = new double[2];
+        dimension[0] = canvas.getWidth();
+        dimension[1] = canvas.getHeight();
+
+        return dimension;
+    }
+
+    public AttributeController getAttributeController() {
+        return attributeController;
+    }
+
+    public ToolBarController getToolBarController() {
+        return toolBarController;
     }
     
     public void drawSnapGrid() {
@@ -261,7 +277,7 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void changed(ObservableValue<? extends Color> observableValue, Color oldValue, Color newValue) {
-            if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
+            if (activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
                 invoker.execute(new UpdateCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
             }
         }

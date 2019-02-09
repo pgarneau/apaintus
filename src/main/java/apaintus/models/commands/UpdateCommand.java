@@ -30,11 +30,15 @@ public class UpdateCommand implements Command {
     public void undo() {
         shape.update(oldShapeAttributes);
         canvasController.redrawCanvas();
+        canvasController.getAttributeController().update(oldShapeAttributes);
+        canvasController.getToolBarController().update(oldShapeAttributes);
     }
 
     @Override
     public void redo() {
         execute();
+        canvasController.getAttributeController().update(shapeAttributes);
+        canvasController.getToolBarController().update(shapeAttributes);
     }
 
     @Override

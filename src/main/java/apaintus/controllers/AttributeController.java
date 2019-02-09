@@ -13,6 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 
+import javax.swing.event.DocumentEvent;
 import java.util.HashMap;
 import java.util.Map;
 
