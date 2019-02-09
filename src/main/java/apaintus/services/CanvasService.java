@@ -71,6 +71,7 @@ public class CanvasService {
         Point mousePosition = getMousePosition(mouseEvent);
         if(snapgrid.isActive()) {
         	mousePosition = snapgrid.computeNearestPoint(mousePosition);
+        	lastMouseClickPosition = snapgrid.computeNearestPoint(lastMouseClickPosition);
         }
         double strokeSize = toolBarController.getStrokeSize()/2 + BoundingBox.getBoundingboxStrokeSize();
 
@@ -96,6 +97,10 @@ public class CanvasService {
 		context.save();
 		context.setStroke(Color.BLACK);
 		
+		for(Point pt : snapgrid.getGridPoints()) {
+			context.fillOval(pt.getX(), pt.getY(), 5, 5);
+		}
+		
 		context.beginPath();
 		context.moveTo(0,0);
 		
@@ -106,7 +111,7 @@ public class CanvasService {
 		
 		for(int i = 0; i<(context.getCanvas().getWidth());i+=snapgrid.getSpacing()) {
 			context.moveTo(i,0);
-			context.lineTo(i,context.getCanvas().getHeight());
+			context.lineTo(i,context.getCanvas().getHeight()+i);
 		}
 		
 		context.stroke();
