@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import apaintus.controllers.Controller;
 import apaintus.controllers.MenuController;
+import apaintus.controllers.ToolBarController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -34,8 +35,6 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		loadPreferences();
-
 		setInstance(this);
 
 		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main.fxml"));
@@ -50,11 +49,16 @@ public class Main extends Application {
 		primaryStage.setTitle("PaintUS");
 		primaryStage.setScene(new Scene(root, 800, 600));
 		primaryStage.show();
+		
+		loadPreferences(primaryStage);
 	}
 
 	@Override
 	public void stop() {
-		savePreferences();
+		Stage primaryStage = controller.getPrimaryStage();
+
+		savePreferences(primaryStage);
+		
 		MenuController menuController = controller.getMenuController();
 		if (menuController.hasUnsavedWork()) {
 //			menuController.saveDialogBox();
@@ -65,22 +69,25 @@ public class Main extends Application {
 		launch(args);
 	}
 
-	private static void savePreferences() {
-		Properties prop = new Properties();
+	private void savePreferences(Stage primaryStage) {
+		ToolBarController toolBarController = controller.getToolBarController();
+		Properties toolBarProperties = toolBarController.getPreferences();
+		
+		Properties properties = new Properties();
 		OutputStream output = null;
 
 		try {
-
 			output = new FileOutputStream("config.properties");
 
+			double height = primaryStage.getHeight();
+			double width = primaryStage.getWidth();
 			// set the properties value
-			prop.setProperty("database", "localhost");
-			prop.setProperty("dbuser", "mkyong");
-			prop.setProperty("dbpassword", "password");
+			properties.setProperty("primaryStageHeight", Double.toString(height));
+			properties.setProperty("primaryStageWidth", Double.toString(width));
+			properties.putAll(toolBarProperties);
 
 			// save properties to project root folder
-			prop.store(output, null);
-
+			properties.store(output, null);
 		} catch (IOException io) {
 			io.printStackTrace();
 		} finally {
@@ -94,22 +101,22 @@ public class Main extends Application {
 		}
 	}
 
-	private static void loadPreferences() {
-		Properties prop = new Properties();
+	private void loadPreferences(Stage primaryStage) {
+		ToolBarController toolBarController = controller.getToolBarController();
+		
+		Properties properties = new Properties();
 		InputStream input = null;
 
 		try {
-
 			input = new FileInputStream("config.properties");
 
 			// load a properties file
-			prop.load(input);
+			properties.load(input);
 
 			// get the property value and print it out
-			System.out.println(prop.getProperty("database"));
-			System.out.println(prop.getProperty("dbuser"));
-			System.out.println(prop.getProperty("dbpassword"));
-
+			primaryStage.setHeight(Double.valueOf(properties.getProperty("primaryStageHeight")));
+			primaryStage.setWidth(Double.valueOf(properties.getProperty("primaryStageWidth")));
+			toolBarController.setPreferences(properties);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {

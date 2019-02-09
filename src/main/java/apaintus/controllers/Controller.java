@@ -48,6 +48,10 @@ public class Controller {
 	public void injectPrimaryStage(Stage stage) {
 		primaryStage = stage;
 	}
+	
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
 
 	public CanvasController getCanvasController() {
 		return canvasController;
