@@ -24,8 +24,8 @@ public class CanvasController implements ChildController<Controller> {
     @FXML private AnchorPane root;
     @FXML private Canvas drawLayer;
     @FXML private Canvas canvas;
+    @FXML private Canvas snapgridCanvas;
     
-    private Canvas snapgridCanvas;
     private Snapgrid snapgrid;
 
     private Controller controller;
@@ -56,11 +56,7 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     @Override
-    public void initialize() {
-    	snapgridCanvas = new Canvas();
-    	snapgridCanvas.setId("snapgrid");
-    	root.getChildren().add(snapgridCanvas);
-    	
+    public void initialize() {    	
         canvas.setOnMousePressed(event -> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
 
@@ -184,7 +180,7 @@ public class CanvasController implements ChildController<Controller> {
     	canvasService.draw(snapgridCanvas.getGraphicsContext2D(), snapgrid);
     }
     
-    public void clearSnapGrid() {
+    public void clearSnapgrid() {
     	snapgridCanvas.getGraphicsContext2D().clearRect(0, 0, snapgridCanvas.getWidth(), snapgridCanvas.getHeight());
     }
 
@@ -233,7 +229,7 @@ public class CanvasController implements ChildController<Controller> {
 
 	public void activateSnapGrid() {
 		if(snapgrid.isActive()) {
-			clearSnapGrid();
+			clearSnapgrid();
 			snapgrid.setActive(false);
 		}
 		else {

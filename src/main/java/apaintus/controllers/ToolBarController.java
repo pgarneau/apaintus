@@ -59,7 +59,7 @@ public class ToolBarController implements ChildController<Controller> {
         activeToolToggleGroup.add(line);
         activeToolToggleGroup.add(smiley);
         activeToolToggleGroup.add(textBox);
-
+        
         select.setOnMouseClicked(event -> {
             toolBarService.toggle(select, activeToolToggleGroup);
             activeTool = ActiveTool.SELECT;

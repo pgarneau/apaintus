@@ -14,22 +14,22 @@ public class Snapgrid {
 	private ArrayList<Point> snapgridPoints;
 	
 	public Snapgrid(double spacing, double drawingAreaWidth, double drawingAreaHeight, boolean active){
-		this.spacing = spacing;
+		this.spacing = spacing * 10;
 		this.drawingAreaWidth = drawingAreaWidth;
 		this.drawingAreaHeight = drawingAreaHeight;
 		this.isActive = active;
-		this.snapgridPoints = new ArrayList<Point>();
-		if(this.isActive){
-			//send directive to canvas to draw snapgrid.
-		}
-		
+		this.snapgridPoints = new ArrayList<Point>();		
 		computeAllPointInGrid();
 	}
 	
 	private void computeAllPointInGrid() {
-		for (int i = 0; i < drawingAreaHeight; i+=spacing) {
-			for (int j = 0; j < drawingAreaWidth; j+=spacing) {
-				snapgridPoints.add(new Point(i,j));
+		snapgridPoints.clear();
+		System.out.println(drawingAreaHeight/spacing);
+		System.out.println(drawingAreaWidth/spacing);
+		for (int y = (int)spacing; y <= drawingAreaHeight; y+=spacing) {
+			for (int x = (int)spacing; x <= drawingAreaWidth; x+=spacing) {
+				snapgridPoints.add(new Point(x,y));
+				
 			}
 		}
 	}
@@ -47,7 +47,7 @@ public class Snapgrid {
 	}
 
 	public void setSpacing(Double newValue) {
-		this.spacing = newValue;
+		this.spacing = newValue * 10;
 		
 		//we need to recompute all the points when the spacing has changed.
 		computeAllPointInGrid();

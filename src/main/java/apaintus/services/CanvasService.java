@@ -84,20 +84,29 @@ public class CanvasService {
             tempDrawService.draw(context);
         }
     }
-    public void draw(GraphicsContext context, Snapgrid snapgrid) {
-    	ArrayList<Point> points = snapgrid.getGridPoints();
-    	double[] xPts = new double[points.size()];
-    	double[] yPts = new double[points.size()];
-    	int idx = 0;
-    	context.save();
-    	context.setStroke(Color.BLACK);
-    	context.setLineWidth(2);
-    	for(Point point : points) {
-    		System.out.println(point.getX()+":"+point.getY());
+    
+	public void draw(GraphicsContext context, Snapgrid snapgrid) {
+		context.save();
+		context.setStroke(Color.BLACK);
+		
+		context.beginPath();
+		context.moveTo(0,0);
+		
+		for(int i = 0; i<(context.getCanvas().getHeight());i+=snapgrid.getSpacing()) {
+			context.moveTo(0, i);
+			context.lineTo(context.getCanvas().getWidth()+i,i);
 		}
-    	context.strokeLine(0, snapgrid.getSpacing(), 0,800);
-    	context.restore();
-    }
+		
+		for(int i = 0; i<(context.getCanvas().getWidth());i+=snapgrid.getSpacing()) {
+			context.moveTo(i,0);
+			context.lineTo(i,context.getCanvas().getHeight());
+		}
+		
+		context.stroke();
+		context.closePath();
+		
+		context.restore();
+	}
 
     public void saveState(GraphicsContext canvasContext, Image image) {
             canvasContext.drawImage(image, 0, 0);

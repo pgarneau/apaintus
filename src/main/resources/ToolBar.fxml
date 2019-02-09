@@ -20,8 +20,8 @@
                   <Label alignment="TOP_LEFT" text="Spacing" />
                   <HBox prefHeight="25.0" prefWidth="133.0">
                      <children>
-                        <Spinner fx:id="spacing" amountToStepBy="1.0" editable="true" initialValue="6.0" max="20.0" min="0.0" prefHeight="25.0" prefWidth="51.0" />
                         <ToggleButton fx:id="snapgrid" mnemonicParsing="false" text="Snap Grid" />
+                        <Spinner fx:id="spacing" amountToStepBy="1.0" editable="true" initialValue="5.0" max="10" min="1.0" prefHeight="25.0" prefWidth="64.0" />
                      </children>
                   </HBox>
                </children>
