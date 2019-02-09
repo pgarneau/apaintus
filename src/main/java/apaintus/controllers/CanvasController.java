@@ -67,7 +67,7 @@ public class CanvasController implements ChildController<Controller> {
                     this.attributeController.resetSpinners();
                     redrawCanvas();
                 }
-                activeShape = canvasService.createShape(activeTool, event);
+                activeShape = canvasService.createShape(activeTool, event,snapgrid);
             } else {
             	ListIterator<DrawableShape> iterator = drawnShapes.listIterator(drawnShapes.size());
                 while(iterator.hasPrevious()) {
@@ -97,7 +97,7 @@ public class CanvasController implements ChildController<Controller> {
         canvas.setOnMouseDragged(event -> {
             activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
-                canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension());
+                canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension(),snapgrid);
                 attributeController.update(activeShape.getShapeAttributes());
 
                 canvasService.clear(drawLayer.getGraphicsContext2D());

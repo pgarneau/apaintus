@@ -28,8 +28,11 @@ public class CanvasService {
         this.toolBarController = toolBarController;
     }
 
-    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent) {
+    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent, Snapgrid snapgrid) {
         Point mousePosition = getMousePosition(mouseEvent);
+        if(snapgrid.isActive()) {
+        	mousePosition = snapgrid.computeNearestPoint(mousePosition);
+        }
         ShapeType shapeType = null;
 
         switch (activeTool) {
@@ -64,8 +67,12 @@ public class CanvasService {
 
     }
 
-    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimensions) {
-        Point mousePosition = computeInboundMousePosition(getMousePosition(mouseEvent), canvasDimensions);
+    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double [] canvasDimension,Snapgrid snapgrid) {
+        Point mousePosition = getMousePosition(mouseEvent);
+        if(snapgrid.isActive()) {
+        	mousePosition = snapgrid.computeNearestPoint(mousePosition);
+        }
+        double strokeSize = toolBarController.getStrokeSize()/2 + BoundingBox.getBoundingboxStrokeSize();
 
         ShapeFactory.updateShape(
                 shape,
