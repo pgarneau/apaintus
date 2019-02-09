@@ -64,7 +64,7 @@ public class AttributeController implements ChildController<Controller> {
         shapeOrientation.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.ORIENTATION));
         shapeWidth.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.WIDTH));
         shapeHeight.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.HEIGHT));
-        shapeText.textProperty().addListener(canvasController.new TextFieldChangeListener(Attribute.TEXT));
+        shapeText.textProperty().addListener(canvasController.new TextAreaChangeListener(Attribute.TEXT));
     }
 
     private void fillSpinnerMap() {
