@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.input.KeyCodeCombination?>
 
 <MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.MenuController">
    <menus>
@@ -18,8 +19,14 @@
       <Menu mnemonicParsing="false" text="Edit">
          <items>
             <MenuItem fx:id="menuClear" mnemonicParsing="false" onAction="#clear" text="Clear" />
-            <MenuItem fx:id="menuUndo" mnemonicParsing="false" onAction="#undo" text="Undo" />
-            <MenuItem fx:id="menuRedo" mnemonicParsing="false" onAction="#redo" text="Redo" />
+            <MenuItem fx:id="menuUndo" mnemonicParsing="false" onAction="#undo" text="Undo">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator></MenuItem>
+            <MenuItem fx:id="menuRedo" mnemonicParsing="false" onAction="#redo" text="Redo">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+               </accelerator></MenuItem>
          </items>
       </Menu>
    </menus>

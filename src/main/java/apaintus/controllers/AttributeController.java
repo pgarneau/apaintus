@@ -12,6 +12,7 @@ import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 
+import javax.swing.event.DocumentEvent;
 import java.util.HashMap;
 import java.util.Map;
 
