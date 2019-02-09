@@ -10,10 +10,6 @@ public class Rectangle extends FillableShape {
         super();
     }
 
-    private Rectangle() {
-        super();
-    }
-
     public Rectangle(ShapeAttributes shapeAttributes) {
         super(RECTANGLE, shapeAttributes);
     }
