@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class ToolBarController implements ChildController<Controller> {
     @FXML private ToolBar toolBar;
@@ -30,7 +31,8 @@ public class ToolBarController implements ChildController<Controller> {
     private Controller controller;
     private CanvasController canvasController;
     private ToolBarService toolBarService;
-
+    
+    private Properties properties = new Properties();
     private List<ToggleButton> activeToolToggleGroup = new ArrayList<>();
     private ActiveTool activeTool;
 
@@ -90,6 +92,18 @@ public class ToolBarController implements ChildController<Controller> {
         snapGrid.setOnMouseClicked(event ->{
         	canvasController.activateSnapGrid();
         });
+        
+        strokeSize.setOnMouseClicked(event -> {
+            setPreferences();
+        });
+        
+        fillColor.setOnAction(event -> {
+            setPreferences();
+        });
+        
+        strokeColor.setOnMouseClicked(event -> {
+            setPreferences();
+        });
 
 
         // DEFAULT SETTINGS
@@ -135,4 +149,21 @@ public class ToolBarController implements ChildController<Controller> {
 	public Double getGridSpacing() {
 		return spacingSize.getValue();
 	}
+    
+    public Properties getPreferences() {
+    	return properties;
+    }
+    
+    public void setPreferences(Properties properties) {
+    	this.properties = properties;
+    	strokeSize.getValueFactory().setValue(Double.valueOf(properties.getProperty("strokeSize")));
+    	setColorPicker(fillColor, properties.getProperty("fillColor"));
+    	setColorPicker(strokeColor, properties.getProperty("strokeColor"));
+    }
+    
+    private void setPreferences() {
+    	this.properties.setProperty("strokeColor", strokeColor.getValue().toString());
+    	this.properties.setProperty("fillColor", fillColor.getValue().toString());
+    	this.properties.setProperty("strokeSize", strokeSize.getValue().toString());
+    }
 }
