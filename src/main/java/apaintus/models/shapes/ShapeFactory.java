@@ -92,7 +92,18 @@ public class ShapeFactory {
                                 .withStrokeSize(strokeSize)
                                 .build()
                 );
-
+            case SELECTION_BOX:
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
+                return new SelectionBox(
+                        ShapeAttributes
+                                .builder()
+                                .withCoordinates(coordinates)
+                                .withWidth(dimensions[0])
+                                .withHeight(dimensions[1])
+                                .withStrokeSize(strokeSize)
+                                .build()
+                );
 
             default:
                 return null;
@@ -202,7 +213,19 @@ public class ShapeFactory {
                                 .build()
                 );
                 break;
-
+            case SELECTION_BOX:
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
+                shape.update(
+                        ShapeAttributes
+                                .builder()
+                                .withCoordinates(coordinates)
+                                .withWidth(dimensions[0])
+                                .withHeight(dimensions[1])
+                                .withStrokeSize(strokeSize)
+                                .build()
+                );
+                break;
         }
     }
 
