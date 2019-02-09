@@ -5,6 +5,7 @@ import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.models.commands.Invoker;
 import apaintus.models.commands.DrawCommand;
+import apaintus.models.commands.UpdateCommand;
 import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.SelectionBox;
 import apaintus.models.shapes.ShapeType;
@@ -261,8 +262,7 @@ public class CanvasController implements ChildController<Controller> {
         @Override
         public void changed(ObservableValue<? extends Color> observableValue, Color oldValue, Color newValue) {
             if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
-                activeShape.update(updateService.getAttributes());
-                redrawCanvas();
+                invoker.execute(new UpdateCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
             }
         }
     }
@@ -280,7 +280,8 @@ public class CanvasController implements ChildController<Controller> {
                 if(activeShape.getShapeType() == ShapeType.SELECTION_BOX) {
                     ((SelectionBox) activeShape).update(attribute, newValue - oldValue);
                 } else {
-                    activeShape.update(updateService.getAttributes());
+//                    activeShape.update(updateService.getAttributes());
+                    invoker.execute(new UpdateCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
                 }
                 redrawCanvas();
             }
@@ -288,7 +289,6 @@ public class CanvasController implements ChildController<Controller> {
     }
     
     public class GridSpinnerChangeListener implements ChangeListener<Double>{
-
     	@Override
     	public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
 			snapGrid.setSpacing(newValue);
