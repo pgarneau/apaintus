@@ -8,6 +8,7 @@ import apaintus.models.commands.Invoker;
 import apaintus.models.commands.UpdateCommand;
 import apaintus.models.commands.Invoker;
 import apaintus.models.commands.DrawCommand;
+import apaintus.models.commands.UpdateCommand;
 import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.SelectionBox;
 import apaintus.models.shapes.ShapeType;
