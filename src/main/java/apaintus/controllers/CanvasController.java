@@ -8,6 +8,7 @@ import apaintus.models.commands.Invoker;
 import apaintus.models.commands.UpdateCommand;
 import apaintus.models.commands.Invoker;
 import apaintus.models.commands.DrawCommand;
+import apaintus.models.commands.Invoker;
 import apaintus.models.commands.UpdateCommand;
 import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.SelectionBox;
@@ -186,10 +187,6 @@ public class CanvasController implements ChildController<Controller> {
         redrawCanvas();
 
         return image;
-    }
-
-    public void setBaseImage(Image image) {
-        this.baseImage = image;
     }
 
     public Image getBaseImage() {
