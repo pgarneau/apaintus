@@ -14,7 +14,15 @@ public class Snapgrid {
 	private ArrayList<Point> snapgridPoints;
 	
 	public Snapgrid(double spacing, double drawingAreaWidth, double drawingAreaHeight, boolean active){
-		this.spacing = spacing * 10;
+		try {
+			if (spacing <= 0)
+				throw new ArithmeticException();
+			this.spacing = spacing * 10;
+		} catch (Exception e) {
+			System.out.println("Trying to make a grid with a linespacing equal to 0");
+			System.out.println("This probably mean you are trying to pass a value from the wrong place.");
+			return;
+		}
 		this.drawingAreaWidth = drawingAreaWidth;
 		this.drawingAreaHeight = drawingAreaHeight;
 		this.isActive = active;
@@ -24,12 +32,9 @@ public class Snapgrid {
 	
 	private void computeAllPointInGrid() {
 		snapgridPoints.clear();
-		System.out.println(drawingAreaHeight/spacing);
-		System.out.println(drawingAreaWidth/spacing);
 		for (int y = (int)spacing; y <= drawingAreaHeight; y+=spacing) {
 			for (int x = (int)spacing; x <= drawingAreaWidth; x+=spacing) {
 				snapgridPoints.add(new Point(x,y));
-				
 			}
 		}
 	}

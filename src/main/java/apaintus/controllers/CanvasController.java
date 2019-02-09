@@ -224,6 +224,8 @@ public class CanvasController implements ChildController<Controller> {
     	@Override
     	public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
     		snapgrid.setSpacing(newValue);
+    		clearSnapgrid();
+    		drawSnapgrid();
     	}
     }
 
