@@ -3,6 +3,8 @@ package apaintus.controllers;
 import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
+import apaintus.models.commands.Invoker;
+import apaintus.models.commands.DrawCommand;
 import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.SelectionBox;
 import apaintus.models.shapes.ShapeType;
@@ -38,6 +40,8 @@ public class CanvasController implements ChildController<Controller> {
     private CanvasService canvasService;
     private UpdateService updateService;
 
+    private Invoker invoker;
+
     private Point lastMouseClickPosition;
     private DrawableShape activeShape;
     private SelectionBox selectionBox;
@@ -55,6 +59,7 @@ public class CanvasController implements ChildController<Controller> {
         this.updateService = new UpdateService(this.attributeController, this.toolBarController);
 
         snapGrid = new SnapGrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),toolBarController.getStrokeSize(),false);
+        invoker = this.controller.getInvoker();
     }
 
     @Override
@@ -72,7 +77,7 @@ public class CanvasController implements ChildController<Controller> {
             if (activeTool == ActiveTool.SELECT) {
                 ListIterator<DrawableShape> iterator = drawnShapes.listIterator(drawnShapes.size());
                 while(iterator.hasPrevious()) {
-                	DrawableShape shape = (DrawableShape)iterator.previous();
+                	DrawableShape shape = iterator.previous();
                     if (shape.contains(lastMouseClickPosition)) {
                         activeShape.setSelected(false);
 
@@ -97,9 +102,10 @@ public class CanvasController implements ChildController<Controller> {
 
             if (event.getX() != lastMouseClickPosition.getX() && event.getY() != lastMouseClickPosition.getY()) {
                 if (activeTool == ActiveTool.SELECT) {
-                    saveSelectionBox();
+//                    saveSelectionBox();
                 } else {
-                    saveDrawLayer();
+//                    saveDrawLayer();
+                    invoker.execute(new DrawCommand(this, activeShape));
                 }
                 canvasChanged = true;
             }
@@ -134,7 +140,6 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public void drawImage(Image image) {
-        baseImage = image;
         canvasService.saveState(canvas.getGraphicsContext2D(), image);
     }
 
@@ -167,17 +172,21 @@ public class CanvasController implements ChildController<Controller> {
         return image;
     }
 
+    public void setBaseImage(Image image) {
+        this.baseImage = image;
+    }
+
+    public Image getBaseImage() {
+        return baseImage;
+    }
 
     public void setCanvasChanged(boolean canvasChanged) {
         this.canvasChanged = canvasChanged;
     }
 
-    private void saveDrawLayer() {
+    public void saveDrawLayer() {
         if (activeShape != null) {
-            drawnShapes.add(activeShape);
-
             canvasService.saveState(canvas.getGraphicsContext2D(), canvasService.convertCanvasToImage(drawLayer));
-
             canvasService.clear(drawLayer.getGraphicsContext2D());
         }
     }

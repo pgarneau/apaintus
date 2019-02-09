@@ -15,6 +15,9 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
+import java.util.List;
+import java.util.Optional;
+
 public class CanvasService {
     ToolBarController toolBarController;
 

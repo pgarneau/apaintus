@@ -9,17 +9,18 @@
       <Menu mnemonicParsing="false" text="File">
         <items>
             <MenuItem fx:id="menuNew" mnemonicParsing="false" onAction="#newCanvas" text="New" />
-            <MenuItem fx:id="menuOpen" mnemonicParsing="false" onAction="#loadPng" text="Load PNG" />
             <MenuItem fx:id="menuSave" mnemonicParsing="false" onAction="#savePng" text="Save PNG" />
+            <MenuItem fx:id="menuOpen" mnemonicParsing="false" onAction="#loadPng" text="Load PNG" />
             <MenuItem fx:id="menuExportXml" mnemonicParsing="false" onAction="#exportXml" text="Export XML" />
             <MenuItem fx:id="menuImportXml" mnemonicParsing="false" onAction="#importXml" text="Import XML" />
         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Edit">
-        <items>
-          <MenuItem fx:id="menuClear" mnemonicParsing="false" onAction="#clearButtonClicked" text="Clear" />
-        </items><items>
-        </items>
+         <items>
+            <MenuItem fx:id="menuClear" mnemonicParsing="false" onAction="#clear" text="Clear" />
+            <MenuItem fx:id="menuUndo" mnemonicParsing="false" onAction="#undo" text="Undo" />
+            <MenuItem fx:id="menuRedo" mnemonicParsing="false" onAction="#redo" text="Redo" />
+         </items>
       </Menu>
    </menus>
 </MenuBar>

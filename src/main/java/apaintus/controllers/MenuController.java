@@ -1,23 +1,26 @@
 package apaintus.controllers;
 
+import apaintus.models.commands.Invoker;
+import apaintus.models.commands.ClearCommand;
+import apaintus.models.commands.DrawImageCommand;
+import apaintus.models.commands.LoadPngCommand;
 import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.Shape;
 import apaintus.services.MenuService;
 import apaintus.services.file.FileService;
 import apaintus.services.file.png.PngFileService;
 import apaintus.services.file.xml.XmlFileService;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class MenuController implements ChildController<Controller> {
+	@FXML MenuBar menuBar;
+
 	private Controller controller;
 	private CanvasController canvasController;
 
@@ -25,12 +28,14 @@ public class MenuController implements ChildController<Controller> {
 	private FileService<List<DrawableShape>, List<DrawableShape>> xmlFileService;
 	private MenuService menuService;
 
-	@FXML MenuBar menuBar;
+	private Invoker invoker;
 
 	@Override
 	public void injectParentController(Controller controller) {
 		this.controller = controller;
 		this.canvasController = this.controller.getCanvasController();
+
+		this.invoker = this.controller.getInvoker();
 	}
 
 	@Override
@@ -77,8 +82,7 @@ public class MenuController implements ChildController<Controller> {
 			}
 		}
 
-		canvasController.clearCanvas();
-		canvasController.drawImage(pngFileService.load());
+		invoker.execute(new LoadPngCommand(new ClearCommand(canvasController), new DrawImageCommand(canvasController, pngFileService.load())));
 	}
 
 	public void exportXml() {
@@ -96,10 +100,19 @@ public class MenuController implements ChildController<Controller> {
 		canvasController.clearCanvas();
 	    canvasController.setDrawnShapes(xmlFileService.load());
 	    canvasController.redrawCanvas();
+	    invoker.clear();
 	}
 
-	public void clearButtonClicked() {
+	public void clear() {
 		canvasController.clearCanvas();
+	}
+
+	public void undo() {
+		invoker.undo();
+	}
+
+	public void redo() {
+		invoker.redo();
 	}
 
 	public boolean hasUnsavedWork() {

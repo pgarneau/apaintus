@@ -5,7 +5,6 @@ import apaintus.services.draw.rectangle.RectangleDrawService;
 import static apaintus.models.shapes.ShapeType.RECTANGLE;
 
 public class Rectangle extends FillableShape {
-
     private Rectangle() {
         super();
     }
