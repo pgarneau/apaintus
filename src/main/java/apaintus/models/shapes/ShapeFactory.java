@@ -100,19 +100,14 @@ public class ShapeFactory {
     }
 
     public static void updateShape(Shape shape, Point mousePosition, Point lastMouseClickPosition, String fillColor, String strokeColor, double strokeSize,Snapgrid snapgrid, double canvasWidth, double canvasHeight) {
-        switch (shape.getShapeType()) {
+    	Point[] positions = new Point[2];
+    	switch (shape.getShapeType()) {
             case RECTANGLE:
-            	Point mosPos = mousePosition;
-            	Point lastPos = lastMouseClickPosition;
-            	if(snapgrid.isActive()) {
-            		mosPos = computeNearestPoint(mousePosition,snapgrid,strokeSize);
-            		lastPos = computeNearestPoint(lastMouseClickPosition,snapgrid,strokeSize);
-            		if(mosPos == lastPos) {
-            			lastPos = getToNextPointInGrid(lastPos,snapgrid.getGridPoints());
-            		}
-                }
-                dimensions = computeDimensions(mosPos, lastPos, canvasWidth, canvasHeight, strokeSize);
-                coordinates = computeCoordinates(mosPos, lastPos,strokeSize);
+            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
+            	mousePosition = positions[0];
+            	lastMouseClickPosition = positions[1];
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
            
                 shape.update(
                         ShapeAttributes
@@ -129,12 +124,9 @@ public class ShapeFactory {
                 break;
 
             case CIRCLE:
-            	if(snapgrid.isActive()) {
-            		mousePosition = computeNearestPoint(mousePosition,snapgrid,strokeSize);
-            		lastMouseClickPosition = computeNearestPoint(lastMouseClickPosition,snapgrid,strokeSize);
-            		if(mousePosition == lastMouseClickPosition) {
-            		}
-                }
+            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
+            	mousePosition = positions[0];
+            	lastMouseClickPosition = positions[1];
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
                 shape.update(
@@ -152,12 +144,9 @@ public class ShapeFactory {
                 break;
 
             case LINE:
-            	if(snapgrid.isActive()) {
-            		mousePosition = computeNearestPoint(mousePosition,snapgrid,strokeSize);
-            		lastMouseClickPosition = computeNearestPoint(lastMouseClickPosition,snapgrid,strokeSize);
-            		if(mousePosition == lastMouseClickPosition) {
-            		}
-                }
+            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
+            	mousePosition = positions[0];
+            	lastMouseClickPosition = positions[1];
                 orientation = computeOrientation(mousePosition, lastMouseClickPosition);
                 width = computeLineWidth(mousePosition, lastMouseClickPosition, strokeSize);
                 shape.update(
@@ -175,12 +164,9 @@ public class ShapeFactory {
                 break;
 
             case SMILEY:
-            	if(snapgrid.isActive()) {
-            		mousePosition = computeNearestPoint(mousePosition,snapgrid,strokeSize);
-            		lastMouseClickPosition = computeNearestPoint(lastMouseClickPosition,snapgrid,strokeSize);
-            		if(mousePosition == lastMouseClickPosition) {
-            		}
-                }
+            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
+            	mousePosition = positions[0];
+            	lastMouseClickPosition = positions[1];
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
                 shape.update(
@@ -198,12 +184,9 @@ public class ShapeFactory {
                 break;
                 
             case TEXT_BOX:
-            	if(snapgrid.isActive()) {
-            		mousePosition = computeNearestPoint(mousePosition,snapgrid,strokeSize);
-            		lastMouseClickPosition = computeNearestPoint(lastMouseClickPosition,snapgrid,strokeSize);
-            		if(mousePosition == lastMouseClickPosition) {
-            		}
-                }
+            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
+            	mousePosition = positions[0];
+            	lastMouseClickPosition = positions[1];
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
                 shape.update(
@@ -306,5 +289,19 @@ public class ShapeFactory {
 		}
 		
 		return newPoint;
+	}
+	
+	private static Point[] ajustPointWithSnapgrid(Snapgrid snapgrid, Point mousePosition, Point lastMouseClickPosition, double strokeSize) {
+		Point mosPos = mousePosition;
+    	Point lastPos = lastMouseClickPosition;
+		if(snapgrid.isActive()) {
+    		mosPos = computeNearestPoint(mousePosition,snapgrid,strokeSize);
+    		lastPos = computeNearestPoint(lastMouseClickPosition,snapgrid,strokeSize);
+    		if(mosPos == lastPos) {
+    			mosPos = getToNextPointInGrid(mosPos,snapgrid.getGridPoints());
+    		}
+        }
+		
+		return new Point[] {mosPos,lastPos};
 	}
 }
