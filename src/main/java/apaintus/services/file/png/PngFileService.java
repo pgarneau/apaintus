@@ -8,9 +8,12 @@ import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class PngFileService implements FileService<Image, Image> {
     public PngFileService() {}
+    private Path lastSaveRepository;
+    private Path lastLoadRepository;
 
     @Override
     public void save(Image image) {
@@ -46,19 +49,49 @@ public class PngFileService implements FileService<Image, Image> {
 
     @Override
     public File getSaveFile() {
-        return getFileChooser().showSaveDialog(null);
+    	File file = getFileChooser("save").showSaveDialog(null);
+    	lastSaveRepository = file.getParentFile().toPath();
+        return file;
     }
 
     @Override
     public File getLoadFile() {
-        return getFileChooser().showOpenDialog(null);
+    	File file = getFileChooser("load").showOpenDialog(null);
+    	lastLoadRepository = file.getParentFile().toPath();
+        return file;
     }
 
-    private FileChooser getFileChooser() {
+    private FileChooser getFileChooser(String action) {
         FileChooser fileChooser = new FileChooser();
+        if(action == "save" && lastSaveRepository != null) {
+        	fileChooser.setInitialDirectory(lastSaveRepository.toFile());
+        }
+        else if(action == "load" && lastLoadRepository != null) {
+        	fileChooser.setInitialDirectory(lastLoadRepository.toFile());
+        }
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("png files (*.png)", "*.png");
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         return fileChooser;
+    }
+    
+    @Override
+    public Path getLastSaveRepository() {
+    	return lastSaveRepository;
+    }
+    
+    @Override
+    public Path getLastLoadRepository() {
+    	return lastLoadRepository;
+    }
+    
+    @Override
+    public void setLastSaveRepository(Path lastSaveRepository) {
+    	this.lastSaveRepository = lastSaveRepository;
+    }
+    
+    @Override
+    public void setLastLoadRepository(Path lastLoadRepository) {
+    	this.lastLoadRepository = lastLoadRepository;
     }
 }
