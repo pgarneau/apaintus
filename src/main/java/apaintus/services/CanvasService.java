@@ -1,10 +1,5 @@
 package apaintus.services;
 
-import java.awt.Stroke;
-import java.util.ArrayList;
-import java.util.Vector;
-
-import apaintus.controllers.CanvasController;
 import apaintus.controllers.ToolBarController;
 import apaintus.model.snapgrid.Snapgrid;
 import apaintus.models.Point;
@@ -19,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class CanvasService {
     ToolBarController toolBarController;

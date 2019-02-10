@@ -7,6 +7,6 @@
    <children>
    		<Canvas fx:id="canvas" height="600.0" width="800.0" />
    		<Canvas fx:id="drawLayer" height="600.0" mouseTransparent="true" width="800.0" />
-   		<Canvas fx:id="snapgridCanvas" height="600.0" mouseTransparent="true" width="800.0" />
+   		<Canvas fx:id="snapGridCanvas" height="600.0" mouseTransparent="true" width="800.0" />
    </children>
 </AnchorPane>

@@ -4,7 +4,6 @@ import apaintus.model.snapgrid.Snapgrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.Shape;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.CanvasService;
 import apaintus.services.update.UpdateService;
@@ -24,7 +23,7 @@ public class CanvasController implements ChildController<Controller> {
     @FXML private AnchorPane root;
     @FXML private Canvas drawLayer;
     @FXML private Canvas canvas;
-    @FXML private Canvas snapgridCanvas;
+    @FXML private Canvas snapGridCanvas;
     
     private Snapgrid snapgrid;
 
@@ -45,14 +44,12 @@ public class CanvasController implements ChildController<Controller> {
     @Override
     public void injectParentController(Controller controller) {
         this.controller = controller;
-        
         this.toolBarController = this.controller.getToolBarController();
-        snapgrid = new Snapgrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),toolBarController.getStrokeSize(),false);
-        
         this.attributeController = this.controller.getAttributeController();
-
         this.canvasService = new CanvasService(this.toolBarController);
         this.updateService = new UpdateService(this.attributeController, this.toolBarController);
+
+        snapgrid = new Snapgrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),toolBarController.getStrokeSize(),false);
     }
 
     @Override
@@ -177,11 +174,11 @@ public class CanvasController implements ChildController<Controller> {
     }
     
     public void drawSnapgrid() {
-    	canvasService.draw(snapgridCanvas.getGraphicsContext2D(), snapgrid);
+    	canvasService.draw(snapGridCanvas.getGraphicsContext2D(), snapgrid);
     }
     
     public void clearSnapgrid() {
-    	snapgridCanvas.getGraphicsContext2D().clearRect(0, 0, snapgridCanvas.getWidth(), snapgridCanvas.getHeight());
+    	snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
     }
 
     public class ColorChangeListener implements ChangeListener<Color> {

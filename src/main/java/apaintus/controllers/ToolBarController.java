@@ -1,7 +1,6 @@
 package apaintus.controllers;
 
 import apaintus.models.Attribute;
-import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.ShapeAttributes;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
@@ -9,13 +8,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ToolBarController implements ChildController<Controller> {
-    @FXML private AnchorPane root;
     @FXML private ToolBar toolBar;
 
     @FXML private Spinner<Double> strokeSize;
@@ -27,8 +24,8 @@ public class ToolBarController implements ChildController<Controller> {
     @FXML private ToggleButton line;
     @FXML private ToggleButton smiley;
     @FXML private ToggleButton textBox;
-    @FXML private ToggleButton snapgrid;
-    @FXML private Spinner<Double> spacing;
+    @FXML private ToggleButton snapGrid;
+    @FXML private Spinner<Double> spacingSize;
 
     private Controller controller;
     private CanvasController canvasController;
@@ -46,7 +43,7 @@ public class ToolBarController implements ChildController<Controller> {
         fillColor.valueProperty().addListener(canvasController.new ColorChangeListener(Attribute.FILL_COLOR));
         strokeColor.valueProperty().addListener(canvasController.new ColorChangeListener(Attribute.STROKE_COLOR));
         strokeSize.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.STROKE_SIZE));
-        spacing.valueProperty().addListener(canvasController.new GridSpinnerChangeListener());
+        spacingSize.valueProperty().addListener(canvasController.new GridSpinnerChangeListener());
     }
 
     @Override
@@ -90,7 +87,7 @@ public class ToolBarController implements ChildController<Controller> {
             activeTool = ActiveTool.TEXT_BOX;
         });
         
-        snapgrid.setOnMouseClicked(event ->{
+        snapGrid.setOnMouseClicked(event ->{
         	canvasController.activateSnapGrid();
         });
 
@@ -99,7 +96,7 @@ public class ToolBarController implements ChildController<Controller> {
         select.setSelected(true);
         activeTool = ActiveTool.SELECT;
         
-        snapgrid.setSelected(false);
+        snapGrid.setSelected(false);
     }
 
     public void update(ShapeAttributes shapeAttributes) {
@@ -136,6 +133,6 @@ public class ToolBarController implements ChildController<Controller> {
     }
 
 	public Double getGridSpacing() {
-		return spacing.getValue();
+		return spacingSize.getValue();
 	}
 }

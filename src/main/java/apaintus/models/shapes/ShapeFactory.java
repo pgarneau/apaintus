@@ -292,16 +292,16 @@ public class ShapeFactory {
 	}
 	
 	private static Point[] ajustPointWithSnapgrid(Snapgrid snapgrid, Point mousePosition, Point lastMouseClickPosition, double strokeSize) {
-		Point mosPos = mousePosition;
-    	Point lastPos = lastMouseClickPosition;
-		if(snapgrid.isActive()) {
-    		mosPos = computeNearestPoint(mousePosition,snapgrid,strokeSize);
-    		lastPos = computeNearestPoint(lastMouseClickPosition,snapgrid,strokeSize);
-    		if(mosPos == lastPos) {
-    			mosPos = getToNextPointInGrid(mosPos,snapgrid.getGridPoints());
-    		}
+        Point newMousePosition = mousePosition;
+        Point newLastMousePosition = lastMouseClickPosition;
+        if (snapgrid.isActive()) {
+            newMousePosition = computeNearestPoint(mousePosition, snapgrid, strokeSize);
+            newLastMousePosition = computeNearestPoint(lastMouseClickPosition, snapgrid, strokeSize);
+            if (newMousePosition == newLastMousePosition) {
+                newMousePosition = getToNextPointInGrid(newMousePosition, snapgrid.getGridPoints());
+            }
         }
-		
-		return new Point[] {mosPos,lastPos};
-	}
+
+        return new Point[]{newMousePosition, newLastMousePosition};
+    }
 }
