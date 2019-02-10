@@ -1,7 +1,7 @@
 package apaintus.services;
 
 import apaintus.controllers.ToolBarController;
-import apaintus.model.snapgrid.Snapgrid;
+import apaintus.models.snapgrid.Snapgrid;
 import apaintus.models.Point;
 import apaintus.models.shapes.*;
 import apaintus.models.shapes.Shape;

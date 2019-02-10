@@ -1,6 +1,6 @@
 package apaintus.controllers;
 
-import apaintus.model.snapgrid.Snapgrid;
+import apaintus.models.snapgrid.Snapgrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.models.shapes.DrawableShape;

@@ -2,7 +2,7 @@ package apaintus.models.shapes;
 
 import java.util.ArrayList;
 
-import apaintus.model.snapgrid.Snapgrid;
+import apaintus.models.snapgrid.Snapgrid;
 import apaintus.models.Point;
 
 public class ShapeFactory {
