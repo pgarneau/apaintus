@@ -95,10 +95,10 @@ public class CanvasService {
 		context.save();
 		context.setStroke(Color.BLACK);
 		
-		//this is used for debugging grid points
-		for(Point pt : snapgrid.getGridPoints()) {
-			context.fillOval(pt.getX(), pt.getY(), 5, 5);
-		}
+//		//this is used for debugging grid points
+//		for(Point pt : snapgrid.getGridPoints()) {
+//			context.fillOval(pt.getX(), pt.getY(), 5, 5);
+//		}
 		
 		context.beginPath();
 		context.moveTo(0,0);
