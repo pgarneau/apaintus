@@ -99,7 +99,7 @@ public class CanvasController implements ChildController<Controller> {
 
                 canvasService.clear(drawLayer.getGraphicsContext2D());
 
-                canvasService.draw(drawLayer.getGraphicsContext2D(), activeShape);
+                canvasService.drawShape(drawLayer.getGraphicsContext2D(), activeShape);
             }
         });
     }
@@ -112,7 +112,7 @@ public class CanvasController implements ChildController<Controller> {
         }
 
         for (DrawableShape shape : drawnShapes) {
-            canvasService.draw(canvas.getGraphicsContext2D(), shape);
+            canvasService.drawShape(canvas.getGraphicsContext2D(), shape);
         }
     }
 
@@ -173,8 +173,8 @@ public class CanvasController implements ChildController<Controller> {
     	return dimension;
     }
     
-    public void drawSnapgrid() {
-    	canvasService.draw(snapGridCanvas.getGraphicsContext2D(), snapgrid);
+    public void drawSnapGrid() {
+    	canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapgrid);
     }
     
     public void clearSnapgrid() {
@@ -223,7 +223,7 @@ public class CanvasController implements ChildController<Controller> {
 			snapgrid.setSpacing(newValue);
 			if (snapgrid.isActive()) {
 				clearSnapgrid();
-				drawSnapgrid();
+				drawSnapGrid();
 			}
 		}
     }
@@ -234,7 +234,7 @@ public class CanvasController implements ChildController<Controller> {
 			snapgrid.setActive(false);
 		}
 		else {
-			drawSnapgrid();
+			drawSnapGrid();
 			snapgrid.setActive(true);
 		}
 	}

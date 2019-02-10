@@ -22,7 +22,7 @@ public class CanvasService {
         this.toolBarController = toolBarController;
     }
 
-    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent, double [] canvasDimension, Snapgrid snapgrid) {
+    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent, double[] canvasDimension, Snapgrid snapgrid) {
         Point mousePosition = getMousePosition(mouseEvent);
         ShapeType shapeType = null;
 
@@ -42,7 +42,7 @@ public class CanvasService {
             case SMILEY:
                 shapeType = ShapeType.SMILEY;
                 break;
-                
+
             case TEXT_BOX:
                 shapeType = ShapeType.TEXT_BOX;
                 break;
@@ -60,9 +60,9 @@ public class CanvasService {
 
     }
 
-    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double [] canvasDimension,Snapgrid snapgrid) {
+    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimension, Snapgrid snapgrid) {
         Point mousePosition = getMousePosition(mouseEvent);
-        double strokeSize = toolBarController.getStrokeSize()/2 + BoundingBox.getBoundingboxStrokeSize();
+        double strokeSize = toolBarController.getStrokeSize() / 2 + BoundingBox.getBoundingboxStrokeSize();
 
         ShapeFactory.updateShape(
                 shape,
@@ -76,7 +76,7 @@ public class CanvasService {
                 canvasDimension[1]);
     }
 
-    public void draw(GraphicsContext context, DrawableShape shape) {
+    public void drawShape(GraphicsContext context, DrawableShape shape) {
         DrawService drawService = shape.getDrawService();
         drawService.draw(context);
         if (shape.isSelected()) {
@@ -84,37 +84,37 @@ public class CanvasService {
             tempDrawService.draw(context);
         }
     }
-    
-	public void draw(GraphicsContext context, Snapgrid snapgrid) {
-		context.save();
-		context.setStroke(Color.BLACK);
-		
+
+    public void drawSnapGrid(GraphicsContext context, Snapgrid snapgrid) {
+        context.save();
+        context.setStroke(Color.BLACK);
+
 //		//this is used for debugging grid points
 //		for(Point pt : snapgrid.getGridPoints()) {
 //			context.fillOval(pt.getX(), pt.getY(), 5, 5);
 //		}
-		
-		context.beginPath();
-		context.moveTo(0,0);
-		
-		for(int i = 0; i<(context.getCanvas().getHeight());i+=snapgrid.getSpacing()) {
-			context.moveTo(0, i);
-			context.lineTo(context.getCanvas().getWidth()+i,i);
-		}
-		
-		for(int i = 0; i<(context.getCanvas().getWidth());i+=snapgrid.getSpacing()) {
-			context.moveTo(i,0);
-			context.lineTo(i,context.getCanvas().getHeight()+i);
-		}
-		
-		context.stroke();
-		context.closePath();
-		
-		context.restore();
-	}
+
+        context.beginPath();
+        context.moveTo(0, 0);
+
+        for (int i = 0; i < (context.getCanvas().getHeight()); i += snapgrid.getSpacing()) {
+            context.moveTo(0, i);
+            context.lineTo(context.getCanvas().getWidth() + i, i);
+        }
+
+        for (int i = 0; i < (context.getCanvas().getWidth()); i += snapgrid.getSpacing()) {
+            context.moveTo(i, 0);
+            context.lineTo(i, context.getCanvas().getHeight() + i);
+        }
+
+        context.stroke();
+        context.closePath();
+
+        context.restore();
+    }
 
     public void saveState(GraphicsContext canvasContext, Image image) {
-            canvasContext.drawImage(image, 0, 0);
+        canvasContext.drawImage(image, 0, 0);
     }
 
     public WritableImage convertCanvasToImage(Canvas canvas) {
