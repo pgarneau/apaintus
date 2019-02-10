@@ -53,7 +53,7 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     @Override
-    public void initialize() {    	
+    public void initialize() {
         canvas.setOnMousePressed(event -> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
 
