@@ -25,7 +25,7 @@ public class AttributeController implements ChildController<Controller> {
     @FXML
     private Spinner<Double> shapeHeight;
     @FXML
-    private TextArea shapeText;
+    private TextArea text;
 
     @FXML
     private AnchorPane root;
@@ -64,7 +64,7 @@ public class AttributeController implements ChildController<Controller> {
         shapeOrientation.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.ORIENTATION));
         shapeWidth.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.WIDTH));
         shapeHeight.valueProperty().addListener(canvasController.new SpinnerChangeListener(Attribute.HEIGHT));
-        shapeText.textProperty().addListener(canvasController.new TextAreaChangeListener(Attribute.TEXT));
+        text.textProperty().addListener(canvasController.new TextAreaChangeListener(Attribute.TEXT));
     }
 
     private void fillSpinnerMap() {
@@ -84,7 +84,7 @@ public class AttributeController implements ChildController<Controller> {
     }
     
     public String getTextAreaValue() {
-        return shapeText.getText();
+        return text.getText();
     }
 
     public void update(ShapeAttributes shapeAttributes) {
@@ -108,6 +108,6 @@ public class AttributeController implements ChildController<Controller> {
     }
     
     private void updateTextArea(String text) {
-    	shapeText.setText(text);;
+    	this.text.setText(text);;
     }
 }

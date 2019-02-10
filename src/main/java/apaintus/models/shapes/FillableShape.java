@@ -39,7 +39,6 @@ public abstract class FillableShape extends DrawableShape {
                 .withStrokeColor(strokeColor)
                 .withStrokeSize(strokeSize)
                 .withFillColor(fillColor)
-                .withText(text)
                 .build();
     }
 }

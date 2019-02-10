@@ -21,7 +21,7 @@
             <Label text="Height" />
             <Spinner fx:id="shapeHeight" prefHeight="25.0" prefWidth="75.0" />
             <Label text="Text" />
-            <TextArea fx:id="shapeText" prefHeight="30.0" prefWidth="125.0" />
+            <TextArea fx:id="text" prefHeight="30.0" prefWidth="125.0" />
         </items>
       </ToolBar>
    </children>
