@@ -72,6 +72,8 @@ public class Main extends Application {
 	private void savePreferences(Stage primaryStage) {
 		ToolBarController toolBarController = controller.getToolBarController();
 		Properties toolBarProperties = toolBarController.getPreferences();
+		MenuController menuController = controller.getMenuController();
+		Properties menuProperties = menuController.getPreferences();
 		
 		Properties properties = new Properties();
 		OutputStream output = null;
@@ -85,6 +87,7 @@ public class Main extends Application {
 			properties.setProperty("primaryStageHeight", Double.toString(height));
 			properties.setProperty("primaryStageWidth", Double.toString(width));
 			properties.putAll(toolBarProperties);
+			properties.putAll(menuProperties);
 
 			// save properties to project root folder
 			properties.store(output, null);
@@ -103,6 +106,7 @@ public class Main extends Application {
 
 	private void loadPreferences(Stage primaryStage) {
 		ToolBarController toolBarController = controller.getToolBarController();
+		MenuController menuController = controller.getMenuController();
 		
 		Properties properties = new Properties();
 		InputStream input = null;
@@ -114,9 +118,16 @@ public class Main extends Application {
 			properties.load(input);
 
 			// get the property value and print it out
-			primaryStage.setHeight(Double.valueOf(properties.getProperty("primaryStageHeight")));
-			primaryStage.setWidth(Double.valueOf(properties.getProperty("primaryStageWidth")));
+			try {
+				primaryStage.setHeight(Double.valueOf(properties.getProperty("primaryStageHeight")));
+				primaryStage.setWidth(Double.valueOf(properties.getProperty("primaryStageWidth")));
+			}
+			catch(Exception ex) {
+				ex.printStackTrace();
+			}
+			
 			toolBarController.setPreferences(properties);
+			menuController.setPreferences(properties);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {

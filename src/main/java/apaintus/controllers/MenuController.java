@@ -1,26 +1,26 @@
 package apaintus.controllers;
 
 import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.Shape;
 import apaintus.services.MenuService;
 import apaintus.services.file.FileService;
 import apaintus.services.file.png.PngFileService;
 import apaintus.services.file.xml.XmlFileService;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
-import java.util.ArrayList;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 public class MenuController implements ChildController<Controller> {
 	private Controller controller;
 	private CanvasController canvasController;
 
+	private Properties properties = new Properties();
 	private FileService<Image, Image> pngFileService;
 	private FileService<List<DrawableShape>, List<DrawableShape>> xmlFileService;
 	private MenuService menuService;
@@ -67,6 +67,7 @@ public class MenuController implements ChildController<Controller> {
 
 	public void savePng() {
 		pngFileService.save(canvasController.getCanvasImage());
+		this.properties.setProperty("lastSaveRepository", pngFileService.getLastSaveRepository().toString());
 		canvasController.setCanvasChanged(false);
 	}
 
@@ -79,10 +80,12 @@ public class MenuController implements ChildController<Controller> {
 
 		canvasController.clearCanvas();
 		canvasController.drawImage(pngFileService.load());
+		this.properties.setProperty("lastLoadRepository", pngFileService.getLastLoadRepository().toString());
 	}
 
 	public void exportXml() {
 		xmlFileService.save(canvasController.getDrawnShapes());
+		this.properties.setProperty("lastSaveRepository", pngFileService.getLastSaveRepository().toString());
 		canvasController.setCanvasChanged(false);
 	}
 
@@ -96,6 +99,7 @@ public class MenuController implements ChildController<Controller> {
 		canvasController.clearCanvas();
 	    canvasController.setDrawnShapes(xmlFileService.load());
 	    canvasController.redrawCanvas();
+		this.properties.setProperty("lastLoadRepository", pngFileService.getLastLoadRepository().toString());
 	}
 
 	public void clearButtonClicked() {
@@ -109,5 +113,26 @@ public class MenuController implements ChildController<Controller> {
 	public MenuBar getMenuBar() {
 		return menuBar;
 	}
-
+	
+    public Properties getPreferences() {
+    	return properties;
+    }
+    
+    public void setPreferences(Properties properties) {
+    	this.properties = properties;
+    	try {
+	    	pngFileService.setLastSaveRepository(Paths.get(properties.getProperty("lastSaveRepository")));
+	    	xmlFileService.setLastSaveRepository(Paths.get(properties.getProperty("lastSaveRepository")));
+    	} 
+    	catch(Exception ex) {
+			ex.printStackTrace();
+    	}
+    	try {
+	    	pngFileService.setLastLoadRepository(Paths.get(properties.getProperty("lastLoadRepository")));
+	    	xmlFileService.setLastLoadRepository(Paths.get(properties.getProperty("lastLoadRepository")));
+    	}
+    	catch(Exception ex) {
+			ex.printStackTrace();
+    	}
+    }
 }

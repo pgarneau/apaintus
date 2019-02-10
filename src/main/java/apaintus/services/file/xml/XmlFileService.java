@@ -12,10 +12,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 public class XmlFileService implements FileService<List<DrawableShape>, List<DrawableShape>> {
     public XmlFileService() {}
+    private Path lastSaveRepository;
+    private Path lastLoadRepository;
 
     @Override
     public void save(List<DrawableShape> shapeList) {
@@ -72,19 +75,49 @@ public class XmlFileService implements FileService<List<DrawableShape>, List<Dra
 
     @Override
     public File getSaveFile() {
-        return getFileChooser().showSaveDialog(null);
+    	File file = getFileChooser("save").showSaveDialog(null);
+    	lastSaveRepository = file.getParentFile().toPath();
+        return file;
     }
 
     @Override
     public File getLoadFile() {
-        return getFileChooser().showOpenDialog(null);
+    	File file = getFileChooser("load").showOpenDialog(null);
+    	lastLoadRepository = file.getParentFile().toPath();
+        return file;
     }
 
-    private FileChooser getFileChooser() {
+    private FileChooser getFileChooser(String action) {
         FileChooser fileChooser = new FileChooser();
+        if(action == "save") {
+        	fileChooser.setInitialDirectory(lastSaveRepository.toFile());
+        }
+        else if(action == "load") {
+        	fileChooser.setInitialDirectory(lastLoadRepository.toFile());
+        }
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("xml files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         return fileChooser;
+    }
+    
+    @Override
+    public Path getLastSaveRepository() {
+    	return lastSaveRepository;
+    }
+    
+    @Override
+    public Path getLastLoadRepository() {
+    	return lastLoadRepository;
+    }
+    
+    @Override
+    public void setLastSaveRepository(Path lastSaveRepository) {
+    	this.lastSaveRepository = lastSaveRepository;
+    }
+    
+    @Override
+    public void setLastLoadRepository(Path lastLoadRepository) {
+    	this.lastLoadRepository = lastLoadRepository;
     }
 }
