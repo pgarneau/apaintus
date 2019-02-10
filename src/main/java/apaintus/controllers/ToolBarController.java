@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -94,15 +95,15 @@ public class ToolBarController implements ChildController<Controller> {
         });
         
         strokeSize.setOnMouseClicked(event -> {
-            setPreferences();
+        	this.properties.setProperty("strokeSize", strokeSize.getValue().toString());
+        });
+        
+        strokeColor.setOnAction(event -> {
+        	this.properties.setProperty("strokeColor", strokeColor.getValue().toString());
         });
         
         fillColor.setOnAction(event -> {
-            setPreferences();
-        });
-        
-        strokeColor.setOnMouseClicked(event -> {
-            setPreferences();
+        	this.properties.setProperty("fillColor", fillColor.getValue().toString());
         });
 
 
@@ -156,14 +157,24 @@ public class ToolBarController implements ChildController<Controller> {
     
     public void setPreferences(Properties properties) {
     	this.properties = properties;
-    	strokeSize.getValueFactory().setValue(Double.valueOf(properties.getProperty("strokeSize")));
-    	setColorPicker(fillColor, properties.getProperty("fillColor"));
-    	setColorPicker(strokeColor, properties.getProperty("strokeColor"));
-    }
-    
-    private void setPreferences() {
-    	this.properties.setProperty("strokeColor", strokeColor.getValue().toString());
-    	this.properties.setProperty("fillColor", fillColor.getValue().toString());
-    	this.properties.setProperty("strokeSize", strokeSize.getValue().toString());
+
+    	try {
+	    	strokeSize.getValueFactory().setValue(Double.valueOf(properties.getProperty("strokeSize")));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+    	
+    	try {
+	    	setColorPicker(strokeColor, properties.getProperty("strokeColor"));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+    	
+    	try {
+	    	setColorPicker(fillColor, properties.getProperty("fillColor"));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+    	
     }
 }
