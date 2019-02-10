@@ -86,6 +86,20 @@ public class SelectionBox extends DrawableShape {
         return false;
     }
 
+    public void clear() {
+        shapes.clear();
+    }
+
+    public boolean contains(DrawableShape shape) {
+        for (Point vertices : shape.getBoundingBox().getVertices()) {
+            if (!super.contains(vertices)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public void optimize() {
         for (int index = 0; index < getSize(); index++) {
             if (shapes.get(index).getShapeType() == ShapeType.SELECTION_BOX) {

@@ -2,11 +2,10 @@ package apaintus.controllers;
 
 import apaintus.models.Attribute;
 import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.Shape;
 import apaintus.models.shapes.ShapeAttributes;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import apaintus.models.shapes.ShapeType;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
@@ -27,6 +26,8 @@ public class AttributeController implements ChildController<Controller> {
     private Spinner<Double> shapeWidth;
     @FXML
     private Spinner<Double> shapeHeight;
+    @FXML
+    private Button ungroup;
 
     @FXML
     private AnchorPane root;
@@ -43,12 +44,15 @@ public class AttributeController implements ChildController<Controller> {
         this.canvasController = this.controller.getCanvasController();
 
         setSpinnerChangeListener();
+        ungroup.setOnAction(canvasController.new UngroupActionEvent());
     }
 
     @Override
     public void initialize() {
         createValueFactory();
         fillSpinnerMap();
+
+        ungroup.setVisible(false);
     }
 
     private void createValueFactory() {
@@ -83,15 +87,16 @@ public class AttributeController implements ChildController<Controller> {
         return spinners.get(attribute).getValue();
     }
 
-    public void update(ShapeAttributes shapeAttributes) {
-        resetSpinners();
-        updateSpinners(shapeAttributes);
+    public void update(DrawableShape shape) {
+        updateSpinners(shape.getShapeAttributes());
+        ungroup.setVisible(shape.getShapeType() == ShapeType.SELECTION_BOX);
     }
 
-    public void resetSpinners() {
+    public void resetAttributes() {
         for (Map.Entry<Attribute, SpinnerValueFactory<Double>> entry : spinners.entrySet()) {
             entry.getValue().setValue(0.0);
         }
+        ungroup.setVisible(false);
     }
 
     private void updateSpinners(ShapeAttributes shapeAttributes) {
