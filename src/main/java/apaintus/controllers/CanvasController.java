@@ -47,7 +47,7 @@ public class CanvasController implements ChildController<Controller> {
         this.controller = controller;
         
         this.toolBarController = this.controller.getToolBarController();
-        snapgrid = new Snapgrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),false);
+        snapgrid = new Snapgrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),toolBarController.getStrokeSize(),false);
         
         this.attributeController = this.controller.getAttributeController();
 
@@ -67,7 +67,7 @@ public class CanvasController implements ChildController<Controller> {
                     this.attributeController.resetSpinners();
                     redrawCanvas();
                 }
-                activeShape = canvasService.createShape(activeTool, event,snapgrid);
+                activeShape = canvasService.createShape(activeTool, event,getCanvasDimension(),snapgrid);
             } else {
             	ListIterator<DrawableShape> iterator = drawnShapes.listIterator(drawnShapes.size());
                 while(iterator.hasPrevious()) {
@@ -223,10 +223,12 @@ public class CanvasController implements ChildController<Controller> {
     	
     	@Override
     	public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-    		snapgrid.setSpacing(newValue);
-    		clearSnapgrid();
-    		drawSnapgrid();
-    	}
+			snapgrid.setSpacing(newValue);
+			if (snapgrid.isActive()) {
+				clearSnapgrid();
+				drawSnapgrid();
+			}
+		}
     }
 
 	public void activateSnapGrid() {

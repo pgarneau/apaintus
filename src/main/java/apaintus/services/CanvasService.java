@@ -28,11 +28,8 @@ public class CanvasService {
         this.toolBarController = toolBarController;
     }
 
-    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent, Snapgrid snapgrid) {
+    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent, double [] canvasDimension, Snapgrid snapgrid) {
         Point mousePosition = getMousePosition(mouseEvent);
-        if(snapgrid.isActive()) {
-        	mousePosition = snapgrid.computeNearestPoint(mousePosition);
-        }
         ShapeType shapeType = null;
 
         switch (activeTool) {
@@ -63,16 +60,14 @@ public class CanvasService {
                 mousePosition,
                 toolBarController.getFillColor().toString(),
                 toolBarController.getStrokeColor().toString(),
-                toolBarController.getStrokeSize());
+                toolBarController.getStrokeSize(),
+                canvasDimension[0],
+                canvasDimension[1]);
 
     }
 
     public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double [] canvasDimension,Snapgrid snapgrid) {
         Point mousePosition = getMousePosition(mouseEvent);
-        if(snapgrid.isActive()) {
-        	mousePosition = snapgrid.computeNearestPoint(mousePosition);
-        	lastMouseClickPosition = snapgrid.computeNearestPoint(lastMouseClickPosition);
-        }
         double strokeSize = toolBarController.getStrokeSize()/2 + BoundingBox.getBoundingboxStrokeSize();
 
         ShapeFactory.updateShape(
@@ -81,7 +76,10 @@ public class CanvasService {
                 lastMouseClickPosition,
                 toolBarController.getFillColor().toString(),
                 toolBarController.getStrokeColor().toString(),
-                toolBarController.getStrokeSize());
+                toolBarController.getStrokeSize(),
+                snapgrid,
+                canvasDimension[0],
+                canvasDimension[1]);
     }
 
     public void draw(GraphicsContext context, DrawableShape shape) {
@@ -97,6 +95,7 @@ public class CanvasService {
 		context.save();
 		context.setStroke(Color.BLACK);
 		
+		//this is used for debugging grid points
 		for(Point pt : snapgrid.getGridPoints()) {
 			context.fillOval(pt.getX(), pt.getY(), 5, 5);
 		}

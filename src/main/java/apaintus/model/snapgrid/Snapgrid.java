@@ -13,7 +13,7 @@ public class Snapgrid {
 	
 	private ArrayList<Point> snapgridPoints;
 	
-	public Snapgrid(double spacing, double drawingAreaWidth, double drawingAreaHeight, boolean active){
+	public Snapgrid(double spacing, double drawingAreaWidth, double drawingAreaHeight,double strokeSize, boolean active){
 		try {
 			if (spacing <= 0)
 				throw new ArithmeticException();
@@ -32,8 +32,8 @@ public class Snapgrid {
 	
 	private void computeAllPointInGrid() {
 		snapgridPoints.clear();
-		for (int y = (int)spacing; y <= drawingAreaHeight; y+=spacing) {
-			for (int x = (int)spacing; x <= drawingAreaWidth; x+=spacing) {
+		for (int y = 0; y <= drawingAreaHeight; y+=(spacing)) {
+			for (int x = 0; x <= drawingAreaWidth; x+=(spacing)) {
 				snapgridPoints.add(new Point(x,y));
 			}
 		}
@@ -60,20 +60,5 @@ public class Snapgrid {
 
 	public double getSpacing() {
 		return spacing;
-	}
-
-	public Point computeNearestPoint(Point mousePosition) {
-		Point newPoint = new Point(0, 0);
-		double distance = Double.MAX_VALUE;
-		for (Point pt : getGridPoints()) {
-			double x = (Math.abs(pt.getX()-mousePosition.getX()));
-			double y = (Math.abs(pt.getY()-mousePosition.getY()));
-			double currentDistance = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
-			if(distance > currentDistance) {
-				distance = currentDistance;
-				newPoint = pt;
-			}
-		}
-		return newPoint;
 	}
 }
