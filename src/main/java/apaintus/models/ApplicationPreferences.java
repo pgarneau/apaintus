@@ -1,17 +1,29 @@
 package apaintus.models;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Properties;
 
 public class ApplicationPreferences {
 	private static ApplicationPreferences applicationPreferences;
 	private Properties properties = new Properties();
+	private File propertiesFile;
+	private String propertiesFilePath;
 
-	private ApplicationPreferences() {}
+	private ApplicationPreferences() {
+		
+		propertiesFilePath = "config.properties";
+		propertiesFile = new File(propertiesFilePath);
+		System.out.println(propertiesFile.getAbsolutePath());
+		if(!propertiesFile.exists())
+		{
+			System.out.println("creating config file...");
+			try{
+				propertiesFile.createNewFile();
+			}catch (IOException e){
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public static synchronized ApplicationPreferences getInstance() {
 		if (applicationPreferences == null)
@@ -21,46 +33,26 @@ public class ApplicationPreferences {
 	}
 
 	public void loadPreferences() {
-		InputStream input = null;
-
 		try {
-			input = new FileInputStream("config.properties");
-
-			// load a properties file
-			properties.load(input);
-
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			if(propertiesFile.exists()) {
+				InputStream input = new FileInputStream(propertiesFile);
+				properties.load(input);
 			}
+		} catch (IOException e) {
+			System.err.println("file was never created!");
+			e.printStackTrace();
 		}
 	}
 
 	public void savePreferences() {
-		OutputStream output = null;
-
 		try {
-			output = new FileOutputStream("config.properties");
+			OutputStream output = new FileOutputStream(propertiesFile);
 
 			// save properties to project root folder
 			properties.store(output, null);
 
-		} catch (IOException io) {
-			io.printStackTrace();
-		} finally {
-			if (output != null) {
-				try {
-					output.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
