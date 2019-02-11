@@ -6,6 +6,8 @@ import apaintus.services.file.FileService;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -14,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class PngFileService implements FileService<Image, Image> {
+	private static final Logger LOGGER = LogManager.getLogger(PngFileService.class);
 	private Path savePath;
 	private Path loadPath;
 
@@ -27,8 +30,7 @@ public class PngFileService implements FileService<Image, Image> {
 			try {
 				ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 			} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println("Failed to save png image: " + e);
+			    LOGGER.error(e.getMessage());
 			}
 		}
 	}
@@ -43,8 +45,7 @@ public class PngFileService implements FileService<Image, Image> {
 
 				return new Image(imagePath);
 			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Failed to open png image: " + e);
+			    LOGGER.error(e.getMessage());
 			}
 		}
 

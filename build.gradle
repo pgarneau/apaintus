@@ -19,6 +19,8 @@ dependencies {
     compile group: 'javax.activation', name: 'activation', version: '1.1.1'
     compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.2.11'
     compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.2.11'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
 
     testCompile ("org.testfx:openjfx-monocle:jdk-9+181")
     testCompile('org.junit.jupiter:junit-jupiter-api:5.3.2')
@@ -46,7 +48,6 @@ compileJava {
     doFirst {
         options.compilerArgs = [
                 '--module-path', classpath.asPath,
-                '--add-modules', 'javafx.controls,javafx.base,javafx.fxml,javafx.graphics,javafx.swing,java.xml.bind'
         ]
         classpath = files()
     }

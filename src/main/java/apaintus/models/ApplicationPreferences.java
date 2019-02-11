@@ -1,66 +1,62 @@
 package apaintus.models;
 
+
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.util.Properties;
 
 public class ApplicationPreferences {
-	private static ApplicationPreferences applicationPreferences;
-	private Properties properties = new Properties();
-	private File propertiesFile;
-	private String propertiesFilePath;
+    private static ApplicationPreferences applicationPreferences;
+    private Properties properties = new Properties();
+    private File propertiesFile;
+    private String propertiesFilePath;
+    private static final Logger LOGGER = LogManager.getLogger(ApplicationPreferences.class);
 
-	private ApplicationPreferences() {
-		
-		propertiesFilePath = "config.properties";
-		propertiesFile = new File(propertiesFilePath);
-		System.out.println(propertiesFile.getAbsolutePath());
-		if(!propertiesFile.exists())
-		{
-			System.out.println("creating config file...");
-			try{
-				propertiesFile.createNewFile();
-			}catch (IOException e){
-				e.printStackTrace();
-			}
-		}
-	}
 
-	public static synchronized ApplicationPreferences getInstance() {
-		if (applicationPreferences == null)
-			applicationPreferences = new ApplicationPreferences();
+    private ApplicationPreferences() {
+        propertiesFilePath = "config.properties";
+        propertiesFile = new File(propertiesFilePath);
+        System.out.println(propertiesFile.getAbsolutePath());
+    }
 
-		return applicationPreferences;
-	}
+    public static synchronized ApplicationPreferences getInstance() {
+        if (applicationPreferences == null)
+            applicationPreferences = new ApplicationPreferences();
 
-	public void loadPreferences() {
-		try {
-			if(propertiesFile.exists()) {
-				InputStream input = new FileInputStream(propertiesFile);
-				properties.load(input);
-			}
-		} catch (IOException e) {
-			System.err.println("file was never created!");
-			e.printStackTrace();
-		}
-	}
+        return applicationPreferences;
+    }
 
-	public void savePreferences() {
-		try {
-			OutputStream output = new FileOutputStream(propertiesFile);
+    public void loadPreferences() {
+        try {
+            if (!propertiesFile.createNewFile()) {
+                InputStream input = new FileInputStream(propertiesFile);
+                properties.load(input);
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
 
-			// save properties to project root folder
-			properties.store(output, null);
+    public void savePreferences() {
+        try {
+            OutputStream output = new FileOutputStream(propertiesFile);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            // save properties to project root folder
+            properties.store(output, null);
 
-	public String getPreference(Preference name) {
-		return properties.getProperty(name.toString());
-	}
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
 
-	public void setPreference(Preference name, String value) {
-		properties.setProperty(name.toString(), value);
-	}
+    public String getPreference(Preference name) {
+        return properties.getProperty(name.toString());
+    }
+
+    public void setPreference(Preference name, String value) {
+        properties.setProperty(name.toString(), value);
+    }
 }
