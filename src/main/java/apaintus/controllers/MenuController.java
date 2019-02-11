@@ -1,19 +1,17 @@
 package apaintus.controllers;
 
+import apaintus.models.ApplicationPreferences;
 import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.Shape;
 import apaintus.services.MenuService;
 import apaintus.services.file.FileService;
 import apaintus.services.file.png.PngFileService;
 import apaintus.services.file.xml.XmlFileService;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +23,8 @@ public class MenuController implements ChildController<Controller> {
 	private FileService<List<DrawableShape>, List<DrawableShape>> xmlFileService;
 	private MenuService menuService;
 
-	@FXML MenuBar menuBar;
+	@FXML
+	MenuBar menuBar;
 
 	@Override
 	public void injectParentController(Controller controller) {
@@ -46,9 +45,9 @@ public class MenuController implements ChildController<Controller> {
 	}
 
 	public void newCanvas() {
-	    if (hasUnsavedWork()) {
-	    	if (menuService.saveRequested()) {
-	    		savePng();
+		if (hasUnsavedWork()) {
+			if (menuService.saveRequested()) {
+				savePng();
 			}
 		}
 
@@ -87,15 +86,15 @@ public class MenuController implements ChildController<Controller> {
 	}
 
 	public void importXml() {
-	    if (hasUnsavedWork()) {
-	        if (menuService.saveRequested()) {
-	        	exportXml();
+		if (hasUnsavedWork()) {
+			if (menuService.saveRequested()) {
+				exportXml();
 			}
 		}
 
 		canvasController.clearCanvas();
-	    canvasController.setDrawnShapes(xmlFileService.load());
-	    canvasController.redrawCanvas();
+		canvasController.setDrawnShapes(xmlFileService.load());
+		canvasController.redrawCanvas();
 	}
 
 	public void clearButtonClicked() {
@@ -103,11 +102,14 @@ public class MenuController implements ChildController<Controller> {
 	}
 
 	public boolean hasUnsavedWork() {
-	    return canvasController.isCanvasChanged();
+		return canvasController.isCanvasChanged();
 	}
 
 	public MenuBar getMenuBar() {
 		return menuBar;
 	}
 
+	public void setPreferences(ApplicationPreferences applicationPreferences) {
+		pngFileService.setPreferences(applicationPreferences);
+	}
 }
