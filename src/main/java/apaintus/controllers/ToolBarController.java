@@ -125,11 +125,11 @@ public class ToolBarController implements ChildController<Controller> {
 		snapGrid.setSelected(false);
 	}
 
-    private void setColorPicker(ColorPicker colorPicker, String colorValue) {
-        if(colorValue != null &&  !colorValue.isEmpty()) {
-            colorPicker.setValue(Color.valueOf(colorValue));
-        }
-    }
+	public void update(ShapeAttributes shapeAttributes) {
+		strokeSize.getValueFactory().setValue(shapeAttributes.getStrokeSize());
+		setColorPicker(strokeColor, shapeAttributes.getStrokeColor());
+		setColorPicker(fillColor, shapeAttributes.getFillColor());
+	}
 
 	// Binds the Toolbar's size to the main anchorpane
 	public void bindTo(AnchorPane anchorPane) {
