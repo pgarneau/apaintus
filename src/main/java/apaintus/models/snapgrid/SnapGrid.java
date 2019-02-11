@@ -14,15 +14,11 @@ public class SnapGrid {
 	private ArrayList<Point> snapgridPoints;
 	
 	public SnapGrid(double spacing, double drawingAreaWidth, double drawingAreaHeight, double strokeSize, boolean active){
-		try {
-			if (spacing <= 0)
-				throw new ArithmeticException();
-			this.spacing = spacing * 10;
-		} catch (Exception e) {
-			System.out.println("Trying to make a grid with a linespacing equal to 0");
-			System.out.println("This probably mean you are trying to pass a value from the wrong place.");
-			return;
-		}
+
+		if (spacing <= 0)
+			throw new IllegalArgumentException("Trying to make a grid with a linespacing equal to 0");
+		
+		this.spacing = spacing * 10;
 		this.drawingAreaWidth = drawingAreaWidth;
 		this.drawingAreaHeight = drawingAreaHeight;
 		this.isActive = active;
