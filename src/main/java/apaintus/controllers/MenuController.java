@@ -67,7 +67,7 @@ public class MenuController implements ChildController<Controller> {
 
 	public void savePng() {
 		pngFileService.save(canvasController.getCanvasImage());
-		this.properties.setProperty("lastSaveRepository", pngFileService.getLastSaveRepository().toString());
+		this.properties.setProperty("savePath", pngFileService.getLastSaveRepository().toString());
 		canvasController.setCanvasChanged(false);
 	}
 
@@ -80,12 +80,12 @@ public class MenuController implements ChildController<Controller> {
 
 		canvasController.clearCanvas();
 		canvasController.drawImage(pngFileService.load());
-		this.properties.setProperty("lastLoadRepository", pngFileService.getLastLoadRepository().toString());
+		this.properties.setProperty("loadPath", pngFileService.getLastLoadRepository().toString());
 	}
 
 	public void exportXml() {
 		xmlFileService.save(canvasController.getDrawnShapes());
-		this.properties.setProperty("lastSaveRepository", pngFileService.getLastSaveRepository().toString());
+		this.properties.setProperty("savePath", pngFileService.getLastSaveRepository().toString());
 		canvasController.setCanvasChanged(false);
 	}
 
@@ -99,7 +99,7 @@ public class MenuController implements ChildController<Controller> {
 		canvasController.clearCanvas();
 	    canvasController.setDrawnShapes(xmlFileService.load());
 	    canvasController.redrawCanvas();
-		this.properties.setProperty("lastLoadRepository", pngFileService.getLastLoadRepository().toString());
+		this.properties.setProperty("loadPath", pngFileService.getLastLoadRepository().toString());
 	}
 
 	public void clearButtonClicked() {
@@ -118,21 +118,17 @@ public class MenuController implements ChildController<Controller> {
     	return properties;
     }
     
+    public void setSavePath(String savePath) {
+    	pngFileService.setLastSaveRepository(Paths.get(savePath));
+    	xmlFileService.setLastSaveRepository(Paths.get(savePath));
+    }
+    
+    public void setLoadPath(String loadPath) {
+    	pngFileService.setLastLoadRepository(Paths.get(loadPath));
+    	xmlFileService.setLastLoadRepository(Paths.get(loadPath));
+    }
+    
     public void setPreferences(Properties properties) {
     	this.properties = properties;
-    	try {
-	    	pngFileService.setLastSaveRepository(Paths.get(properties.getProperty("lastSaveRepository")));
-	    	xmlFileService.setLastSaveRepository(Paths.get(properties.getProperty("lastSaveRepository")));
-    	} 
-    	catch(Exception ex) {
-			ex.printStackTrace();
-    	}
-    	try {
-	    	pngFileService.setLastLoadRepository(Paths.get(properties.getProperty("lastLoadRepository")));
-	    	xmlFileService.setLastLoadRepository(Paths.get(properties.getProperty("lastLoadRepository")));
-    	}
-    	catch(Exception ex) {
-			ex.printStackTrace();
-    	}
     }
 }

@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -128,13 +127,25 @@ public class ToolBarController implements ChildController<Controller> {
     public double getStrokeSize() {
         return strokeSize.getValue();
     }
-
-    public Color getFillColor() {
-        return fillColor.getValue();
+    
+    public void setStrokeSize(Double strokeSize) {
+    	this.strokeSize.getValueFactory().setValue(strokeSize);
     }
 
     public Color getStrokeColor() {
         return strokeColor.getValue();
+    }
+    
+    public void setStrokeColor(String color) {
+    	strokeColor.setValue(Color.valueOf(color));
+    }
+
+    public Color getFillColor() {
+        return fillColor.getValue();
+    }
+    
+    public void setFillColor(String color) {
+    	fillColor.setValue(Color.valueOf(color));
     }
 
     public ActiveTool getActiveTool() {
@@ -157,24 +168,5 @@ public class ToolBarController implements ChildController<Controller> {
     
     public void setPreferences(Properties properties) {
     	this.properties = properties;
-
-    	try {
-	    	strokeSize.getValueFactory().setValue(Double.valueOf(properties.getProperty("strokeSize")));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-    	
-    	try {
-	    	setColorPicker(strokeColor, properties.getProperty("strokeColor"));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-    	
-    	try {
-	    	setColorPicker(fillColor, properties.getProperty("fillColor"));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-    	
     }
 }
