@@ -1,16 +1,7 @@
 package apaintus;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Optional;
-import java.util.Properties;
-
 import apaintus.controllers.Controller;
 import apaintus.controllers.MenuController;
-import apaintus.controllers.ToolBarController;
 import apaintus.services.PreferencesService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
