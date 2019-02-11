@@ -78,7 +78,7 @@ public class ShapeFactory {
                 );
                 
             case TEXT_BOX:
-                dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasHeight, canvasHeight, canvasHeight);
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
                 return new TextBox(
                         ShapeAttributes
