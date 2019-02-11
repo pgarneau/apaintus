@@ -53,9 +53,12 @@ public class Main extends Application {
 		applicationPreferences.loadPreferences();
 		controller.getToolBarController().setPreferences(applicationPreferences);
 		controller.getMenuController().setPreferences(applicationPreferences);
-		primaryStage.setWidth(Double.valueOf(applicationPreferences.getPreference(Preference.WIDTH)));
-		primaryStage.setHeight(Double.valueOf(applicationPreferences.getPreference(Preference.HEIGHT)));
-
+		String width = applicationPreferences.getPreference(Preference.WIDTH);
+		if(width != null)
+			primaryStage.setWidth(Double.valueOf(width));
+		String height = applicationPreferences.getPreference(Preference.HEIGHT);
+		if(width != null)
+			primaryStage.setHeight(Double.valueOf(height));
 	}
 
 	@Override
