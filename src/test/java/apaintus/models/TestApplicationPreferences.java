@@ -1,6 +1,8 @@
 package apaintus.models;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
@@ -16,9 +18,7 @@ public class TestApplicationPreferences {
     public void testApplicationPreferencesSave(){
         ApplicationPreferences test = ApplicationPreferences.getInstance();
 
-        for(Preference pref : Preference.values()){
-            test.setPreference(pref,pref.toString());
-        }
+        //Test when we just opened the Application.
         test.savePreferences();
     }
 
@@ -36,12 +36,28 @@ public class TestApplicationPreferences {
     @Test
     public void testApplicationPreferencesSetPreferences(){
         ApplicationPreferences applicationPreferencesTest = ApplicationPreferences.getInstance();
-
-        for(Preference pref : Preference.values()){
-            applicationPreferencesTest.setPreference(pref,pref.toString());
-        }
+        String wrongWidthValue = "asdkfh";
+        String wrongSavePathValue = "9292";
+        String wrongLoadPathValue = "9292";
 
         String goodWidthValue = "2.0";
+        String goodSavePathValue = "";
+        String goodLoadPathValue = "9292";
+
+        applicationPreferencesTest.setPreference(Preference.WIDTH,wrongWidthValue);
+        assertEquals("Accepted alphabetic values for a numeric-only value",
+                "2.0",
+                applicationPreferencesTest.getPreference(Preference.WIDTH));
+
+        applicationPreferencesTest.setPreference(Preference.SAVE_PATH,wrongSavePathValue);
+        assertEquals("Acceptd a value type other than alphabetic-only",
+                goodSavePathValue,
+                applicationPreferencesTest.getPreference(Preference.SAVE_PATH));
+
+        applicationPreferencesTest.setPreference(Preference.LOAD_PATH,wrongLoadPathValue);
+        assertEquals("Acceptd a value type other than alphabetic-only",
+                goodLoadPathValue,
+                applicationPreferencesTest.getPreference(Preference.LOAD_PATH));
 
         //Testing good values.
         applicationPreferencesTest.setPreference(Preference.WIDTH,goodWidthValue);
@@ -54,12 +70,12 @@ public class TestApplicationPreferences {
     public void testApplicationPreferencesGetPreference(){
         ApplicationPreferences test = ApplicationPreferences.getInstance();
 
-        for (Preference pref : Preference.values()) {
-            test.setPreference(pref, pref.toString());
-        }
+        //Testing on a random pref that does not exist...
+        Mockito.when(test.getPreference(Matchers.any(Preference.class)));
 
-        for (Preference pref : Preference.values()) {
-            assertNotNull(test.getPreference(pref));
-        }
+        //Testing on prefs that exists...
+        String widthValue = test.getPreference(Preference.WIDTH);
+        assertNotNull(widthValue);
+
     }
 }
