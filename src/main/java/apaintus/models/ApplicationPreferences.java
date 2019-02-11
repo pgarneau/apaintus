@@ -10,8 +10,10 @@ public class ApplicationPreferences {
 	private String propertiesFilePath;
 
 	private ApplicationPreferences() {
-		propertiesFilePath = "out/production/resources/config.properties";
+		
+		propertiesFilePath = "config.properties";
 		propertiesFile = new File(propertiesFilePath);
+		System.out.println(propertiesFile.getAbsolutePath());
 		if(!propertiesFile.exists())
 		{
 			System.out.println("creating config file...");
