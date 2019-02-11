@@ -84,6 +84,9 @@ public class AttributeController implements ChildController<Controller> {
         spinners.put(Attribute.HEIGHT, shapeHeight.getValueFactory());
     }
 
+//	public void bindTo(AnchorPane mainPane) {
+//		bar.prefWidthProperty().bind(mainPane.prefWidthProperty());
+//	}
     public double getAttributeValue(Attribute attribute) {
         return spinners.get(attribute).getValue();
     }
