@@ -3,7 +3,7 @@ package apaintus.models.snapgrid;
 import apaintus.models.Point;
 import java.util.ArrayList;
 
-public class Snapgrid {
+public class SnapGrid {
 	
 	private double spacing = 0;
 	private double drawingAreaWidth = 0;
@@ -13,7 +13,7 @@ public class Snapgrid {
 	
 	private ArrayList<Point> snapgridPoints;
 	
-	public Snapgrid(double spacing, double drawingAreaWidth, double drawingAreaHeight,double strokeSize, boolean active){
+	public SnapGrid(double spacing, double drawingAreaWidth, double drawingAreaHeight, double strokeSize, boolean active){
 		try {
 			if (spacing <= 0)
 				throw new ArithmeticException();

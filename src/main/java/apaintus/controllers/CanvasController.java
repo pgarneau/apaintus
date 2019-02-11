@@ -1,6 +1,6 @@
 package apaintus.controllers;
 
-import apaintus.models.snapgrid.Snapgrid;
+import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.models.shapes.DrawableShape;
@@ -25,7 +25,7 @@ public class CanvasController implements ChildController<Controller> {
     @FXML private Canvas canvas;
     @FXML private Canvas snapGridCanvas;
     
-    private Snapgrid snapgrid;
+    private SnapGrid snapGrid;
 
     private Controller controller;
     private ToolBarController toolBarController;
@@ -49,7 +49,7 @@ public class CanvasController implements ChildController<Controller> {
         this.canvasService = new CanvasService(this.toolBarController);
         this.updateService = new UpdateService(this.attributeController, this.toolBarController);
 
-        snapgrid = new Snapgrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),toolBarController.getStrokeSize(),false);
+        snapGrid = new SnapGrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),toolBarController.getStrokeSize(),false);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CanvasController implements ChildController<Controller> {
                     this.attributeController.resetSpinners();
                     redrawCanvas();
                 }
-                activeShape = canvasService.createShape(activeTool, event,getCanvasDimension(),snapgrid);
+                activeShape = canvasService.createShape(activeTool, event,getCanvasDimension(), snapGrid);
             } else {
             	ListIterator<DrawableShape> iterator = drawnShapes.listIterator(drawnShapes.size());
                 while(iterator.hasPrevious()) {
@@ -94,7 +94,7 @@ public class CanvasController implements ChildController<Controller> {
         canvas.setOnMouseDragged(event -> {
             activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
-                canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension(),snapgrid);
+                canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension(), snapGrid);
                 attributeController.update(activeShape.getShapeAttributes());
 
                 canvasService.clear(drawLayer.getGraphicsContext2D());
@@ -174,7 +174,7 @@ public class CanvasController implements ChildController<Controller> {
     }
     
     public void drawSnapGrid() {
-    	canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapgrid);
+    	canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
     }
     
     public void clearSnapgrid() {
@@ -182,13 +182,13 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public void activateSnapGrid() {
-        if(snapgrid.isActive()) {
+        if(snapGrid.isActive()) {
             clearSnapgrid();
-            snapgrid.setActive(false);
+            snapGrid.setActive(false);
         }
         else {
             drawSnapGrid();
-            snapgrid.setActive(true);
+            snapGrid.setActive(true);
         }
     }
 
@@ -225,11 +225,11 @@ public class CanvasController implements ChildController<Controller> {
     }
     
     public class GridSpinnerChangeListener implements ChangeListener<Double>{
-    	
+
     	@Override
     	public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-			snapgrid.setSpacing(newValue);
-			if (snapgrid.isActive()) {
+			snapGrid.setSpacing(newValue);
+			if (snapGrid.isActive()) {
 				clearSnapgrid();
 				drawSnapGrid();
 			}

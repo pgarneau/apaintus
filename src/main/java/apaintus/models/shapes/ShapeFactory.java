@@ -2,7 +2,7 @@ package apaintus.models.shapes;
 
 import java.util.ArrayList;
 
-import apaintus.models.snapgrid.Snapgrid;
+import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Point;
 
 public class ShapeFactory {
@@ -15,7 +15,7 @@ public class ShapeFactory {
         switch (shapeType) {
             case RECTANGLE:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
                 return new Rectangle(
                         ShapeAttributes
                                 .builder()
@@ -31,7 +31,7 @@ public class ShapeFactory {
 
             case CIRCLE:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
                 return new Circle(
                         ShapeAttributes
                                 .builder()
@@ -63,7 +63,7 @@ public class ShapeFactory {
 
             case SMILEY:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
                 return new Smiley(
                         ShapeAttributes
                                 .builder()
@@ -79,7 +79,7 @@ public class ShapeFactory {
                 
             case TEXT_BOX:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasHeight, canvasHeight, canvasHeight);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
                 return new TextBox(
                         ShapeAttributes
                                 .builder()
@@ -99,7 +99,7 @@ public class ShapeFactory {
         }
     }
 
-    public static void updateShape(Shape shape, Point mousePosition, Point lastMouseClickPosition, String fillColor, String strokeColor, double strokeSize,Snapgrid snapgrid, double canvasWidth, double canvasHeight) {
+    public static void updateShape(Shape shape, Point mousePosition, Point lastMouseClickPosition, String fillColor, String strokeColor, double strokeSize, SnapGrid snapgrid, double canvasWidth, double canvasHeight) {
     	Point[] positions = new Point[2];
     	switch (shape.getShapeType()) {
             case RECTANGLE:
@@ -216,7 +216,7 @@ public class ShapeFactory {
 		return newPoint;
 	}
 
-	private static Point computeCoordinates(Point mousePosition, Point lastMouseClickPosition,double strokeSize) {
+	private static Point computeCoordinates(Point mousePosition, Point lastMouseClickPosition, double strokeSize) {
         Point coordinates;
 
         boolean upMotion = mousePosition.getY() - lastMouseClickPosition.getY() <= 0.0;
@@ -275,7 +275,7 @@ public class ShapeFactory {
         return orientation;
     }
     
-	private static Point computeNearestPoint(Point mousePosition,Snapgrid snapgrid, double strokeSize) {
+	private static Point computeNearestPoint(Point mousePosition, SnapGrid snapgrid, double strokeSize) {
 		Point newPoint = new Point(0, 0);
 		double distance = Double.MAX_VALUE;
 		for (Point pt : snapgrid.getGridPoints()) {
@@ -291,7 +291,7 @@ public class ShapeFactory {
 		return newPoint;
 	}
 	
-	private static Point[] ajustPointWithSnapgrid(Snapgrid snapgrid, Point mousePosition, Point lastMouseClickPosition, double strokeSize) {
+	private static Point[] ajustPointWithSnapgrid(SnapGrid snapgrid, Point mousePosition, Point lastMouseClickPosition, double strokeSize) {
         Point newMousePosition = mousePosition;
         Point newLastMousePosition = lastMouseClickPosition;
         if (snapgrid.isActive()) {
