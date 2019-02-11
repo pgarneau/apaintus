@@ -85,7 +85,7 @@ public class CanvasController implements ChildController<Controller> {
                     }
                 }
             }
-            activeShape = canvasService.createShape(activeTool, event);
+            activeShape = canvasService.createShape(activeTool, event, getCanvasDimension(), snapGrid);
 
             if (activeTool == ActiveTool.SELECT) {
                 selectionBox = (SelectionBox) activeShape;

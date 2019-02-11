@@ -93,8 +93,8 @@ public class ShapeFactory {
                                 .build()
                 );
             case SELECTION_BOX:
-                dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
                 return new SelectionBox(
                         ShapeAttributes
                                 .builder()
@@ -214,8 +214,8 @@ public class ShapeFactory {
                 );
                 break;
             case SELECTION_BOX:
-                dimensions = computeDimensions(mousePosition, lastMouseClickPosition);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition);
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
                 shape.update(
                         ShapeAttributes
                                 .builder()
