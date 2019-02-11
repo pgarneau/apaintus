@@ -17,11 +17,6 @@ public class SelectionBox extends DrawableShape {
         shapes = new ArrayList<>();
     }
 
-    public void update(ShapeAttributes shapeAttributes) {
-        super.update(shapeAttributes);
-        boundingBox.update(shapeAttributes);
-    }
-
     public void update(Attribute attribute, double step) {
         if (shapes.isEmpty()) {
             return;
@@ -31,7 +26,7 @@ public class SelectionBox extends DrawableShape {
                 ((SelectionBox) shape).update(attribute, step);
             }
             updateShape(attribute, step, shape);
-            shape.update(shape.getShapeAttributes());
+            shape.getBoundingBox().update(shape.getShapeAttributes());
         }
 
         updateShape(attribute, step, this);
@@ -95,7 +90,7 @@ public class SelectionBox extends DrawableShape {
         width = dimension.getX();
         height = dimension.getY();
 
-        update(getShapeAttributes());
+        boundingBox.update(getShapeAttributes());
     }
 
     public boolean isDuplicate(DrawableShape shape) {
