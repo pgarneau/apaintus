@@ -18,7 +18,9 @@ public class TestApplicationPreferences {
     public void testApplicationPreferencesSave(){
         ApplicationPreferences test = ApplicationPreferences.getInstance();
 
-        //Test when we just opened the Application.
+        for(Preference pref : Preference.values()){
+            test.setPreference(pref,pref.toString());
+        }
         test.savePreferences();
     }
 
@@ -36,6 +38,11 @@ public class TestApplicationPreferences {
     @Test
     public void testApplicationPreferencesSetPreferences(){
         ApplicationPreferences applicationPreferencesTest = ApplicationPreferences.getInstance();
+
+        for(Preference pref : Preference.values()){
+            applicationPreferencesTest.setPreference(pref,pref.toString());
+        }
+
         String wrongWidthValue = "asdkfh";
         String wrongSavePathValue = "9292";
         String wrongLoadPathValue = "9292";
