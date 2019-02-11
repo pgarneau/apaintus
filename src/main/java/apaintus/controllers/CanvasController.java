@@ -302,4 +302,20 @@ public class CanvasController implements ChildController<Controller> {
             }
         }
     }
+
+    public class TextAreaChangeListener implements ChangeListener<String> {
+        private Attribute attribute;
+
+        public TextAreaChangeListener(Attribute attribute) {
+            this.attribute = attribute;
+        }
+
+        @Override
+        public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+            if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
+                activeShape.update(updateService.getAttributes());
+                redrawCanvas();
+            }
+        }
+    }
 }

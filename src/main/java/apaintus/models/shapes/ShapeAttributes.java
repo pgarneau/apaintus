@@ -11,6 +11,7 @@ public class ShapeAttributes {
     private double strokeSize;
     private String fillColor;
     private String strokeColor;
+    private String text;
 
     private ShapeAttributes() {}
 
@@ -23,6 +24,7 @@ public class ShapeAttributes {
         this.strokeSize = builder.strokeSize;
         this.fillColor = builder.fillColor;
         this.strokeColor = builder.strokeColor;
+        this.text = builder.text;
     }
 
     public Point getCoordinates() {
@@ -56,6 +58,10 @@ public class ShapeAttributes {
     public String getFillColor() {
         return fillColor;
     }
+    
+    public String getText() {
+        return text;
+    }
 
     public static Builder builder() {
         return new ShapeAttributes.Builder();
@@ -70,6 +76,7 @@ public class ShapeAttributes {
         private double strokeSize;
         private String fillColor;
         private String strokeColor;
+        private String text;
 
         private Builder() {}
 
@@ -110,6 +117,11 @@ public class ShapeAttributes {
 
         public Builder withStrokeColor(String strokeColor) {
             this.strokeColor = strokeColor;
+            return this;
+        }
+        
+        public Builder withText(String text) {
+            this.text = text;
             return this;
         }
 
