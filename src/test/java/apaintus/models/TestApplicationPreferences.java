@@ -77,12 +77,12 @@ public class TestApplicationPreferences {
     public void testApplicationPreferencesGetPreference(){
         ApplicationPreferences test = ApplicationPreferences.getInstance();
 
-        //Testing on a random pref that does not exist...
-        Mockito.when(test.getPreference(Matchers.any(Preference.class)));
+        for (Preference pref : Preference.values()) {
+            test.setPreference(pref, pref.toString());
+        }
 
-        //Testing on prefs that exists...
-        String widthValue = test.getPreference(Preference.WIDTH);
-        assertNotNull(widthValue);
-
+        for (Preference pref : Preference.values()) {
+            assertNotNull(test.getPreference(pref));
+        }
     }
 }
