@@ -226,9 +226,6 @@ public class CanvasController implements ChildController<Controller> {
     
     public class GridSpinnerChangeListener implements ChangeListener<Double>{
     	
-    	public GridSpinnerChangeListener() {
-    	}
-    	
     	@Override
     	public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
 			snapgrid.setSpacing(newValue);
