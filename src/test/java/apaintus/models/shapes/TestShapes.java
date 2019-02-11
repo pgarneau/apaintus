@@ -106,7 +106,18 @@ public class TestShapes {
     }
 
     @Test
-    public void testRectCreate(){
+    public void testDrawRect(){
+        //Mocking Shape attributes...
+        ShapeAttributes mockedShapeAttributes = mock(ShapeAttributes.class);
+        when(mockedShapeAttributes.getHeight()).thenReturn(2.0);
+        when(mockedShapeAttributes.getWidth()).thenReturn(2.0);
+        Point testPoint = new Point(50.0,50.0);
+        when(mockedShapeAttributes.getCoordinates()).thenReturn(testPoint);
+        when(mockedShapeAttributes.getOrientation()).thenReturn(90.0,0.0);
+        when(mockedShapeAttributes.getStrokeColor()).thenReturn("Black");
+        when(mockedShapeAttributes.getStrokeSize()).thenReturn(6.0);
 
+        Rectangle testRect = new Rectangle(mockedShapeAttributes);
+        assertNotNull("Shapes should always have a DrawService",testRect.getDrawService());
     }
 }
