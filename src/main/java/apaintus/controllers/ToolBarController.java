@@ -8,6 +8,7 @@ import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 

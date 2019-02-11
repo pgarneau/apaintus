@@ -285,6 +285,7 @@ public class CanvasController implements ChildController<Controller> {
 
     public class ShapeSpinnerChangeListener implements ChangeListener<Double> {
         private Attribute attribute;
+        private boolean blocked;
 
         public ShapeSpinnerChangeListener(Attribute attribute) {
             this.attribute = attribute;
@@ -325,6 +326,10 @@ public class CanvasController implements ChildController<Controller> {
                 attributeController.resetAttributes();
                 redrawCanvas();
             }
+        }
+
+        public void setBlocked(boolean value) {
+            blocked = value;
         }
     }
 
