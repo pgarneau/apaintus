@@ -127,7 +127,7 @@ public class ToolBarController implements ChildController<Controller> {
     }
 
     private void setColorPicker(ColorPicker colorPicker, String colorValue) {
-        if(!colorValue.isEmpty()) {
+        if(colorValue != null &&  !colorValue.isEmpty()) {
             colorPicker.setValue(Color.valueOf(colorValue));
         }
     }
