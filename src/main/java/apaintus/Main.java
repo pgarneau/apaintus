@@ -2,7 +2,8 @@ package apaintus;
 
 import apaintus.controllers.Controller;
 import apaintus.controllers.MenuController;
-import apaintus.services.PreferencesService;
+import apaintus.models.ApplicationPreferences;
+import apaintus.models.Preference;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,8 +15,9 @@ public class Main extends Application {
 	private static Main instance;
 	private AnchorPane root;
 	static private double MIN_WIDTH = 800;
-	static private double  MIN_HEIGHT = 600;
-	private PreferencesService preferencesService;
+	static private double MIN_HEIGHT = 600;
+	private ApplicationPreferences applicationPreferences;
+	private Stage primaryStage;
 
 	public static Main getInstance() {
 		return instance;
@@ -32,6 +34,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		setInstance(this);
+		this.primaryStage = primaryStage;
 
 		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main.fxml"));
 		loader.load();
@@ -46,14 +49,21 @@ public class Main extends Application {
 		primaryStage.setScene(new Scene(root, MIN_WIDTH, MIN_HEIGHT));
 		primaryStage.show();
 
-		preferencesService = new PreferencesService(controller);
-		preferencesService.loadPreferences();
+		applicationPreferences = ApplicationPreferences.getInstance();
+		applicationPreferences.loadPreferences();
+		controller.getToolBarController().setPreferences(applicationPreferences);
+		controller.getMenuController().setPreferences(applicationPreferences);
+		primaryStage.setWidth(Double.valueOf(applicationPreferences.getPreference(Preference.WIDTH)));
+		primaryStage.setHeight(Double.valueOf(applicationPreferences.getPreference(Preference.HEIGHT)));
+
 	}
 
 	@Override
 	public void stop() {
-		preferencesService.savePreferences();
-		
+		applicationPreferences.setPreference(Preference.WIDTH, Double.toString(primaryStage.getWidth()));
+		applicationPreferences.setPreference(Preference.HEIGHT, Double.toString(primaryStage.getHeight()));
+		applicationPreferences.savePreferences();
+
 		MenuController menuController = controller.getMenuController();
 		if (menuController.hasUnsavedWork()) {
 //			menuController.saveDialogBox();
