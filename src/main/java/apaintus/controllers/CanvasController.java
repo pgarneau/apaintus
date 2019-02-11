@@ -181,6 +181,17 @@ public class CanvasController implements ChildController<Controller> {
     	snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
     }
 
+    public void activateSnapGrid() {
+        if(snapgrid.isActive()) {
+            clearSnapgrid();
+            snapgrid.setActive(false);
+        }
+        else {
+            drawSnapGrid();
+            snapgrid.setActive(true);
+        }
+    }
+
     public class ColorChangeListener implements ChangeListener<Color> {
         private Attribute attribute;
 
@@ -227,15 +238,4 @@ public class CanvasController implements ChildController<Controller> {
 			}
 		}
     }
-
-	public void activateSnapGrid() {
-		if(snapgrid.isActive()) {
-			clearSnapgrid();
-			snapgrid.setActive(false);
-		}
-		else {
-			drawSnapGrid();
-			snapgrid.setActive(true);
-		}
-	}
 }
