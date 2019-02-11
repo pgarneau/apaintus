@@ -102,7 +102,7 @@ public class AttributeController implements ChildController<Controller> {
     }
 
     public void update(ShapeAttributes shapeAttributes) {
-        resetSpinners();
+        resetAttributes();
         updateSpinners(shapeAttributes);
         updateTextArea(shapeAttributes.getText());
     }
