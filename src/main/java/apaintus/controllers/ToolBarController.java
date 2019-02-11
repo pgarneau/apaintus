@@ -6,6 +6,7 @@ import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
@@ -16,6 +17,7 @@ public class ToolBarController implements ChildController<Controller> {
     @FXML private ToolBar toolBar;
 
     @FXML private Spinner<Double> strokeSize;
+    @FXML private TextField strokeSizeText;
     @FXML private ColorPicker fillColor;
     @FXML private ColorPicker strokeColor;
     @FXML private ToggleButton select;
@@ -90,7 +92,6 @@ public class ToolBarController implements ChildController<Controller> {
         snapGrid.setOnMouseClicked(event ->{
         	canvasController.activateSnapGrid();
         });
-
 
         // DEFAULT SETTINGS
         select.setSelected(true);

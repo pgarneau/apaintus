@@ -80,10 +80,6 @@ public class AttributeController implements ChildController<Controller> {
         spinners.put(Attribute.HEIGHT, shapeHeight.getValueFactory());
     }
 
-//	public void bindTo(AnchorPane mainPane) {
-//		bar.prefWidthProperty().bind(mainPane.prefWidthProperty());
-//	}
-
     public double getAttributeValue(Attribute attribute) {
         return spinners.get(attribute).getValue();
     }
@@ -101,6 +97,7 @@ public class AttributeController implements ChildController<Controller> {
     }
 
     private void updateSpinners(ShapeAttributes shapeAttributes) {
+//        spinners.get(Attribute.COORDINATE_Y).valueProperty().removeListener();
         spinners.get(Attribute.COORDINATE_X).setValue(shapeAttributes.getCoordinates().getX());
         spinners.get(Attribute.COORDINATE_Y).setValue(shapeAttributes.getCoordinates().getY());
         spinners.get(Attribute.ORIENTATION).setValue(shapeAttributes.getOrientation());
