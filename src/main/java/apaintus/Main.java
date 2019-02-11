@@ -5,11 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Optional;
 import java.util.Properties;
 
 import apaintus.controllers.Controller;
 import apaintus.controllers.MenuController;
 import apaintus.controllers.ToolBarController;
+import apaintus.services.PreferencesService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,6 +22,9 @@ public class Main extends Application {
 	private Controller controller;
 	private static Main instance;
 	private AnchorPane root;
+	static private double MIN_WIDTH = 800;
+	static private double  MIN_HEIGHT = 600;
+	private PreferencesService preferencesService;
 
 	public static Main getInstance() {
 		return instance;
@@ -43,21 +48,20 @@ public class Main extends Application {
 		controller.injectPrimaryStage(primaryStage);
 		this.root = loader.getRoot();
 
-		primaryStage.setMinHeight(600);
-		primaryStage.setMinWidth(800);
+		primaryStage.setMinWidth(MIN_WIDTH);
+		primaryStage.setMinHeight(MIN_HEIGHT);
 
 		primaryStage.setTitle("PaintUS");
-		primaryStage.setScene(new Scene(root, 800, 600));
+		primaryStage.setScene(new Scene(root, MIN_WIDTH, MIN_HEIGHT));
 		primaryStage.show();
-		
-		loadPreferences(primaryStage);
+
+		preferencesService = new PreferencesService(controller);
+		preferencesService.loadPreferences();
 	}
 
 	@Override
 	public void stop() {
-		Stage primaryStage = controller.getPrimaryStage();
-
-		savePreferences(primaryStage);
+		preferencesService.savePreferences();
 		
 		MenuController menuController = controller.getMenuController();
 		if (menuController.hasUnsavedWork()) {
@@ -67,77 +71,5 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
-	}
-
-	private void savePreferences(Stage primaryStage) {
-		ToolBarController toolBarController = controller.getToolBarController();
-		Properties toolBarProperties = toolBarController.getPreferences();
-		MenuController menuController = controller.getMenuController();
-		Properties menuProperties = menuController.getPreferences();
-		
-		Properties properties = new Properties();
-		OutputStream output = null;
-
-		try {
-			output = new FileOutputStream("config.properties");
-
-			double height = primaryStage.getHeight();
-			double width = primaryStage.getWidth();
-			// set the properties value
-			properties.setProperty("primaryStageHeight", Double.toString(height));
-			properties.setProperty("primaryStageWidth", Double.toString(width));
-			properties.putAll(toolBarProperties);
-			properties.putAll(menuProperties);
-
-			// save properties to project root folder
-			properties.store(output, null);
-		} catch (IOException io) {
-			io.printStackTrace();
-		} finally {
-			if (output != null) {
-				try {
-					output.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private void loadPreferences(Stage primaryStage) {
-		ToolBarController toolBarController = controller.getToolBarController();
-		MenuController menuController = controller.getMenuController();
-		
-		Properties properties = new Properties();
-		InputStream input = null;
-
-		try {
-			input = new FileInputStream("config.properties");
-
-			// load a properties file
-			properties.load(input);
-
-			// get the property value and print it out
-			try {
-				primaryStage.setHeight(Double.valueOf(properties.getProperty("primaryStageHeight")));
-				primaryStage.setWidth(Double.valueOf(properties.getProperty("primaryStageWidth")));
-			}
-			catch(Exception ex) {
-				ex.printStackTrace();
-			}
-			
-			toolBarController.setPreferences(properties);
-			menuController.setPreferences(properties);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 }
