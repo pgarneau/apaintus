@@ -1,7 +1,7 @@
 package apaintus.services;
 
-import apaintus.controllers.CanvasController;
 import apaintus.controllers.ToolBarController;
+import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Point;
 import apaintus.models.shapes.*;
 import apaintus.models.shapes.Shape;
@@ -22,7 +22,7 @@ public class CanvasService {
         this.toolBarController = toolBarController;
     }
 
-    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent) {
+    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent, double[] canvasDimension, SnapGrid snapgrid) {
         Point mousePosition = getMousePosition(mouseEvent);
         ShapeType shapeType = null;
 
@@ -42,7 +42,7 @@ public class CanvasService {
             case SMILEY:
                 shapeType = ShapeType.SMILEY;
                 break;
-                
+
             case TEXT_BOX:
                 shapeType = ShapeType.TEXT_BOX;
                 break;
@@ -54,12 +54,15 @@ public class CanvasService {
                 mousePosition,
                 toolBarController.getFillColor().toString(),
                 toolBarController.getStrokeColor().toString(),
-                toolBarController.getStrokeSize());
+                toolBarController.getStrokeSize(),
+                canvasDimension[0],
+                canvasDimension[1]);
 
     }
 
-    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimensions) {
-        Point mousePosition = computeInboundMousePosition(getMousePosition(mouseEvent), canvasDimensions);
+    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimension, SnapGrid snapgrid) {
+        Point mousePosition = getMousePosition(mouseEvent);
+        double strokeSize = toolBarController.getStrokeSize() / 2 + BoundingBox.getBoundingboxStrokeSize();
 
         ShapeFactory.updateShape(
                 shape,
@@ -67,10 +70,13 @@ public class CanvasService {
                 lastMouseClickPosition,
                 toolBarController.getFillColor().toString(),
                 toolBarController.getStrokeColor().toString(),
-                toolBarController.getStrokeSize());
+                toolBarController.getStrokeSize(),
+                snapgrid,
+                canvasDimension[0],
+                canvasDimension[1]);
     }
 
-    public void draw(GraphicsContext context, DrawableShape shape) {
+    public void drawShape(GraphicsContext context, DrawableShape shape) {
         DrawService drawService = shape.getDrawService();
         drawService.draw(context);
         if (shape.isSelected()) {
@@ -79,8 +85,36 @@ public class CanvasService {
         }
     }
 
+    public void drawSnapGrid(GraphicsContext context, SnapGrid snapgrid) {
+        context.save();
+        context.setStroke(Color.BLACK);
+
+//		//this is used for debugging grid points
+//		for(Point pt : snapgrid.getGridPoints()) {
+//			context.fillOval(pt.getX(), pt.getY(), 5, 5);
+//		}
+
+        context.beginPath();
+        context.moveTo(0, 0);
+
+        for (int i = 0; i < (context.getCanvas().getHeight()); i += snapgrid.getSpacing()) {
+            context.moveTo(0, i);
+            context.lineTo(context.getCanvas().getWidth() + i, i);
+        }
+
+        for (int i = 0; i < (context.getCanvas().getWidth()); i += snapgrid.getSpacing()) {
+            context.moveTo(i, 0);
+            context.lineTo(i, context.getCanvas().getHeight() + i);
+        }
+
+        context.stroke();
+        context.closePath();
+
+        context.restore();
+    }
+
     public void saveState(GraphicsContext canvasContext, Image image) {
-            canvasContext.drawImage(image, 0, 0);
+        canvasContext.drawImage(image, 0, 0);
     }
 
     public WritableImage convertCanvasToImage(Canvas canvas) {

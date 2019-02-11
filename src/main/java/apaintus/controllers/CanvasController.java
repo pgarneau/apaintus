@@ -1,9 +1,9 @@
 package apaintus.controllers;
 
+import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.Shape;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.CanvasService;
 import apaintus.services.update.UpdateService;
@@ -23,6 +23,9 @@ public class CanvasController implements ChildController<Controller> {
     @FXML private AnchorPane root;
     @FXML private Canvas drawLayer;
     @FXML private Canvas canvas;
+    @FXML private Canvas snapGridCanvas;
+    
+    private SnapGrid snapGrid;
 
     private Controller controller;
     private ToolBarController toolBarController;
@@ -43,9 +46,10 @@ public class CanvasController implements ChildController<Controller> {
         this.controller = controller;
         this.toolBarController = this.controller.getToolBarController();
         this.attributeController = this.controller.getAttributeController();
-
         this.canvasService = new CanvasService(this.toolBarController);
         this.updateService = new UpdateService(this.attributeController, this.toolBarController);
+
+        snapGrid = new SnapGrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),toolBarController.getStrokeSize(),false);
     }
 
     @Override
@@ -60,7 +64,7 @@ public class CanvasController implements ChildController<Controller> {
                     this.attributeController.resetSpinners();
                     redrawCanvas();
                 }
-                activeShape = canvasService.createShape(activeTool, event);
+                activeShape = canvasService.createShape(activeTool, event,getCanvasDimension(), snapGrid);
             } else {
             	ListIterator<DrawableShape> iterator = drawnShapes.listIterator(drawnShapes.size());
                 while(iterator.hasPrevious()) {
@@ -90,12 +94,12 @@ public class CanvasController implements ChildController<Controller> {
         canvas.setOnMouseDragged(event -> {
             activeTool = toolBarController.getActiveTool();
             if (activeTool != ActiveTool.SELECT && activeShape != null) {
-                canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension());
+                canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension(), snapGrid);
                 attributeController.update(activeShape.getShapeAttributes());
 
                 canvasService.clear(drawLayer.getGraphicsContext2D());
 
-                canvasService.draw(drawLayer.getGraphicsContext2D(), activeShape);
+                canvasService.drawShape(drawLayer.getGraphicsContext2D(), activeShape);
             }
         });
     }
@@ -108,7 +112,7 @@ public class CanvasController implements ChildController<Controller> {
         }
 
         for (DrawableShape shape : drawnShapes) {
-            canvasService.draw(canvas.getGraphicsContext2D(), shape);
+            canvasService.drawShape(canvas.getGraphicsContext2D(), shape);
         }
     }
 
@@ -168,6 +172,25 @@ public class CanvasController implements ChildController<Controller> {
     	
     	return dimension;
     }
+    
+    public void drawSnapGrid() {
+    	canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
+    }
+    
+    public void clearSnapgrid() {
+    	snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
+    }
+
+    public void activateSnapGrid() {
+        if(snapGrid.isActive()) {
+            clearSnapgrid();
+            snapGrid.setActive(false);
+        }
+        else {
+            drawSnapGrid();
+            snapGrid.setActive(true);
+        }
+    }
 
     public class ColorChangeListener implements ChangeListener<Color> {
         private Attribute attribute;
@@ -185,10 +208,10 @@ public class CanvasController implements ChildController<Controller> {
         }
     }
 
-    public class SpinnerChangeListener implements ChangeListener<Double> {
+    public class ShapeSpinnerChangeListener implements ChangeListener<Double> {
         private Attribute attribute;
 
-        public SpinnerChangeListener(Attribute attribute) {
+        public ShapeSpinnerChangeListener(Attribute attribute) {
             this.attribute = attribute;
         }
 
@@ -199,5 +222,17 @@ public class CanvasController implements ChildController<Controller> {
                 redrawCanvas();
             }
         }
+    }
+    
+    public class GridSpinnerChangeListener implements ChangeListener<Double>{
+
+    	@Override
+    	public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
+			snapGrid.setSpacing(newValue);
+			if (snapGrid.isActive()) {
+				clearSnapgrid();
+				drawSnapGrid();
+			}
+		}
     }
 }
