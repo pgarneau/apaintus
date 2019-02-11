@@ -1,8 +1,6 @@
 package apaintus.models;
 
 import org.junit.Test;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
