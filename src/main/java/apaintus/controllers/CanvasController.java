@@ -268,7 +268,11 @@ public class CanvasController implements ChildController<Controller> {
         @Override
         public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
             if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
-                activeShape.update(updateService.getAttributes());
+                if(activeShape.getShapeType() == ShapeType.SELECTION_BOX) {
+                    ((SelectionBox) activeShape).update(attribute, newValue - oldValue);
+                } else {
+                    activeShape.update(updateService.getAttributes());
+                }
                 redrawCanvas();
             }
         }

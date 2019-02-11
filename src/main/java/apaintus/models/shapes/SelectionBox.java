@@ -1,5 +1,6 @@
 package apaintus.models.shapes;
 
+import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
 import apaintus.services.draw.selection_box.SelectionBoxDrawService;
@@ -21,16 +22,45 @@ public class SelectionBox extends DrawableShape {
         boundingBox.update(shapeAttributes);
     }
 
+    public void update(Attribute attribute, double step) {
+        if (shapes.isEmpty()) {
+            return;
+        }
+        for (DrawableShape shape : shapes) {
+            if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
+                ((SelectionBox) shape).update(attribute, step);
+            }
+            updateShape(attribute, step, shape);
+            shape.update(shape.getShapeAttributes());
+        }
+
+        updateShape(attribute, step, this);
+
+        // This prevents the selection box to rotate too.
+        orientation = 0;
+        resize();
+    }
+
+    private void updateShape(Attribute attribute, double step, DrawableShape shape) {
+        switch (attribute) {
+            case COORDINATE_X:
+                shape.setCoordinates(new Point(shape.getCoordinates().getX() + step, shape.getCoordinates().getY()));
+                break;
+            case COORDINATE_Y:
+                shape.setCoordinates(new Point(shape.getCoordinates().getX(), shape.getCoordinates().getY() + step));
+                break;
+            case ORIENTATION:
+                shape.setOrientation(shape.getOrientation() + step);
+                break;
+        }
+    }
+
     public void add(DrawableShape shape) {
         shapes.add(shape);
     }
 
     public boolean remove(DrawableShape shape) {
         return (shapes.remove(shape));
-    }
-
-    public boolean isEmpty() {
-        return shapes.isEmpty();
     }
 
     public List<DrawableShape> getShapes() {
