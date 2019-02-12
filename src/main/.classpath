@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/aPaintUS.main/java"/>
+	<classpathentry kind="src" path="/aPaintUS.main/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Gradle: javax.xml.bind:jaxb-api:2.2.11"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Gradle: javax.activation:activation:1.1.1"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Gradle: com.sun.xml.bind:jaxb-impl:2.2.11"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Gradle: com.sun.xml.bind:jaxb-core:2.2.11"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Gradle: org.apache.logging.log4j:log4j-core:2.11.2"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Gradle: org.apache.logging.log4j:log4j-api:2.11.2"/>
+	<classpathentry kind="output" path="/out/production/classes"/>
+</classpath>
