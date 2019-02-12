@@ -218,13 +218,9 @@ public class CanvasController implements ChildController<Controller> {
                     activeShape = shape;
                     attributeController.update(activeShape);
                     activeShape.setSelected(true);
-                    break;
+                    return;
                 }
             }
-        }
-
-        if (activeShape != selectionBox) {
-            return;
         }
 
         selectionBox.optimize();

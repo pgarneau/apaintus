@@ -111,10 +111,12 @@ public class SelectionBox extends DrawableShape {
                     }
                     continue;
                 }
-                if (shapes.contains(compositeShape)) {
-                    return true;
+                if (!shapes.contains(compositeShape)) {
+                    return false;
                 }
             }
+
+            return true;
         }
 
         return false;
