@@ -23,6 +23,7 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
 
+    testCompile ("org.testfx:testfx-junit5:4.0.15-alpha")
     testCompile ("org.mockito:mockito-core:2.+")
     testCompile ("org.testfx:openjfx-monocle:jdk-9+181")
     testCompile('org.junit.jupiter:junit-jupiter-api:5.3.2')

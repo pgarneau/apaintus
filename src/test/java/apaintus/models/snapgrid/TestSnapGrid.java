@@ -1,23 +1,22 @@
 package apaintus.models.snapgrid;
 
 import apaintus.models.Point;
-import apaintus.models.shapes.Rectangle;
 import org.junit.Test;
-
 import java.util.ArrayList;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 public class TestSnapGrid {
+    double testSpacing = 4.0;
+    double testCanvasWidth = 600.0;
+    double testCanvasHeight = 800.0;
+    double strokeSize = 5.0;
+    boolean active = false;
+
     @Test
     public void testSnapGridAllPoints() {
-        double testSpacing = 0.0;
-        double testCanvasWidth = 600.0;
-        double testCanvasHeight = 800.0;
-        double strokeSize = 5.0;
-        boolean active = false;
 
+        testSpacing = 0.0;
         SnapGrid test = null;
         try {
             test = new SnapGrid(testSpacing,
@@ -46,5 +45,33 @@ public class TestSnapGrid {
             assertEquals(goodPoints.get(i).getX(), test.getGridPoints().get(i).getX(),0.1);
             assertEquals(goodPoints.get(i).getX(), test.getGridPoints().get(i).getX(),0.1);
         }
+    }
+
+    @Test
+    public void testActivateDeactivateSnapGrid(){
+
+        SnapGrid test = new SnapGrid(testSpacing,
+                testCanvasWidth,
+                testCanvasHeight,
+                strokeSize,
+                active);
+
+        test.setActive(true);
+        assertTrue(test.isActive());
+
+        test.setActive(false);
+        assertFalse(test.isActive());
+    }
+
+    @Test
+    public void testSpacing(){
+        SnapGrid test = new SnapGrid(testSpacing,
+                testCanvasWidth,
+                testCanvasHeight,
+                strokeSize,
+                active);
+
+        test.setSpacing(2.0);
+        assertEquals(20.0,test.getSpacing(),0.0);
     }
 }
