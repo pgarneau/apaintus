@@ -45,7 +45,7 @@ public class TestShapes {
                 () -> assertEquals(testPoint.getX(), testRect.getCoordinates().getX(), 0.0),
                 () -> assertEquals(testPoint.getY(), testRect.getCoordinates().getY(), 0.0),
                 () -> assertEquals(90.0, testRect.getOrientation(), 0.0),
-                () -> assertEquals(BLACK, testRect.getStrokeColor()),
+                () -> assertEquals("Black", testRect.getStrokeColor()),
                 () -> assertEquals(6.0, testRect.getStrokeSize(), 0.0)
                 ),
                 () -> assertAll(() -> assertEquals(2.0, testCircle.getWidth(), 0.0),
@@ -53,7 +53,7 @@ public class TestShapes {
                         () -> assertEquals(testPoint.getX(), testCircle.getCoordinates().getX(), 0.0),
                         () -> assertEquals(testPoint.getY(), testCircle.getCoordinates().getY(), 0.0),
                         () -> assertEquals(90.0, testCircle.getOrientation(), 0.0),
-                        () -> assertEquals(BLACK, testCircle.getStrokeColor()),
+                        () -> assertEquals("Black", testCircle.getStrokeColor()),
                         () -> assertEquals(6.0, testCircle.getStrokeSize(), 0.0)
                 ),
                 () -> assertAll(() -> assertEquals(2.0, testLine.getWidth(), 0.0),
@@ -61,7 +61,7 @@ public class TestShapes {
                         () -> assertEquals(testPoint.getX(), testLine.getCoordinates().getX(), 0.0),
                         () -> assertEquals(testPoint.getY(), testLine.getCoordinates().getY(), 0.0),
                         () -> assertEquals(90.0, testLine.getOrientation(), 0.0),
-                        () -> assertEquals(BLACK, testLine.getStrokeColor()),
+                        () -> assertEquals("Black", testLine.getStrokeColor()),
                         () -> assertEquals(6.0, testLine.getStrokeSize(), 0.0)
                 ),
                 () -> assertAll(() -> assertEquals(2.0, testSmiley.getWidth(), 0.0),
@@ -69,7 +69,7 @@ public class TestShapes {
                         () -> assertEquals(testPoint.getX(), testSmiley.getCoordinates().getX(), 0.0),
                         () -> assertEquals(testPoint.getY(), testSmiley.getCoordinates().getY(), 0.0),
                         () -> assertEquals(90.0, testSmiley.getOrientation(), 0.0),
-                        () -> assertEquals(BLACK, testSmiley.getStrokeColor()),
+                        () -> assertEquals("Black", testSmiley.getStrokeColor()),
                         () -> assertEquals(6.0, testSmiley.getStrokeSize(), 0.0)
                 ));
 
@@ -83,32 +83,32 @@ public class TestShapes {
                 () -> assertEquals(6.0, testRect.getHeight(), 0.0),
                 () -> assertEquals(testNewPoint.getX(), testRect.getCoordinates().getX(), 0.0),
                 () -> assertEquals(testNewPoint.getY(), testRect.getCoordinates().getY(), 0.0),
-                () -> assertEquals(20.0, testRect.getOrientation(), 0.0),
-                () -> assertEquals(WHITE, testRect.getStrokeColor()),
+                () -> assertEquals(0.0, testRect.getOrientation(), 0.0),
+                () -> assertEquals("White", testRect.getStrokeColor()),
                 () -> assertEquals(2.0, testRect.getStrokeSize(), 0.0)
                 ),
                 () -> assertAll(() -> assertEquals(6.0, testCircle.getWidth(), 0.0),
                         () -> assertEquals(6.0, testCircle.getHeight(), 0.0),
                         () -> assertEquals(testNewPoint.getX(), testCircle.getCoordinates().getX(), 0.0),
                         () -> assertEquals(testNewPoint.getY(), testCircle.getCoordinates().getY(), 0.0),
-                        () -> assertEquals(20.0, testCircle.getOrientation(), 0.0),
-                        () -> assertEquals(WHITE, testCircle.getStrokeColor()),
+                        () -> assertEquals(0.0, testCircle.getOrientation(), 0.0),
+                        () -> assertEquals("White", testCircle.getStrokeColor()),
                         () -> assertEquals(2.0, testCircle.getStrokeSize(), 0.0)
                 ),
                 () -> assertAll(() -> assertEquals(6.0, testLine.getWidth(), 0.0),
                         () -> assertEquals(6.0, testLine.getHeight(), 0.0),
                         () -> assertEquals(testNewPoint.getX(), testLine.getCoordinates().getX(), 0.0),
                         () -> assertEquals(testNewPoint.getY(), testLine.getCoordinates().getY(), 0.0),
-                        () -> assertEquals(20.0, testLine.getOrientation(), 0.0),
-                        () -> assertEquals(WHITE, testLine.getStrokeColor()),
+                        () -> assertEquals(0.0, testLine.getOrientation(), 0.0),
+                        () -> assertEquals("White", testLine.getStrokeColor()),
                         () -> assertEquals(2.0, testLine.getStrokeSize(), 0.0)
                 ),
                 () -> assertAll(() -> assertEquals(6.0, testSmiley.getWidth(), 0.0),
                         () -> assertEquals(6.0, testSmiley.getHeight(), 0.0),
                         () -> assertEquals(testNewPoint.getX(), testSmiley.getCoordinates().getX(), 0.0),
                         () -> assertEquals(testNewPoint.getY(), testSmiley.getCoordinates().getY(), 0.0),
-                        () -> assertEquals(20.0, testSmiley.getOrientation(), 0.0),
-                        () -> assertEquals(WHITE, testSmiley.getStrokeColor()),
+                        () -> assertEquals(0.0, testSmiley.getOrientation(), 0.0),
+                        () -> assertEquals("White", testSmiley.getStrokeColor()),
                         () -> assertEquals(2.0, testSmiley.getStrokeSize(), 0.0)
                 ));
     }

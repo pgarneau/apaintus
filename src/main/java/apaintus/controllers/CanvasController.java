@@ -171,7 +171,7 @@ public class CanvasController implements ChildController<Controller> {
         return image;
     }
 
-    public Canvas getCanvas() {
+    public Canvas getCanvas(){
         return this.canvas;
     }
 
