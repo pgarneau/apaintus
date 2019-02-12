@@ -15,10 +15,10 @@ repositories {
 }
 
 dependencies {
-    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.11'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
     compile group: 'javax.activation', name: 'activation', version: '1.1.1'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.2.11'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.2.11'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.0'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
 
@@ -48,6 +48,7 @@ compileJava {
     doFirst {
         options.compilerArgs = [
                 '--module-path', classpath.asPath,
+                '--add-modules', 'java.xml.bind,javafx.graphics,javafx.controls,javafx.fxml,javafx.swing,org.apache.logging.log4j'
         ]
         classpath = files()
     }

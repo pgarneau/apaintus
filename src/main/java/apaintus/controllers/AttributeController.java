@@ -2,7 +2,6 @@ package apaintus.controllers;
 
 import apaintus.models.Attribute;
 import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.ShapeAttributes;
 import apaintus.models.shapes.ShapeType;
 import apaintus.models.shapes.ShapeAttributes;
 import javafx.fxml.FXML;
