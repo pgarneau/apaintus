@@ -77,12 +77,6 @@ public class CanvasController implements ChildController<Controller> {
                         activeShape.setSelected(false);
 
                         activeShape = shape;
-
-                        // Because if a shape that is inside a selection box is moved, the bounding box will not update
-                        if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
-                            ((SelectionBox) shape).resize();
-                        }
-
                         attributeController.update(activeShape);
                         toolBarController.update(activeShape.getShapeAttributes());
                         activeShape.setSelected(true);

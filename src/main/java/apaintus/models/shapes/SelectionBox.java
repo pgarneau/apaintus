@@ -146,6 +146,11 @@ public class SelectionBox extends DrawableShape {
         }
     }
 
+    public void setSelected(boolean selected) {
+        super.setSelected(selected);
+        resize();
+    }
+
     @Override
     public DrawService getDrawService() {
         return new SelectionBoxDrawService(this);
