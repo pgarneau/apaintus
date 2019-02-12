@@ -66,6 +66,10 @@ public class SelectionBox extends DrawableShape {
         return shapes.size();
     }
 
+    public boolean isEmpty() {
+        return shapes.isEmpty();
+    }
+
     public DrawableShape getShape(int i) {
         return shapes.get(i);
     }
@@ -99,10 +103,15 @@ public class SelectionBox extends DrawableShape {
         if (getCoordinates().getX() == selectionBox.getCoordinates().getX()
                 && getCoordinates().getY() == selectionBox.getCoordinates().getY()
                 && getWidth() == selectionBox.getWidth()
-                && getHeight() == selectionBox.getHeight()
-                && getSize() - 1 == selectionBox.getSize()) {
-            for (int index = 0; index < getSize(); index++) {
-                if (getShape(index) == selectionBox.getShape(index)) {
+                && getHeight() == selectionBox.getHeight()) {
+            for (DrawableShape compositeShape : selectionBox.getShapes()) {
+                if (compositeShape.getShapeType() == ShapeType.SELECTION_BOX) {
+                    if(isDuplicate(compositeShape)) {
+                        return true;
+                    }
+                    continue;
+                }
+                if (shapes.contains(compositeShape)) {
                     return true;
                 }
             }

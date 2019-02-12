@@ -1,11 +1,11 @@
 package apaintus.controllers;
 
-import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.SelectionBox;
 import apaintus.models.shapes.ShapeType;
+import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.CanvasService;
 import apaintus.services.update.UpdateService;
@@ -77,6 +77,12 @@ public class CanvasController implements ChildController<Controller> {
                         activeShape.setSelected(false);
 
                         activeShape = shape;
+
+                        // Because if a shape that is inside a selection box is moved, the bounding box will not update
+                        if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
+                            ((SelectionBox) shape).resize();
+                        }
+
                         attributeController.update(activeShape);
                         toolBarController.update(activeShape.getShapeAttributes());
                         activeShape.setSelected(true);
@@ -93,14 +99,14 @@ public class CanvasController implements ChildController<Controller> {
         });
 
         canvas.setOnMouseReleased(event -> {
-            activeTool = toolBarController.getActiveTool();
-
             if (event.getX() == lastMouseClickPosition.getX() && event.getY() == lastMouseClickPosition.getY()) {
                 return;
             }
 
+            activeTool = toolBarController.getActiveTool();
             if (activeTool == ActiveTool.SELECT) {
                 saveSelectionBox();
+                redrawCanvas();
             } else {
                 saveDrawLayer();
             }
@@ -197,27 +203,39 @@ public class CanvasController implements ChildController<Controller> {
             }
         }
 
-        if (selectionBox.getSize() > 1) {
-            selectionBox.resize();
+        if (selectionBox.isEmpty()) {
+            attributeController.resetAttributes();
+            return;
+        }
 
-            for (DrawableShape shape : drawnShapes) {
-                if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
-                    activeShape = selectionBox.isDuplicate(shape) ? shape : selectionBox;
+        if (selectionBox.getSize() == 1) {
+            activeShape = selectionBox.getShape(0);
+            attributeController.update(activeShape);
+            activeShape.setSelected(true);
+            return;
+        }
+
+        selectionBox.resize();
+
+        for (DrawableShape shape : drawnShapes) {
+            if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
+                ((SelectionBox) shape).resize();
+                if (selectionBox.isDuplicate(shape)) {
+                    activeShape = shape;
+                    attributeController.update(activeShape);
                     activeShape.setSelected(true);
+                    break;
                 }
             }
-
-            if (activeShape == selectionBox) {
-                selectionBox.optimize();
-                drawnShapes.add(activeShape);
-            }
         }
 
-        if (!drawnShapes.contains(activeShape)) {
-            attributeController.resetAttributes();
+        if (activeShape != selectionBox) {
+            return;
         }
 
-        redrawCanvas();
+        selectionBox.optimize();
+        attributeController.update(activeShape);
+        drawnShapes.add(activeShape);
     }
 
     public double[] getCanvasDimension() {
