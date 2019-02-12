@@ -1,11 +1,11 @@
 package apaintus.controllers;
 
-import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.SelectionBox;
 import apaintus.models.shapes.ShapeType;
+import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.CanvasService;
 import apaintus.services.update.UpdateService;
@@ -28,7 +28,7 @@ public class CanvasController implements ChildController<Controller> {
     @FXML private Canvas drawLayer;
     @FXML private Canvas canvas;
     @FXML private Canvas snapGridCanvas;
-    
+
     private SnapGrid snapGrid;
 
     private Controller controller;
@@ -93,31 +93,33 @@ public class CanvasController implements ChildController<Controller> {
         });
 
         canvas.setOnMouseReleased(event -> {
-            activeTool = toolBarController.getActiveTool();
-
-            if (event.getX() != lastMouseClickPosition.getX() && event.getY() != lastMouseClickPosition.getY()) {
-                if (activeTool == ActiveTool.SELECT) {
-                    saveSelectionBox();
-                } else {
-                    saveDrawLayer();
-                }
-                canvasChanged = true;
+            if (event.getX() == lastMouseClickPosition.getX() && event.getY() == lastMouseClickPosition.getY()) {
+                return;
             }
+
+            activeTool = toolBarController.getActiveTool();
+            if (activeTool == ActiveTool.SELECT) {
+                saveSelectionBox();
+                redrawCanvas();
+            } else {
+                saveDrawLayer();
+            }
+
+            canvasChanged = true;
         });
 
         canvas.setOnMouseDragged(event -> {
             activeTool = toolBarController.getActiveTool();
 
-            if (activeShape != null
-                    && ((activeTool != ActiveTool.SELECT && activeShape.getShapeType() != ShapeType.SELECTION_BOX)
-                    || (activeTool == ActiveTool.SELECT && activeShape.getShapeType() == ShapeType.SELECTION_BOX))) {
-                canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension(), snapGrid);
-                attributeController.update(activeShape);
-
-                canvasService.clear(drawLayer.getGraphicsContext2D());
-
-                canvasService.drawShape(drawLayer.getGraphicsContext2D(), activeShape);
+            if (activeShape == null || drawnShapes.contains(activeShape)) {
+                return;
             }
+            canvasService.updateShape(activeShape, event, lastMouseClickPosition, getCanvasDimension(), snapGrid);
+            attributeController.update(activeShape);
+
+            canvasService.clear(drawLayer.getGraphicsContext2D());
+
+            canvasService.drawShape(drawLayer.getGraphicsContext2D(), activeShape);
         });
     }
 
@@ -183,50 +185,61 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     private void saveSelectionBox() {
-        if (activeShape != null && !drawnShapes.contains(activeShape)) {
-            for (DrawableShape shape : drawnShapes) {
-                if (selectionBox.contains(shape)) {
-                    selectionBox.add(shape);
-                }
-            }
-
-            if (selectionBox.getSize() > 1) {
-                selectionBox.resize();
-
-                for (DrawableShape shape : drawnShapes) {
-                    if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
-                        activeShape = selectionBox.isDuplicate(shape) ? shape : selectionBox;
-                        activeShape.setSelected(true);
-                    }
-                }
-
-                if (activeShape == selectionBox) {
-                    selectionBox.optimize();
-                    drawnShapes.add(activeShape);
-                }
-            }
-        }
-
-        if (!drawnShapes.contains(activeShape)) {
-            attributeController.resetAttributes();
-        }
-
         canvasService.clear(drawLayer.getGraphicsContext2D());
-        redrawCanvas();
+
+        if (activeShape == null || drawnShapes.contains(activeShape)) {
+            return;
+        }
+
+        for (DrawableShape shape : drawnShapes) {
+            if (selectionBox.contains(shape)) {
+                selectionBox.add(shape);
+            }
+        }
+
+        if (selectionBox.isEmpty()) {
+            attributeController.resetAttributes();
+            return;
+        }
+
+        if (selectionBox.getSize() == 1) {
+            activeShape = selectionBox.getShape(0);
+            attributeController.update(activeShape);
+            activeShape.setSelected(true);
+            return;
+        }
+
+        selectionBox.resize();
+
+        for (DrawableShape shape : drawnShapes) {
+            if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
+                ((SelectionBox) shape).resize();
+                if (selectionBox.isDuplicate(shape)) {
+                    activeShape = shape;
+                    attributeController.update(activeShape);
+                    activeShape.setSelected(true);
+                    return;
+                }
+            }
+        }
+
+        selectionBox.optimize();
+        attributeController.update(activeShape);
+        drawnShapes.add(activeShape);
     }
 
     public double[] getCanvasDimension() {
     	double[] dimension = new double[2];
     	dimension[0]=canvas.getWidth();
     	dimension[1]=canvas.getHeight();
-    	
+
     	return dimension;
     }
-    
+
     public void drawSnapGrid() {
     	canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
     }
-    
+
     public void clearSnapgrid() {
     	snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
     }
@@ -277,7 +290,7 @@ public class CanvasController implements ChildController<Controller> {
             }
         }
     }
-    
+
     public class GridSpinnerChangeListener implements ChangeListener<Double>{
 
     	@Override
