@@ -64,17 +64,19 @@ public class ToolBarController implements ChildController<Controller> {
 	private CanvasController.ColorChangeListener strokeColorListener;
 	private CanvasController.ShapeSpinnerChangeListener strokeSizeListener;
 	private CanvasController.GridSpinnerChangeListener gridSpacingListener;
-	private CanvasController.AlignmentActionEvent alignTopListener;
-	private CanvasController.AlignmentActionEvent alignRightListener;
-	private CanvasController.AlignmentActionEvent alignBottomListener;
-	private CanvasController.AlignmentActionEvent alignLeftListener;
 
 	@Override
 	public void injectParentController(Controller controller) {
 		this.controller = controller;
 		this.canvasController = this.controller.getCanvasController();
 
+		alignBottom.setOnAction(canvasController.new AlignmentActionEvent(Alignment.BOTTOM));
+		alignLeft.setOnAction(canvasController.new AlignmentActionEvent(Alignment.LEFT));
+		alignRight.setOnAction(canvasController.new AlignmentActionEvent(Alignment.RIGHT));
+		alignTop.setOnAction(canvasController.new AlignmentActionEvent(Alignment.TOP));
+
 		createListeners();
+		spacingSize.valueProperty().addListener(gridSpacingListener);
 	}
 
 	@Override
@@ -135,6 +137,7 @@ public class ToolBarController implements ChildController<Controller> {
 			applicationPreferences.setPreference(Preference.FILL_COLOR, fillColor.getValue().toString());
 		});
 
+
 		// DEFAULT SETTINGS
 		select.setSelected(true);
 		activeTool = ActiveTool.SELECT;
@@ -147,24 +150,18 @@ public class ToolBarController implements ChildController<Controller> {
 		strokeColorListener = canvasController.new ColorChangeListener(Attribute.STROKE_COLOR);
 		strokeSizeListener = canvasController.new ShapeSpinnerChangeListener(Attribute.STROKE_SIZE);
 		gridSpacingListener = canvasController.new GridSpinnerChangeListener();
-		alignLeftListener = canvasController.new AlignmentActionEvent(Alignment.LEFT);
-		alignTopListener = canvasController.new AlignmentActionEvent(Alignment.TOP);
-		alignRightListener = canvasController.new AlignmentActionEvent(Alignment.RIGHT);
-		alignBottomListener = canvasController.new AlignmentActionEvent(Alignment.BOTTOM);
 	}
 
 	public void setToolBarListeners() {
 		fillColor.valueProperty().addListener(fillColorListener);
 		strokeColor.valueProperty().addListener(strokeColorListener);
 		strokeSize.valueProperty().addListener(strokeSizeListener);
-		spacingSize.valueProperty().addListener(gridSpacingListener);
 	}
 
 	public void unsetToolBarListeners() {
 		fillColor.valueProperty().removeListener(fillColorListener);
 		strokeColor.valueProperty().removeListener(strokeColorListener);
 		strokeSize.valueProperty().removeListener(strokeSizeListener);
-		spacingSize.valueProperty().removeListener(gridSpacingListener);
 	}
 
 	public void update(DrawableShape shape) {

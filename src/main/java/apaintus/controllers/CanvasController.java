@@ -181,10 +181,16 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     private void saveSelectionBox() {
+        canvasService.clear(drawLayer.getGraphicsContext2D());
+
         for (DrawableShape shape : drawnShapes) {
             if (selectionBox.contains(shape)) {
                 selectionBox.add(shape);
             }
+        }
+
+        if (selectionBox.isEmpty()) {
+            return;
         }
 
         if (selectionBox.getSize() == 1) {
@@ -308,6 +314,7 @@ public class CanvasController implements ChildController<Controller> {
     public class GridSpinnerChangeListener implements ChangeListener<Double>{
     	@Override
     	public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
+            System.out.println("SNAP GRID");
 			snapGrid.setSpacing(newValue);
 			if (snapGrid.isActive()) {
 				clearSnapgrid();
