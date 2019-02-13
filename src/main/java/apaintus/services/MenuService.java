@@ -1,14 +1,11 @@
 package apaintus.services;
 
-import apaintus.services.file.FileService;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
 
 public class MenuService {
-    public MenuService() {}
-
     public boolean saveRequested() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.getButtonTypes().remove(ButtonType.OK);

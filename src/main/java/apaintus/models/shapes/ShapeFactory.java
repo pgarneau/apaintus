@@ -226,6 +226,9 @@ public class ShapeFactory {
                                 .build()
                 );
                 break;
+
+            default:
+                break;
         }
     }
 

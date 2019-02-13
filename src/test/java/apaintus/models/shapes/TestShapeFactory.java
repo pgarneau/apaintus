@@ -13,25 +13,25 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TestShapeFactory {
+    private static final String FILL_COLOR = "Black";
+    private static final String STROKE_COLOR = "Red";
 
     @Test
     public void testShapeFactoryCreateShape() {
 
         Point mousePosition = new Point(65.0, 76.0);
         Point lastMouseClickPosition = new Point(23.0, 45.0);
-        String fillColor = "Black";
-        String strokeColor = "Red";
         double strokeSize = 5.0;
         double canvasWidth = 600.0;
         double canvasHeight = 800.0;
 
-        assertAll(() -> assertNotNull(ShapeFactory.createShape(ShapeType.RECTANGLE, mousePosition, lastMouseClickPosition, fillColor, strokeColor, strokeSize, canvasWidth, canvasHeight)),
-                () -> assertNotNull(ShapeFactory.createShape(ShapeType.CIRCLE, mousePosition, lastMouseClickPosition, fillColor, strokeColor, strokeSize, canvasWidth, canvasHeight)),
-                () -> assertNotNull(ShapeFactory.createShape(ShapeType.LINE, mousePosition, lastMouseClickPosition, fillColor, strokeColor, strokeSize, canvasWidth, canvasHeight)),
-                () -> assertNotNull(ShapeFactory.createShape(ShapeType.SMILEY, mousePosition, lastMouseClickPosition, fillColor, strokeColor, strokeSize, canvasWidth, canvasHeight)),
-                () -> assertNotNull(ShapeFactory.createShape(ShapeType.TEXT_BOX, mousePosition, lastMouseClickPosition, fillColor, strokeColor, strokeSize, canvasWidth, canvasHeight)),
-                () -> assertNotNull(ShapeFactory.createShape(ShapeType.SELECTION_BOX, mousePosition, lastMouseClickPosition, fillColor, strokeColor, strokeSize, canvasWidth, canvasHeight)),
-                () -> assertNull(ShapeFactory.createShape(ShapeType.BOUNDING_BOX, mousePosition, lastMouseClickPosition, fillColor, strokeColor, strokeSize, canvasWidth, canvasHeight))
+        assertAll(() -> assertNotNull(ShapeFactory.createShape(ShapeType.RECTANGLE, mousePosition, lastMouseClickPosition, FILL_COLOR, STROKE_COLOR, strokeSize, canvasWidth, canvasHeight)),
+                () -> assertNotNull(ShapeFactory.createShape(ShapeType.CIRCLE, mousePosition, lastMouseClickPosition, FILL_COLOR, STROKE_COLOR, strokeSize, canvasWidth, canvasHeight)),
+                () -> assertNotNull(ShapeFactory.createShape(ShapeType.LINE, mousePosition, lastMouseClickPosition, FILL_COLOR, STROKE_COLOR, strokeSize, canvasWidth, canvasHeight)),
+                () -> assertNotNull(ShapeFactory.createShape(ShapeType.SMILEY, mousePosition, lastMouseClickPosition, FILL_COLOR, STROKE_COLOR, strokeSize, canvasWidth, canvasHeight)),
+                () -> assertNotNull(ShapeFactory.createShape(ShapeType.TEXT_BOX, mousePosition, lastMouseClickPosition, FILL_COLOR, STROKE_COLOR, strokeSize, canvasWidth, canvasHeight)),
+                () -> assertNotNull(ShapeFactory.createShape(ShapeType.SELECTION_BOX, mousePosition, lastMouseClickPosition, FILL_COLOR, STROKE_COLOR, strokeSize, canvasWidth, canvasHeight)),
+                () -> assertNull(ShapeFactory.createShape(ShapeType.BOUNDING_BOX, mousePosition, lastMouseClickPosition, FILL_COLOR, STROKE_COLOR, strokeSize, canvasWidth, canvasHeight))
         );
     }
 
@@ -41,8 +41,6 @@ class TestShapeFactory {
         Point lastMouseClickPosition = new Point(23.0, 45.0);
         double width = Math.abs(65.0 - 23.0);
         double height = Math.abs(76.0 - 45.0);
-        String fillColor = "Black";
-        String strokeColor = "Red";
         double strokeSize = 5.0;
         double canvasWidth = 600.0;
         double canvasHeight = 800.0;
@@ -54,8 +52,8 @@ class TestShapeFactory {
         when(testRectShape.getWidth()).thenReturn(width);
         when(testRectShape.getHeight()).thenReturn(height);
         when(testRectShape.getCoordinates()).thenReturn(new Point(45.0, 67.0));
-        when(testRectShape.getStrokeColor()).thenReturn(strokeColor);
-        when(testRectShape.getFillColor()).thenReturn(fillColor);
+        when(testRectShape.getStrokeColor()).thenReturn(STROKE_COLOR);
+        when(testRectShape.getFillColor()).thenReturn(FILL_COLOR);
         Mockito.doCallRealMethod().when(testRectShape).setFillColor(any(String.class));
         Mockito.doCallRealMethod().when(testRectShape).setStrokeColor(any(String.class));
 
@@ -66,8 +64,8 @@ class TestShapeFactory {
         when(testCircleShape.getWidth()).thenReturn(width);
         when(testCircleShape.getHeight()).thenReturn(height);
         when(testCircleShape.getCoordinates()).thenReturn(new Point(45.0, 67.0));
-        when(testCircleShape.getStrokeColor()).thenReturn(strokeColor);
-        when(testCircleShape.getFillColor()).thenReturn(fillColor);
+        when(testCircleShape.getStrokeColor()).thenReturn(STROKE_COLOR);
+        when(testCircleShape.getFillColor()).thenReturn(FILL_COLOR);
         Mockito.doCallRealMethod().when(testCircleShape).setFillColor(any(String.class));
         Mockito.doCallRealMethod().when(testCircleShape).setStrokeColor(any(String.class));
 
@@ -78,7 +76,7 @@ class TestShapeFactory {
         when(testLineShape.getWidth()).thenReturn(width);
         when(testLineShape.getHeight()).thenReturn(height);
         when(testLineShape.getCoordinates()).thenReturn(new Point(45.0, 67.0));
-        when(testLineShape.getStrokeColor()).thenReturn(strokeColor);
+        when(testLineShape.getStrokeColor()).thenReturn(STROKE_COLOR);
         Mockito.doCallRealMethod().when(testLineShape).setStrokeColor(any(String.class));
 
         Smiley testSmileyShape = mock(Smiley.class);
@@ -88,8 +86,8 @@ class TestShapeFactory {
         when(testSmileyShape.getWidth()).thenReturn(width);
         when(testSmileyShape.getHeight()).thenReturn(height);
         when(testSmileyShape.getCoordinates()).thenReturn(new Point(45.0, 67.0));
-        when(testSmileyShape.getStrokeColor()).thenReturn(strokeColor);
-        when(testSmileyShape.getFillColor()).thenReturn(fillColor);
+        when(testSmileyShape.getStrokeColor()).thenReturn(STROKE_COLOR);
+        when(testSmileyShape.getFillColor()).thenReturn(FILL_COLOR);
         Mockito.doCallRealMethod().when(testSmileyShape).setFillColor(any(String.class));
         Mockito.doCallRealMethod().when(testSmileyShape).setStrokeColor(any(String.class));
 
@@ -100,8 +98,8 @@ class TestShapeFactory {
         when(testTextBox.getWidth()).thenReturn(width);
         when(testTextBox.getHeight()).thenReturn(height);
         when(testTextBox.getCoordinates()).thenReturn(new Point(45.0, 67.0));
-        when(testTextBox.getStrokeColor()).thenReturn(strokeColor);
-        when(testTextBox.getFillColor()).thenReturn(fillColor);
+        when(testTextBox.getStrokeColor()).thenReturn(STROKE_COLOR);
+        when(testTextBox.getFillColor()).thenReturn(FILL_COLOR);
         Mockito.doCallRealMethod().when(testTextBox).setFillColor(any(String.class));
         Mockito.doCallRealMethod().when(testTextBox).setStrokeColor(any(String.class));
 
@@ -112,7 +110,7 @@ class TestShapeFactory {
         when(testBoundingBox.getWidth()).thenReturn(width);
         when(testBoundingBox.getHeight()).thenReturn(height);
         when(testBoundingBox.getCoordinates()).thenReturn(new Point(45.0, 67.0));
-        when(testBoundingBox.getStrokeColor()).thenReturn(strokeColor);
+        when(testBoundingBox.getStrokeColor()).thenReturn(STROKE_COLOR);
         Mockito.doCallRealMethod().when(testBoundingBox).setStrokeColor(any(String.class));
 
         SelectionBox testSelectionBox = mock(SelectionBox.class);
@@ -122,7 +120,7 @@ class TestShapeFactory {
         when(testSelectionBox.getWidth()).thenReturn(width);
         when(testSelectionBox.getHeight()).thenReturn(height);
         when(testSelectionBox.getCoordinates()).thenReturn(new Point(45.0, 67.0));
-        when(testSelectionBox.getStrokeColor()).thenReturn(strokeColor);
+        when(testSelectionBox.getStrokeColor()).thenReturn(STROKE_COLOR);
         Mockito.doCallRealMethod().when(testSelectionBox).setStrokeColor(any(String.class));
 
         SnapGrid testSnapGrid = mock(SnapGrid.class);
@@ -133,8 +131,8 @@ class TestShapeFactory {
         ShapeFactory.updateShape(testRectShape,
                 lastMouseClickPosition,
                 mousePosition,
-                "Black",
-                "Red",
+                FILL_COLOR,
+                STROKE_COLOR,
                 strokeSize,
                 testSnapGrid,
                 canvasWidth,
@@ -144,15 +142,15 @@ class TestShapeFactory {
                 () -> assertEquals(height, testRectShape.getHeight()),
                 () -> assertEquals(width, testRectShape.getWidth()),
                 () -> assertEquals(strokeSize, testRectShape.getStrokeSize()),
-                () -> assertEquals(strokeColor, testRectShape.getStrokeColor(), "stroke color"),
-                () -> assertEquals(fillColor, testRectShape.getFillColor(), "fill color")
+                () -> assertEquals(STROKE_COLOR, testRectShape.getStrokeColor()),
+                () -> assertEquals(FILL_COLOR, testRectShape.getFillColor())
         );
 
         ShapeFactory.updateShape(testCircleShape,
                 mousePosition,
                 lastMouseClickPosition,
-                "Black",
-                "Red",
+                FILL_COLOR,
+                STROKE_COLOR,
                 strokeSize,
                 testSnapGrid,
                 canvasWidth,
@@ -162,15 +160,15 @@ class TestShapeFactory {
                 () -> assertEquals(height, testCircleShape.getHeight()),
                 () -> assertEquals(width, testCircleShape.getWidth()),
                 () -> assertEquals(strokeSize, testCircleShape.getStrokeSize()),
-                () -> assertEquals(strokeColor, testCircleShape.getStrokeColor(), "stroke color"),
-                () -> assertEquals(fillColor, testCircleShape.getFillColor(), "fill color")
+                () -> assertEquals(STROKE_COLOR, testCircleShape.getStrokeColor()),
+                () -> assertEquals(FILL_COLOR, testCircleShape.getFillColor())
         );
 
         ShapeFactory.updateShape(testLineShape,
                 mousePosition,
                 lastMouseClickPosition,
-                "Black",
-                "Red",
+                FILL_COLOR,
+                STROKE_COLOR,
                 strokeSize,
                 testSnapGrid,
                 canvasWidth,
@@ -180,14 +178,14 @@ class TestShapeFactory {
                 () -> assertEquals(height, testLineShape.getHeight()),
                 () -> assertEquals(width, testLineShape.getWidth()),
                 () -> assertEquals(strokeSize, testLineShape.getStrokeSize()),
-                () -> assertEquals(strokeColor, testLineShape.getStrokeColor(), "stroke color")
+                () -> assertEquals(STROKE_COLOR, testLineShape.getStrokeColor())
         );
 
         ShapeFactory.updateShape(testSmileyShape,
                 mousePosition,
                 lastMouseClickPosition,
-                "Black",
-                "Red",
+                FILL_COLOR,
+                STROKE_COLOR,
                 strokeSize,
                 testSnapGrid,
                 canvasWidth,
@@ -197,15 +195,15 @@ class TestShapeFactory {
                 () -> assertEquals(height, testSmileyShape.getHeight()),
                 () -> assertEquals(width, testSmileyShape.getWidth()),
                 () -> assertEquals(strokeSize, testSmileyShape.getStrokeSize()),
-                () -> assertEquals(strokeColor, testSmileyShape.getStrokeColor(), "stroke color"),
-                () -> assertEquals(fillColor, testSmileyShape.getFillColor(), "fill color")
+                () -> assertEquals(STROKE_COLOR, testSmileyShape.getStrokeColor()),
+                () -> assertEquals(FILL_COLOR, testSmileyShape.getFillColor())
         );
 
         ShapeFactory.updateShape(testTextBox,
                 mousePosition,
                 lastMouseClickPosition,
-                "Black",
-                "Red",
+                FILL_COLOR,
+                STROKE_COLOR,
                 strokeSize,
                 testSnapGrid,
                 canvasWidth,
@@ -215,15 +213,15 @@ class TestShapeFactory {
                 () -> assertEquals(height, testTextBox.getHeight()),
                 () -> assertEquals(width, testTextBox.getWidth()),
                 () -> assertEquals(strokeSize, testTextBox.getStrokeSize()),
-                () -> assertEquals(strokeColor, testTextBox.getStrokeColor(), "stroke color"),
-                () -> assertEquals(fillColor, testTextBox.getFillColor(), "fill color")
+                () -> assertEquals(STROKE_COLOR, testTextBox.getStrokeColor()),
+                () -> assertEquals(FILL_COLOR, testTextBox.getFillColor())
         );
 
         ShapeFactory.updateShape(testBoundingBox,
                 mousePosition,
                 lastMouseClickPosition,
-                "Black",
-                "Red",
+                FILL_COLOR,
+                STROKE_COLOR,
                 strokeSize,
                 testSnapGrid,
                 canvasWidth,
@@ -233,14 +231,14 @@ class TestShapeFactory {
                 () -> assertEquals(height, testBoundingBox.getHeight()),
                 () -> assertEquals(width, testBoundingBox.getWidth()),
                 () -> assertEquals(strokeSize, testBoundingBox.getStrokeSize()),
-                () -> assertEquals(strokeColor, testBoundingBox.getStrokeColor(), "stroke color")
+                () -> assertEquals(STROKE_COLOR, testBoundingBox.getStrokeColor())
         );
 
         ShapeFactory.updateShape(testSelectionBox,
                 mousePosition,
                 lastMouseClickPosition,
-                "Black",
-                "Red",
+                FILL_COLOR,
+                STROKE_COLOR,
                 strokeSize,
                 testSnapGrid,
                 canvasWidth,
@@ -250,11 +248,7 @@ class TestShapeFactory {
                 () -> assertEquals(height, testSelectionBox.getHeight()),
                 () -> assertEquals(width, testSelectionBox.getWidth()),
                 () -> assertEquals(strokeSize, testSelectionBox.getStrokeSize()),
-                () -> assertEquals(strokeColor, testSelectionBox.getStrokeColor(), "stroke color")
+                () -> assertEquals(STROKE_COLOR, testSelectionBox.getStrokeColor())
         );
-    }
-
-    @Test
-    public void testMultipleMouseDirection(){
     }
 }

@@ -57,6 +57,8 @@ public class SelectionBox extends DrawableShape {
             case ORIENTATION:
                 shape.setOrientation(shape.getOrientation() + step);
                 break;
+            default:
+                break;
         }
     }
 

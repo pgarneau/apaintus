@@ -49,6 +49,8 @@ public class CanvasService {
             case SELECT:
                 shapeType = ShapeType.SELECTION_BOX;
                 break;
+            default:
+                break;
         }
 
         return ShapeFactory.createShape(

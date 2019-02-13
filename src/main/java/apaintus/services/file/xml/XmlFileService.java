@@ -21,8 +21,6 @@ public class XmlFileService implements FileService<List<DrawableShape>, List<Dra
 	private Path savePath;
 	private Path loadPath;
 
-	public XmlFileService() {}
-
 	@Override
 	public void save(List<DrawableShape> shapeList) {
 		File file = getSaveFile();

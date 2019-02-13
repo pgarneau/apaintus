@@ -20,8 +20,6 @@ public class PngFileService implements FileService<Image, Image> {
 	private Path savePath;
 	private Path loadPath;
 
-	public PngFileService() {}
-
 	@Override
 	public void save(Image image) {
 		File file = getSaveFile();

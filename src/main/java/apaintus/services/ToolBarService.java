@@ -5,8 +5,6 @@ import javafx.scene.control.ToggleButton;
 import java.util.List;
 
 public class ToolBarService {
-    public ToolBarService() {}
-
     public void toggle(ToggleButton button, List<ToggleButton> toggleButtonList) {
         button.setSelected(true);
 
