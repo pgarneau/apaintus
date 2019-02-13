@@ -41,6 +41,8 @@ class TestShapeFactory {
         Point lastMouseClickPosition = new Point(23.0, 45.0);
         double width = Math.abs(65.0 - 23.0);
         double height = Math.abs(76.0 - 45.0);
+        String fillColor = "Black";
+        String strokeColor = "Red";
         double strokeSize = 5.0;
         double canvasWidth = 600.0;
         double canvasHeight = 800.0;
@@ -250,5 +252,9 @@ class TestShapeFactory {
                 () -> assertEquals(strokeSize, testSelectionBox.getStrokeSize()),
                 () -> assertEquals(STROKE_COLOR, testSelectionBox.getStrokeColor())
         );
+    }
+
+    @Test
+    public void testMultipleMouseDirection(){
     }
 }
