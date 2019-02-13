@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 
+<?import javafx.scene.control.Button?>
 <AnchorPane fx:id="root" prefHeight="45.0" prefWidth="812.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.ToolBarController">
    <children>
       <ToolBar fx:id="toolBar" prefHeight="45.0" prefWidth="812.0">
@@ -62,6 +63,19 @@
                         <ToggleButton fx:id="line" mnemonicParsing="false" text="Line" />
                         <ToggleButton fx:id="smiley" mnemonicParsing="false" text="Smiley" />
                         <ToggleButton fx:id="textBox" mnemonicParsing="false" text="Text" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="40.0" prefWidth="242.0">
+               <children>
+                  <Label text="Shapes" textAlignment="CENTER" />
+                  <HBox prefHeight="51.0" prefWidth="242.0">
+                     <children>
+                        <Button fx:id="alignLeft" text="Align left" />
+                        <Button fx:id="alignTop" text="Align top0" />
+                        <Button fx:id="alignRight" text="Align right" />
+                        <Button fx:id="alignBottom" text="Align bottom" />
                      </children>
                   </HBox>
                </children>
