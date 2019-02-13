@@ -4,6 +4,7 @@ import apaintus.models.Alignment;
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Attribute;
 import apaintus.models.Preference;
+import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.ShapeAttributes;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
@@ -14,6 +15,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class ToolBarController implements ChildController<Controller> {
 	@FXML
@@ -58,19 +60,23 @@ public class ToolBarController implements ChildController<Controller> {
 	private List<ToggleButton> activeToolToggleGroup = new ArrayList<>();
 	private ActiveTool activeTool;
 
+	private CanvasController.ColorChangeListener fillColorListener;
+	private CanvasController.ColorChangeListener strokeColorListener;
+	private CanvasController.ShapeSpinnerChangeListener strokeSizeListener;
+	private CanvasController.GridSpinnerChangeListener gridSpacingListener;
+
 	@Override
 	public void injectParentController(Controller controller) {
 		this.controller = controller;
 		this.canvasController = this.controller.getCanvasController();
 
-		fillColor.valueProperty().addListener(canvasController.new ColorChangeListener(Attribute.FILL_COLOR));
-		strokeColor.valueProperty().addListener(canvasController.new ColorChangeListener(Attribute.STROKE_COLOR));
-		strokeSize.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.STROKE_SIZE));
-		spacingSize.valueProperty().addListener(canvasController.new GridSpinnerChangeListener());
-		alignLeft.setOnAction(canvasController.new AlignmentActionEvent(Alignment.LEFT));
-		alignTop.setOnAction(canvasController.new AlignmentActionEvent(Alignment.TOP));
-		alignRight.setOnAction(canvasController.new AlignmentActionEvent(Alignment.RIGHT));
 		alignBottom.setOnAction(canvasController.new AlignmentActionEvent(Alignment.BOTTOM));
+		alignLeft.setOnAction(canvasController.new AlignmentActionEvent(Alignment.LEFT));
+		alignRight.setOnAction(canvasController.new AlignmentActionEvent(Alignment.RIGHT));
+		alignTop.setOnAction(canvasController.new AlignmentActionEvent(Alignment.TOP));
+
+		createListeners();
+		spacingSize.valueProperty().addListener(gridSpacingListener);
 	}
 
 	@Override
@@ -131,6 +137,7 @@ public class ToolBarController implements ChildController<Controller> {
 			applicationPreferences.setPreference(Preference.FILL_COLOR, fillColor.getValue().toString());
 		});
 
+
 		// DEFAULT SETTINGS
 		select.setSelected(true);
 		activeTool = ActiveTool.SELECT;
@@ -138,10 +145,29 @@ public class ToolBarController implements ChildController<Controller> {
 		snapGrid.setSelected(false);
 	}
 
-	public void update(ShapeAttributes shapeAttributes) {
-		strokeSize.getValueFactory().setValue(shapeAttributes.getStrokeSize());
-		setColorPicker(strokeColor, shapeAttributes.getStrokeColor());
-		setColorPicker(fillColor, shapeAttributes.getFillColor());
+	private void createListeners() {
+		fillColorListener = canvasController.new ColorChangeListener(Attribute.FILL_COLOR);
+		strokeColorListener = canvasController.new ColorChangeListener(Attribute.STROKE_COLOR);
+		strokeSizeListener = canvasController.new ShapeSpinnerChangeListener(Attribute.STROKE_SIZE);
+		gridSpacingListener = canvasController.new GridSpinnerChangeListener();
+	}
+
+	public void setToolBarListeners() {
+		fillColor.valueProperty().addListener(fillColorListener);
+		strokeColor.valueProperty().addListener(strokeColorListener);
+		strokeSize.valueProperty().addListener(strokeSizeListener);
+	}
+
+	public void unsetToolBarListeners() {
+		fillColor.valueProperty().removeListener(fillColorListener);
+		strokeColor.valueProperty().removeListener(strokeColorListener);
+		strokeSize.valueProperty().removeListener(strokeSizeListener);
+	}
+
+	public void update(DrawableShape shape) {
+		strokeSize.getValueFactory().setValue(shape.getStrokeSize());
+		setColorPicker(strokeColor, shape.getStrokeColor());
+		setColorPicker(fillColor, shape.getShapeAttributes().getFillColor());
 	}
 
 	// Binds the Toolbar's size to the main anchorpane

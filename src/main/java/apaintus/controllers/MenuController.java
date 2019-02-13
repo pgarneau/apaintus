@@ -1,6 +1,10 @@
 package apaintus.controllers;
 
 import apaintus.models.ApplicationPreferences;
+import apaintus.models.commands.ClearCommand;
+import apaintus.models.commands.DrawImageCommand;
+import apaintus.models.commands.Invoker;
+import apaintus.models.commands.LoadPngCommand;
 import apaintus.models.shapes.DrawableShape;
 import apaintus.services.MenuService;
 import apaintus.services.file.FileService;
@@ -16,100 +20,116 @@ import java.util.List;
 import java.util.Optional;
 
 public class MenuController implements ChildController<Controller> {
-	private Controller controller;
-	private CanvasController canvasController;
+    private Controller controller;
+    private CanvasController canvasController;
 
-	private FileService<Image, Image> pngFileService;
-	private FileService<List<DrawableShape>, List<DrawableShape>> xmlFileService;
-	private MenuService menuService;
+    private FileService<Image, Image> pngFileService;
+    private FileService<List<DrawableShape>, List<DrawableShape>> xmlFileService;
+    private MenuService menuService;
 
-	@FXML
-	MenuBar menuBar;
+    private Invoker invoker;
 
-	@Override
-	public void injectParentController(Controller controller) {
-		this.controller = controller;
-		this.canvasController = this.controller.getCanvasController();
-	}
+    @FXML
+    MenuBar menuBar;
 
-	@Override
-	public void initialize() {
-		this.pngFileService = new PngFileService();
-		this.xmlFileService = new XmlFileService();
-		this.menuService = new MenuService();
-	}
+    @Override
+    public void injectParentController(Controller controller) {
+        this.controller = controller;
+        canvasController = this.controller.getCanvasController();
+        invoker = this.controller.getInvoker();
+    }
 
-	// Binds the Menubar's size to the main anchorpane
-	public void bindTo(AnchorPane anchorPane) {
-		menuBar.prefWidthProperty().bind(anchorPane.widthProperty());
-	}
+    @Override
+    public void initialize() {
+        this.pngFileService = new PngFileService();
+        this.xmlFileService = new XmlFileService();
+        this.menuService = new MenuService();
+    }
 
-	public void newCanvas() {
-		if (hasUnsavedWork()) {
-			if (menuService.saveRequested()) {
-				savePng();
-			}
-		}
+    // Binds the Menubar's size to the main anchorpane
+    public void bindTo(AnchorPane anchorPane) {
+        menuBar.prefWidthProperty().bind(anchorPane.widthProperty());
+    }
 
-		TextInputDialog dialog = new TextInputDialog("800x600");
-		dialog.setTitle("Select width and height");
-		dialog.setHeaderText("Canvas Width-Height");
-		dialog.setContentText("Width x Height:");
+    public void newCanvas() {
+        if (hasUnsavedWork()) {
+            if (menuService.saveRequested()) {
+                savePng();
+            }
+        }
 
-		Optional<String> result = dialog.showAndWait();
-		result.ifPresent(w -> {
-			String[] dims = w.split("x");
+        TextInputDialog dialog = new TextInputDialog("800x600");
+        dialog.setTitle("Select width and height");
+        dialog.setHeaderText("Canvas Width-Height");
+        dialog.setContentText("Width x Height:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(w -> {
+            String[] dims = w.split("x");
 //			controller.getCanvasController().newCanvas(dims);
-		});
+        });
 
-	}
+    }
 
-	public void savePng() {
-		pngFileService.save(canvasController.getCanvasImage());
-		canvasController.setCanvasChanged(false);
-	}
+    public void savePng() {
+        pngFileService.save(canvasController.getCanvasImage());
+        canvasController.setCanvasChanged(false);
+    }
 
-	public void loadPng() {
-		if (hasUnsavedWork()) {
-			if (menuService.saveRequested()) {
-				savePng();
-			}
-		}
+    public void loadPng() {
+        if (hasUnsavedWork()) {
+            if (menuService.saveRequested()) {
+                savePng();
+            }
+        }
 
-		canvasController.clearCanvas();
-		canvasController.drawImage(pngFileService.load());
-	}
+        invoker.execute(
+                new LoadPngCommand(
+                        new ClearCommand(canvasController),
+                        new DrawImageCommand(canvasController, pngFileService.load())
+                )
+        );
+    }
 
-	public void exportXml() {
-		xmlFileService.save(canvasController.getDrawnShapes());
-		canvasController.setCanvasChanged(false);
-	}
+    public void exportXml() {
+        xmlFileService.save(canvasController.getDrawnShapes());
+        canvasController.setCanvasChanged(false);
+    }
 
-	public void importXml() {
-		if (hasUnsavedWork()) {
-			if (menuService.saveRequested()) {
-				exportXml();
-			}
-		}
+    public void importXml() {
+        if (hasUnsavedWork()) {
+            if (menuService.saveRequested()) {
+                exportXml();
+            }
+        }
 
-		canvasController.clearCanvas();
-		canvasController.setDrawnShapes(xmlFileService.load());
-		canvasController.redrawCanvas();
-	}
+        canvasController.clearCanvas();
+        canvasController.setDrawnShapes(xmlFileService.load());
+        canvasController.redrawCanvas();
+        invoker.clear();
+    }
 
-	public void clearButtonClicked() {
-		canvasController.clearCanvas();
-	}
+    public void clear() {
+        invoker.execute(new ClearCommand(canvasController));
+    }
 
-	public boolean hasUnsavedWork() {
-		return canvasController.isCanvasChanged();
-	}
+    public void undo() {
+        invoker.undo();
+    }
 
-	public MenuBar getMenuBar() {
-		return menuBar;
-	}
+    public void redo() {
+        invoker.redo();
+    }
 
-	public void setPreferences(ApplicationPreferences applicationPreferences) {
-		pngFileService.setPreferences(applicationPreferences);
-	}
+    public boolean hasUnsavedWork() {
+        return canvasController.isCanvasChanged();
+    }
+
+    public MenuBar getMenuBar() {
+        return menuBar;
+    }
+
+    public void setPreferences(ApplicationPreferences applicationPreferences) {
+        pngFileService.setPreferences(applicationPreferences);
+    }
 }
