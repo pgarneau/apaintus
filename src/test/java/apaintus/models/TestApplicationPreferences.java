@@ -41,28 +41,7 @@ public class TestApplicationPreferences {
             applicationPreferencesTest.setPreference(pref,pref.toString());
         }
 
-        String wrongWidthValue = "asdkfh";
-        String wrongSavePathValue = "9292";
-        String wrongLoadPathValue = "9292";
-
         String goodWidthValue = "2.0";
-        String goodSavePathValue = "";
-        String goodLoadPathValue = "9292";
-
-        applicationPreferencesTest.setPreference(Preference.WIDTH,wrongWidthValue);
-        assertEquals("Accepted alphabetic values for a numeric-only value",
-                "2.0",
-                applicationPreferencesTest.getPreference(Preference.WIDTH));
-
-        applicationPreferencesTest.setPreference(Preference.SAVE_PATH,wrongSavePathValue);
-        assertEquals("Acceptd a value type other than alphabetic-only",
-                goodSavePathValue,
-                applicationPreferencesTest.getPreference(Preference.SAVE_PATH));
-
-        applicationPreferencesTest.setPreference(Preference.LOAD_PATH,wrongLoadPathValue);
-        assertEquals("Acceptd a value type other than alphabetic-only",
-                goodLoadPathValue,
-                applicationPreferencesTest.getPreference(Preference.LOAD_PATH));
 
         //Testing good values.
         applicationPreferencesTest.setPreference(Preference.WIDTH,goodWidthValue);
