@@ -1,5 +1,6 @@
 package apaintus.controllers;
 
+import apaintus.models.Alignment;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.models.shapes.DrawableShape;
@@ -327,6 +328,22 @@ public class CanvasController implements ChildController<Controller> {
         public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
             if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
                 activeShape.update(updateService.getAttributes());
+                redrawCanvas();
+            }
+        }
+    }
+
+    public class AlignmentActionEvent implements EventHandler<ActionEvent> {
+        private Alignment alignment;
+
+        public AlignmentActionEvent(Alignment alignment) {
+            this.alignment = alignment;
+        }
+
+        @Override
+        public void handle(ActionEvent event) {
+            if (activeShape.getShapeType() == ShapeType.SELECTION_BOX) {
+                ((SelectionBox) activeShape).alignShapes(alignment);
                 redrawCanvas();
             }
         }

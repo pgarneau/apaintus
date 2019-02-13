@@ -1,5 +1,6 @@
 package apaintus.controllers;
 
+import apaintus.models.Alignment;
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Attribute;
 import apaintus.models.Preference;
@@ -40,6 +41,14 @@ public class ToolBarController implements ChildController<Controller> {
 	private ToggleButton snapGrid;
 	@FXML
 	private Spinner<Double> spacingSize;
+	@FXML
+	private Button alignLeft;
+	@FXML
+	private Button alignTop;
+	@FXML
+	private Button alignRight;
+	@FXML
+	private Button alignBottom;
 
 	private Controller controller;
 	private CanvasController canvasController;
@@ -58,6 +67,10 @@ public class ToolBarController implements ChildController<Controller> {
 		strokeColor.valueProperty().addListener(canvasController.new ColorChangeListener(Attribute.STROKE_COLOR));
 		strokeSize.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.STROKE_SIZE));
 		spacingSize.valueProperty().addListener(canvasController.new GridSpinnerChangeListener());
+		alignLeft.setOnAction(canvasController.new AlignmentActionEvent(Alignment.LEFT));
+		alignTop.setOnAction(canvasController.new AlignmentActionEvent(Alignment.TOP));
+		alignRight.setOnAction(canvasController.new AlignmentActionEvent(Alignment.RIGHT));
+		alignBottom.setOnAction(canvasController.new AlignmentActionEvent(Alignment.BOTTOM));
 	}
 
 	@Override

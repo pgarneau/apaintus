@@ -1,20 +1,30 @@
 package apaintus.models.shapes;
 
+import apaintus.models.Alignment;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
 import apaintus.services.draw.selection_box.SelectionBoxDrawService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SelectionBox extends DrawableShape {
+    private final Map<Alignment, Runnable> alignmentFunctions;
     private List<DrawableShape> shapes;
 
     public SelectionBox(ShapeAttributes shapeAttributes) {
         super(ShapeType.SELECTION_BOX, shapeAttributes);
         boundingBox = new BoundingBox(shapeAttributes);
         shapes = new ArrayList<>();
+        alignmentFunctions = Map.of(
+                Alignment.LEFT, () -> alignLeft(),
+                Alignment.RIGHT, () -> alignRight(),
+                Alignment.TOP, () -> alignTop(),
+                Alignment.BOTTOM, () -> alignBottom()
+        );
     }
 
     public void update(Attribute attribute, double step) {
@@ -156,5 +166,38 @@ public class SelectionBox extends DrawableShape {
     @Override
     public DrawService getDrawService() {
         return new SelectionBoxDrawService(this);
+    }
+
+    public void alignShapes(Alignment alignment) {
+        alignmentFunctions.get(alignment).run();
+        resize();
+    }
+
+    private void alignLeft() {
+        for (DrawableShape shape : shapes) {
+            shape.setCoordinates(new Point(coordinates.getX(), shape.getCoordinates().getY()));
+            shape.getBoundingBox().update(shape.getShapeAttributes());
+        }
+    }
+
+    private void alignRight() {
+        for (DrawableShape shape : shapes) {
+            shape.setCoordinates(new Point((coordinates.getX() + width) - shape.getWidth(), shape.getCoordinates().getY()));
+            shape.getBoundingBox().update(shape.getShapeAttributes());
+        }
+    }
+
+    private void alignTop() {
+        for (DrawableShape shape : shapes) {
+            shape.setCoordinates(new Point(shape.getCoordinates().getX(), coordinates.getY()));
+            shape.getBoundingBox().update(shape.getShapeAttributes());
+        }
+    }
+
+    private void alignBottom() {
+        for (DrawableShape shape : shapes) {
+            shape.setCoordinates(new Point(shape.getCoordinates().getX(), (coordinates.getY() + height) - shape.getHeight()));
+            shape.getBoundingBox().update(shape.getShapeAttributes());
+        }
     }
 }
