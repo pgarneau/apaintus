@@ -39,6 +39,7 @@ public class CanvasController implements ChildController<Controller> {
 
     private ToolBarController toolBarController;
     private AttributeController attributeController;
+    private FigureLogController figureLogController;
 
     private CanvasService canvasService;
     private UpdateService updateService;
@@ -58,6 +59,7 @@ public class CanvasController implements ChildController<Controller> {
     public void injectParentController(Controller controller) {
         this.toolBarController = controller.getToolBarController();
         this.attributeController = controller.getAttributeController();
+        this.figureLogController = controller.getFigureLogController();
         this.canvasService = new CanvasService(this.toolBarController);
         this.updateService = new UpdateService(this.attributeController, this.toolBarController);
 
@@ -139,6 +141,7 @@ public class CanvasController implements ChildController<Controller> {
 
     public void clearCanvas() {
         drawnShapes.clear();
+        figureLogController.updateFigureList(drawnShapes);
         canvasService.clear(drawLayer.getGraphicsContext2D());
         canvasService.clear(canvas.getGraphicsContext2D());
     }

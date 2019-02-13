@@ -11,6 +11,7 @@ public class Controller {
 	@FXML private MenuController menuController;
 	@FXML private ToolBarController toolBarController;
 	@FXML private AttributeController attributeController;
+	@FXML private FigureLogController figureLogController;
 
 	@FXML private AnchorPane mainPane;
 	@FXML private ScrollPane scrollPane;
@@ -24,6 +25,7 @@ public class Controller {
 		menuController.injectParentController(this);
 		toolBarController.injectParentController(this);
 		attributeController.injectParentController(this);
+		figureLogController.injectParentController(this);
 
 		menuController.bindTo(mainPane);
 		toolBarController.bindTo(mainPane);
@@ -55,6 +57,10 @@ public class Controller {
 
 	public Invoker getInvoker() {
 		return invoker;
+	}
+	
+	public FigureLogController getFigureLogController() {
+		return figureLogController;
 	}
 }
 

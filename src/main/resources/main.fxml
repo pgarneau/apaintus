@@ -13,7 +13,7 @@
          <children>
          	<fx:include fx:id="menu" source="Menu.fxml" />
             <fx:include fx:id="toolBar" source="ToolBar.fxml" />
-            <HBox>
+            <HBox VBox.vgrow="ALWAYS">
 	            <ScrollPane fx:id="scrollPane" style="-fx-border-color: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
 	               <content>
 	                  <fx:include fx:id="canvas" source="Canvas.fxml" />
