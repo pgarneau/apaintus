@@ -65,7 +65,6 @@ public class CanvasController implements ChildController<Controller> {
 
     @Override
     public void initialize() {
-
         canvas.setOnMousePressed(event -> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
             activeTool = toolBarController.getActiveTool();
@@ -281,7 +280,6 @@ public class CanvasController implements ChildController<Controller> {
         @Override
         public void changed(ObservableValue<? extends Color> observableValue, Color oldValue, Color newValue) {
             if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
-                System.out.println("COLOR CHANGED");
                 invoker.execute(new UpdateShapeCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
             }
         }
@@ -301,7 +299,6 @@ public class CanvasController implements ChildController<Controller> {
                     ((SelectionBox) activeShape).update(attribute, newValue - oldValue);
                     redrawCanvas();
                 } else {
-                    System.out.println("SPINNER CHANGED");
                     invoker.execute(new UpdateShapeCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
                 }
             }
