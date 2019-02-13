@@ -157,10 +157,13 @@ public class CanvasController implements ChildController<Controller> {
 
     public Image getCanvasImage() {
         // Remove the bounding box around the selected shape when saving canvas to image
-        activeShape.setSelected(false);
+        if(activeShape != null)
+            activeShape.setSelected(false);
         redrawCanvas();
         Image image = canvasService.convertCanvasToImage(canvas);
-        activeShape.setSelected(true);
+
+        if(activeShape != null)
+            activeShape.setSelected(true);
         redrawCanvas();
 
         return image;

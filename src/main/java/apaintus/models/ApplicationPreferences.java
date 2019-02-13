@@ -15,8 +15,6 @@ public class ApplicationPreferences {
 
 
     private ApplicationPreferences() {
-        propertiesFilePath = "config.properties";
-        propertiesFile = new File(propertiesFilePath);
     }
 
     public static synchronized ApplicationPreferences getInstance() {
@@ -54,6 +52,34 @@ public class ApplicationPreferences {
     }
 
     public void setPreference(Preference name, String value) {
+        switch (name) {
+            case HEIGHT:
+            case WIDTH:
+            case STROKE_SIZE:
+                try {
+                    double d = Double.parseDouble(value);
+
+                } catch (NumberFormatException e) {
+                    return;
+                }
+                break;
+            case SAVE_PATH:
+            case LOAD_PATH:
+                File file = new File(value);
+                if(!(file.canRead() || file.canWrite()))
+                    return;
+                break;
+            case STROKE_COLOR:
+            case FILL_COLOR:
+                if(!value.matches("[0-9,a-z,A-Z]"))
+                    return;
+                break;
+        }
         properties.setProperty(name.toString(), value);
+    }
+
+    public void setPropertiesFilePath(String filePath) {
+        propertiesFilePath = filePath;
+        propertiesFile = new File(filePath);
     }
 }

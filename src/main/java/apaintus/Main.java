@@ -51,6 +51,7 @@ public class Main extends Application {
 		primaryStage.show();
 
 		applicationPreferences = ApplicationPreferences.getInstance();
+		applicationPreferences.setPropertiesFilePath("config.properties");
 		applicationPreferences.loadPreferences();
 		controller.getToolBarController().setPreferences(applicationPreferences);
 		controller.getMenuController().setPreferences(applicationPreferences);
@@ -58,7 +59,7 @@ public class Main extends Application {
 		if(width != null)
 			primaryStage.setWidth(Double.valueOf(width));
 		String height = applicationPreferences.getPreference(Preference.HEIGHT);
-		if(width != null)
+		if(height != null)
 			primaryStage.setHeight(Double.valueOf(height));
 	}
 
