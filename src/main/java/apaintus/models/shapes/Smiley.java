@@ -11,10 +11,6 @@ public class Smiley extends FillableShape {
         super(ShapeType.SMILEY, shapeAttributes);
     }
 
-    public void update(ShapeAttributes shapeAttributes) {
-        super.update(shapeAttributes);
-    }
-
     @Override
     public SmileyDrawService getDrawService() {
         return new SmileyDrawService(this);

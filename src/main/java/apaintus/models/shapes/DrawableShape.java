@@ -23,7 +23,8 @@ public abstract class DrawableShape extends Shape {
 
     // Credit: https://stackoverflow.com/questions/8721406/how-to-determine-if-a-point-is-inside-a-2d-convex-polygon
     public boolean contains(Point point) {
-        int i, j;
+        int i;
+        int j;
         boolean result = false;
 
         Point[] vertices = boundingBox.getVertices();

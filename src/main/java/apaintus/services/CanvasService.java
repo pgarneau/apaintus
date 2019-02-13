@@ -22,7 +22,7 @@ public class CanvasService {
         this.toolBarController = toolBarController;
     }
 
-    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent, double[] canvasDimension, SnapGrid snapgrid) {
+    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent, double[] canvasDimension) {
         Point mousePosition = getMousePosition(mouseEvent);
         ShapeType shapeType = null;
 
@@ -67,7 +67,6 @@ public class CanvasService {
 
     public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimension, SnapGrid snapgrid) {
         Point mousePosition = getMousePosition(mouseEvent);
-        double strokeSize = toolBarController.getStrokeSize() / 2 + BoundingBox.getBoundingboxStrokeSize();
 
         ShapeFactory.updateShape(
                 shape,
@@ -93,11 +92,6 @@ public class CanvasService {
     public void drawSnapGrid(GraphicsContext context, SnapGrid snapgrid) {
         context.save();
         context.setStroke(Color.BLACK);
-
-//		//this is used for debugging grid points
-//		for(Point pt : snapgrid.getGridPoints()) {
-//			context.fillOval(pt.getX(), pt.getY(), 5, 5);
-//		}
 
         context.beginPath();
         context.moveTo(0, 0);

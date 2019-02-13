@@ -11,11 +11,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	private static final double MIN_WIDTH = 800;
+	private static final double MIN_HEIGHT = 600;
+
 	private Controller controller;
 	private static Main instance;
 	private AnchorPane root;
-	static private double MIN_WIDTH = 800;
-	static private double MIN_HEIGHT = 600;
 	private ApplicationPreferences applicationPreferences;
 	private Stage primaryStage;
 

@@ -83,16 +83,14 @@ public class PngFileService implements FileService<Image, Image> {
 
 	@Override
 	public void setPreferences(ApplicationPreferences applicationPreferences) {
-		String savePath = applicationPreferences.getPreference(Preference.SAVE_PATH);
-		String loadPath = applicationPreferences.getPreference(Preference.LOAD_PATH);
+		String preferenceSavePath = applicationPreferences.getPreference(Preference.SAVE_PATH);
+		String preferenceLoadPath = applicationPreferences.getPreference(Preference.LOAD_PATH);
 
-		if (savePath != null) {
-			this.savePath = Paths.get(savePath);
-			applicationPreferences.setPreference(Preference.SAVE_PATH, savePath);
+		if (preferenceSavePath != null) {
+			savePath = Paths.get(preferenceSavePath);
 		}
-		if (loadPath != null) {
-			this.loadPath = Paths.get(loadPath);
-			applicationPreferences.setPreference(Preference.LOAD_PATH, loadPath);
+		if (preferenceLoadPath != null) {
+			loadPath = Paths.get(preferenceLoadPath);
 		}
 	}
 }

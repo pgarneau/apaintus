@@ -40,7 +40,6 @@ public class AttributeController implements ChildController<Controller> {
 
     private Map<Attribute, ReadOnlyProperty> attributes = new HashMap<>();
     private Map<Attribute, ChangeListener> listeners = new HashMap<>();
-    private Controller controller;
     private CanvasController canvasController;
 
     private CanvasController.ShapeSpinnerChangeListener xListener;
@@ -52,8 +51,7 @@ public class AttributeController implements ChildController<Controller> {
 
     @Override
     public void injectParentController(Controller controller) {
-        this.controller = controller;
-        this.canvasController = this.controller.getCanvasController();
+        this.canvasController = controller.getCanvasController();
 
         ungroup.setOnAction(canvasController.new UngroupActionEvent());
         createListeners();

@@ -22,7 +22,6 @@ public class TestSnapGrid {
             test = new SnapGrid(testSpacing,
                     testCanvasWidth,
                     testCanvasHeight,
-                    strokeSize,
                     active);
         } catch (Exception e) {
             assertNull(test);
@@ -32,7 +31,6 @@ public class TestSnapGrid {
         test = new SnapGrid(testSpacing,
                 testCanvasWidth,
                 testCanvasHeight,
-                strokeSize,
                 active);
         ArrayList<Point> goodPoints = new ArrayList();
         for (int y = 0; y <= testCanvasHeight; y += testSpacing * 10) {
@@ -53,7 +51,6 @@ public class TestSnapGrid {
         SnapGrid test = new SnapGrid(testSpacing,
                 testCanvasWidth,
                 testCanvasHeight,
-                strokeSize,
                 active);
 
         test.setActive(true);
@@ -68,7 +65,6 @@ public class TestSnapGrid {
         SnapGrid test = new SnapGrid(testSpacing,
                 testCanvasWidth,
                 testCanvasHeight,
-                strokeSize,
                 active);
 
         test.setSpacing(2.0);

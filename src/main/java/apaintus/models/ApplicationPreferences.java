@@ -17,7 +17,6 @@ public class ApplicationPreferences {
     private ApplicationPreferences() {
         propertiesFilePath = "config.properties";
         propertiesFile = new File(propertiesFilePath);
-        System.out.println(propertiesFile.getAbsolutePath());
     }
 
     public static synchronized ApplicationPreferences getInstance() {

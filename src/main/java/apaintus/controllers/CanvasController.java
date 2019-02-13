@@ -26,14 +26,17 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class CanvasController implements ChildController<Controller> {
-    @FXML private AnchorPane root;
-    @FXML private Canvas drawLayer;
-    @FXML private Canvas canvas;
-    @FXML private Canvas snapGridCanvas;
+    @FXML
+    private AnchorPane root;
+    @FXML
+    private Canvas drawLayer;
+    @FXML
+    private Canvas canvas;
+    @FXML
+    private Canvas snapGridCanvas;
 
     private SnapGrid snapGrid;
 
-    private Controller controller;
     private ToolBarController toolBarController;
     private AttributeController attributeController;
 
@@ -53,14 +56,13 @@ public class CanvasController implements ChildController<Controller> {
 
     @Override
     public void injectParentController(Controller controller) {
-        this.controller = controller;
-        this.toolBarController = this.controller.getToolBarController();
-        this.attributeController = this.controller.getAttributeController();
+        this.toolBarController = controller.getToolBarController();
+        this.attributeController = controller.getAttributeController();
         this.canvasService = new CanvasService(this.toolBarController);
         this.updateService = new UpdateService(this.attributeController, this.toolBarController);
 
-        snapGrid = new SnapGrid(toolBarController.getGridSpacing(),canvas.getWidth(),canvas.getHeight(),toolBarController.getStrokeSize(),false);
-        invoker = this.controller.getInvoker();
+        snapGrid = new SnapGrid(toolBarController.getGridSpacing(), canvas.getWidth(), canvas.getHeight(), false);
+        invoker = controller.getInvoker();
     }
 
     @Override
@@ -69,8 +71,8 @@ public class CanvasController implements ChildController<Controller> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
             activeTool = toolBarController.getActiveTool();
 
-            tempActiveShape = canvasService.createShape(activeTool, event, getCanvasDimension(), snapGrid);
-            deselectCommand = new DeselectCommand(this, attributeController, activeShape);
+            tempActiveShape = canvasService.createShape(activeTool, event, getCanvasDimension());
+            deselectCommand = new DeselectCommand(this, activeShape);
             deselectCommand.execute();
 
             if (activeTool == ActiveTool.SELECT) {
@@ -96,7 +98,7 @@ public class CanvasController implements ChildController<Controller> {
                     }
 
                     if (activeShape != null) {
-                        invoker.execute(new DeselectCommand(this, attributeController, activeShape));
+                        invoker.execute(new DeselectCommand(this, activeShape));
                     }
                 }
             } else {
@@ -164,7 +166,7 @@ public class CanvasController implements ChildController<Controller> {
         return image;
     }
 
-    public Canvas getCanvas(){
+    public Canvas getCanvas() {
         return this.canvas;
     }
 
@@ -215,27 +217,26 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public double[] getCanvasDimension() {
-    	double[] dimension = new double[2];
-    	dimension[0]=canvas.getWidth();
-    	dimension[1]=canvas.getHeight();
+        double[] dimension = new double[2];
+        dimension[0] = canvas.getWidth();
+        dimension[1] = canvas.getHeight();
 
-    	return dimension;
+        return dimension;
     }
 
     public void drawSnapGrid() {
-    	canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
+        canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
     }
 
     public void clearSnapgrid() {
-    	snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
+        snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
     }
 
     public void activateSnapGrid() {
-        if(snapGrid.isActive()) {
+        if (snapGrid.isActive()) {
             clearSnapgrid();
             snapGrid.setActive(false);
-        }
-        else {
+        } else {
             drawSnapGrid();
             snapGrid.setActive(true);
         }
@@ -285,7 +286,7 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void changed(ObservableValue<? extends Color> observableValue, Color oldValue, Color newValue) {
-            if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
+            if (activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
                 invoker.execute(new UpdateShapeCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
             }
         }
@@ -300,8 +301,8 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-            if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
-                if(activeShape.getShapeType() == ShapeType.SELECTION_BOX) {
+            if (activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
+                if (activeShape.getShapeType() == ShapeType.SELECTION_BOX) {
                     ((SelectionBox) activeShape).update(attribute, newValue - oldValue);
                     redrawCanvas();
                 } else {
@@ -311,16 +312,15 @@ public class CanvasController implements ChildController<Controller> {
         }
     }
 
-    public class GridSpinnerChangeListener implements ChangeListener<Double>{
-    	@Override
-    	public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-            System.out.println("SNAP GRID");
-			snapGrid.setSpacing(newValue);
-			if (snapGrid.isActive()) {
-				clearSnapgrid();
-				drawSnapGrid();
-			}
-		}
+    public class GridSpinnerChangeListener implements ChangeListener<Double> {
+        @Override
+        public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
+            snapGrid.setSpacing(newValue);
+            if (snapGrid.isActive()) {
+                clearSnapgrid();
+                drawSnapGrid();
+            }
+        }
     }
 
     public class UngroupActionEvent implements EventHandler<ActionEvent> {
@@ -345,7 +345,7 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-            if(activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
+            if (activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
                 invoker.execute(new UpdateShapeCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
             }
         }

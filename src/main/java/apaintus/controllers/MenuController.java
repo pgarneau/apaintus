@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class MenuController implements ChildController<Controller> {
-    private Controller controller;
     private CanvasController canvasController;
 
     private FileService<Image, Image> pngFileService;
@@ -34,9 +33,8 @@ public class MenuController implements ChildController<Controller> {
 
     @Override
     public void injectParentController(Controller controller) {
-        this.controller = controller;
-        canvasController = this.controller.getCanvasController();
-        invoker = this.controller.getInvoker();
+        canvasController = controller.getCanvasController();
+        invoker = controller.getInvoker();
     }
 
     @Override
@@ -52,10 +50,8 @@ public class MenuController implements ChildController<Controller> {
     }
 
     public void newCanvas() {
-        if (hasUnsavedWork()) {
-            if (menuService.saveRequested()) {
-                savePng();
-            }
+        if (hasUnsavedWork() && menuService.saveRequested()) {
+            savePng();
         }
 
         TextInputDialog dialog = new TextInputDialog("800x600");
@@ -77,10 +73,8 @@ public class MenuController implements ChildController<Controller> {
     }
 
     public void loadPng() {
-        if (hasUnsavedWork()) {
-            if (menuService.saveRequested()) {
-                savePng();
-            }
+        if (hasUnsavedWork() && menuService.saveRequested()) {
+            savePng();
         }
 
         invoker.execute(
@@ -97,10 +91,8 @@ public class MenuController implements ChildController<Controller> {
     }
 
     public void importXml() {
-        if (hasUnsavedWork()) {
-            if (menuService.saveRequested()) {
-                exportXml();
-            }
+        if (hasUnsavedWork() && menuService.saveRequested()) {
+            exportXml();
         }
 
         canvasController.clearCanvas();

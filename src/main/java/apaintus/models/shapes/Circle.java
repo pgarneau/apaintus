@@ -12,10 +12,6 @@ public class Circle extends FillableShape {
         super(ShapeType.CIRCLE, shapeAttributes);
     }
 
-    public void update(ShapeAttributes shapeAttributes) {
-        super.update(shapeAttributes);
-    }
-
     @Override
     public DrawService getDrawService() {
         return new CircleDrawService(this);

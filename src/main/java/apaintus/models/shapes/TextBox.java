@@ -17,7 +17,7 @@ public class TextBox extends DrawableShape {
     public TextBox(ShapeAttributes shapeAttributes) {
         super(TEXT_BOX, shapeAttributes);
 
-        text = new String("Enter text down below");
+        text = "Enter text down below";
         width = shapeAttributes.getWidth();
         height = shapeAttributes.getHeight();
         fillColor = shapeAttributes.getFillColor();

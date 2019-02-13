@@ -1,4 +1,4 @@
-package apaintus.services.draw.bounding_box;
+package apaintus.services.draw.boundingBox;
 
 import apaintus.models.shapes.BoundingBox;
 import apaintus.services.draw.DrawService;

@@ -17,7 +17,6 @@ public class TextBoxDrawService extends DrawService {
     public void draw(GraphicsContext context) {
         super.draw(context);
         
-        //double fontSize = 12;
         double fontSize = textbox.getStrokeSize();
 
         if (textbox.getFillColor().compareTo("0x00000000") == 0)

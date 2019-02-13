@@ -19,7 +19,7 @@ public class UpdateShapeCommand implements Command {
         this.shape = shape;
         this.attribute = attribute;
         oldShapeAttributes = this.shape.getShapeAttributes();
-        description = "Updated " + shape.getShapeType().toString() + " " + attribute.toString();
+        description = "Updated " + shape.getShapeType().toString() + " " + this.attribute.toString();
     }
 
     @Override

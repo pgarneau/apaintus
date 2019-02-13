@@ -2,9 +2,9 @@ package apaintus.models.snapgrid;
 
 import apaintus.models.Point;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SnapGrid {
-	
 	private double spacing = 0;
 	private double drawingAreaWidth = 0;
 	private double drawingAreaHeight = 0;
@@ -13,7 +13,7 @@ public class SnapGrid {
 	
 	private ArrayList<Point> snapgridPoints;
 	
-	public SnapGrid(double spacing, double drawingAreaWidth, double drawingAreaHeight, double strokeSize, boolean active){
+	public SnapGrid(double spacing, double drawingAreaWidth, double drawingAreaHeight, boolean active){
 
 		if (spacing <= 0)
 			throw new IllegalArgumentException("Trying to make a grid with a linespacing equal to 0");
@@ -22,7 +22,7 @@ public class SnapGrid {
 		this.drawingAreaWidth = drawingAreaWidth;
 		this.drawingAreaHeight = drawingAreaHeight;
 		this.isActive = active;
-		this.snapgridPoints = new ArrayList<Point>();		
+		this.snapgridPoints = new ArrayList<>();
 		computeAllPointInGrid();
 	}
 	
@@ -35,7 +35,7 @@ public class SnapGrid {
 		}
 	}
 	
-	public ArrayList<Point> getGridPoints(){
+	public List<Point> getGridPoints(){
 		return snapgridPoints;
 	}
 	

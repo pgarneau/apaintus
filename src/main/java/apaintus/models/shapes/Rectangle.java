@@ -14,10 +14,6 @@ public class Rectangle extends FillableShape {
         super(RECTANGLE, shapeAttributes);
     }
 
-    public void update(ShapeAttributes shapeAttributes) {
-        super.update(shapeAttributes);
-    }
-
     @Override
     public RectangleDrawService getDrawService() {
         return new RectangleDrawService(this);

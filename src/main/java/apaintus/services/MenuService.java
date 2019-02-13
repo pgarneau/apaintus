@@ -16,12 +16,7 @@ public class MenuService {
                 "Are you sure that you want to close this file without saving ?\nUnsaved changes will be lost.");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent()) {
-            if (result.get() == ButtonType.YES) {
-                return false;
-            }
-        }
 
-        return true;
+        return (result.isPresent() && result.get() == ButtonType.YES);
     }
 }

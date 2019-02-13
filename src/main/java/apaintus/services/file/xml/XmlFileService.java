@@ -15,6 +15,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class XmlFileService implements FileService<List<DrawableShape>, List<DrawableShape>> {
@@ -37,7 +38,6 @@ public class XmlFileService implements FileService<List<DrawableShape>, List<Dra
 				// Marshalling and saving XML to the file.
 				m.marshal(xmlContract, file);
 			} catch (Exception e) { // catches ANY exception
-				System.out.println(e);
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Error");
 				alert.setHeaderText("Could not save data");
@@ -71,7 +71,7 @@ public class XmlFileService implements FileService<List<DrawableShape>, List<Dra
 			}
 		}
 
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override

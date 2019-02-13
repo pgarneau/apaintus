@@ -1,6 +1,7 @@
 package apaintus.models.shapes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Point;
@@ -11,7 +12,10 @@ public class ShapeFactory {
     private static double orientation;
     private static double width;
 
-    public static DrawableShape createShape(ShapeType shapeType, Point mousePosition, Point lastMouseClickPosition, String fillColor, String strokeColor, double strokeSize,double canvasWidth, double canvasHeight) {
+    private ShapeFactory() {
+    }
+
+    public static DrawableShape createShape(ShapeType shapeType, Point mousePosition, Point lastMouseClickPosition, String fillColor, String strokeColor, double strokeSize, double canvasWidth, double canvasHeight) {
         switch (shapeType) {
             case RECTANGLE:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
@@ -76,7 +80,7 @@ public class ShapeFactory {
                                 .withStrokeSize(strokeSize)
                                 .build()
                 );
-                
+
             case TEXT_BOX:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
@@ -111,35 +115,19 @@ public class ShapeFactory {
     }
 
     public static void updateShape(Shape shape, Point mousePosition, Point lastMouseClickPosition, String fillColor, String strokeColor, double strokeSize, SnapGrid snapgrid, double canvasWidth, double canvasHeight) {
-    	Point[] positions = new Point[2];
-    	switch (shape.getShapeType()) {
-            case RECTANGLE:
-            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
-            	mousePosition = positions[0];
-            	lastMouseClickPosition = positions[1];
-                dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
-           
-                shape.update(
-                        ShapeAttributes
-                                .builder()
-                                .withCoordinates(coordinates)
-                                .withWidth(dimensions[0])
-                                .withHeight(dimensions[1])
-                                .withOrientation(0)
-                                .withFillColor(fillColor)
-                                .withStrokeColor(strokeColor)
-                                .withStrokeSize(strokeSize)
-                                .build()
-                );
-                break;
+        Point[] positions;
 
+        switch (shape.getShapeType()) {
+            case RECTANGLE:
             case CIRCLE:
-            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
-            	mousePosition = positions[0];
-            	lastMouseClickPosition = positions[1];
+            case SMILEY:
+            case TEXT_BOX:
+                positions = ajustPointWithSnapgrid(snapgrid, mousePosition, lastMouseClickPosition);
+                mousePosition = positions[0];
+                lastMouseClickPosition = positions[1];
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
+
                 shape.update(
                         ShapeAttributes
                                 .builder()
@@ -155,9 +143,9 @@ public class ShapeFactory {
                 break;
 
             case LINE:
-            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
-            	mousePosition = positions[0];
-            	lastMouseClickPosition = positions[1];
+                positions = ajustPointWithSnapgrid(snapgrid, mousePosition, lastMouseClickPosition);
+                mousePosition = positions[0];
+                lastMouseClickPosition = positions[1];
                 orientation = computeOrientation(mousePosition, lastMouseClickPosition);
                 width = computeLineWidth(mousePosition, lastMouseClickPosition, strokeSize);
                 shape.update(
@@ -174,45 +162,6 @@ public class ShapeFactory {
                 );
                 break;
 
-            case SMILEY:
-            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
-            	mousePosition = positions[0];
-            	lastMouseClickPosition = positions[1];
-                dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
-                shape.update(
-                        ShapeAttributes
-                                .builder()
-                                .withCoordinates(coordinates)
-                                .withWidth(dimensions[0])
-                                .withHeight(dimensions[1])
-                                .withOrientation(0)
-                                .withFillColor(fillColor)
-                                .withStrokeColor(strokeColor)
-                                .withStrokeSize(strokeSize)
-                                .build()
-                );
-                break;
-                
-            case TEXT_BOX:
-            	positions = ajustPointWithSnapgrid(snapgrid,mousePosition,lastMouseClickPosition,strokeSize);
-            	mousePosition = positions[0];
-            	lastMouseClickPosition = positions[1];
-                dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
-                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition,strokeSize);
-                shape.update(
-                        ShapeAttributes
-                                .builder()
-                                .withCoordinates(coordinates)
-                                .withWidth(dimensions[0])
-                                .withHeight(dimensions[1])
-                                .withOrientation(0)
-                                .withFillColor(fillColor)
-                                .withStrokeColor(strokeColor)
-                                .withStrokeSize(strokeSize)
-                                .build()
-                );
-                break;
             case SELECTION_BOX:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasWidth, canvasHeight, strokeSize);
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, strokeSize);
@@ -232,17 +181,17 @@ public class ShapeFactory {
         }
     }
 
-    private static Point getToNextPointInGrid(Point lastPos, ArrayList<Point> gridPts) {
-		Point newPoint = new Point(0,0);
-		for(int i = 0; i<gridPts.size();i++) {
-			Point pt = gridPts.get(i);
-			if(pt.getX() == lastPos.getX() && pt.getY() == lastPos.getY())
-				newPoint = gridPts.get(i+1);
-		}
-		return newPoint;
-	}
+    private static Point getToNextPointInGrid(Point lastPos, List<Point> gridPts) {
+        Point newPoint = new Point(0, 0);
+        for (int i = 0; i < gridPts.size(); i++) {
+            Point pt = gridPts.get(i);
+            if (pt.getX() == lastPos.getX() && pt.getY() == lastPos.getY())
+                newPoint = gridPts.get(i + 1);
+        }
+        return newPoint;
+    }
 
-	private static Point computeCoordinates(Point mousePosition, Point lastMouseClickPosition, double strokeSize) {
+    private static Point computeCoordinates(Point mousePosition, Point lastMouseClickPosition, double strokeSize) {
         Point coordinates;
 
         boolean upMotion = mousePosition.getY() - lastMouseClickPosition.getY() <= 0.0;
@@ -252,34 +201,30 @@ public class ShapeFactory {
             coordinates = mousePosition;
         } else if (upMotion && rightMotion) {
             coordinates = new Point(lastMouseClickPosition.getX(), mousePosition.getY());
-        } else if (!upMotion && rightMotion) {
+        } else if (rightMotion) {
             coordinates = lastMouseClickPosition;
-        } else if (!upMotion && !rightMotion) {
-            coordinates = new Point(mousePosition.getX(), lastMouseClickPosition.getY());
         } else {
-            System.err.print(
-                    "this should not happen in any case. This probably means that the lastMouseClickPosition is null");
-            coordinates = new Point(0, 0);
+            coordinates = new Point(mousePosition.getX(), lastMouseClickPosition.getY());
         }
-        
-        if(coordinates.getX() == 0)
-        	coordinates.setX(strokeSize/1);
-		if(coordinates.getY() == 0)
-			coordinates.setY(strokeSize/1);
+
+        if (coordinates.getX() == 0)
+            coordinates.setX(strokeSize / 1);
+        if (coordinates.getY() == 0)
+            coordinates.setY(strokeSize / 1);
         return coordinates;
     }
 
-    private static double[] computeDimensions(Point mousePosition, Point lastMouseClickPosition, double canvasWidth, double canvasHeight,double strokeSize) {
+    private static double[] computeDimensions(Point mousePosition, Point lastMouseClickPosition, double canvasWidth, double canvasHeight, double strokeSize) {
         // Width is index 0
         // Height is index 1
-        double[] dimension = new double[] {Math.abs(mousePosition.getX() - lastMouseClickPosition.getX()),
+        double[] dimension = new double[]{Math.abs(mousePosition.getX() - lastMouseClickPosition.getX()),
                 Math.abs(mousePosition.getY() - lastMouseClickPosition.getY())};
-        
-        if(mousePosition.getX() >= canvasWidth)
-        	dimension[0] = Math.abs(canvasWidth - lastMouseClickPosition.getX() - strokeSize);
-        if(mousePosition.getY() >= canvasHeight)
-        	dimension[1] = Math.abs(canvasHeight - lastMouseClickPosition.getY() - strokeSize);
-        
+
+        if (mousePosition.getX() >= canvasWidth)
+            dimension[0] = Math.abs(canvasWidth - lastMouseClickPosition.getX() - strokeSize);
+        if (mousePosition.getY() >= canvasHeight)
+            dimension[1] = Math.abs(canvasHeight - lastMouseClickPosition.getY() - strokeSize);
+
         return dimension;
     }
 
@@ -300,29 +245,29 @@ public class ShapeFactory {
 
         return orientation;
     }
-    
-	private static Point computeNearestPoint(Point mousePosition, SnapGrid snapgrid, double strokeSize) {
-		Point newPoint = new Point(0, 0);
-		double distance = Double.MAX_VALUE;
-		for (Point pt : snapgrid.getGridPoints()) {
-			double x = (Math.abs(pt.getX()-mousePosition.getX()));
-			double y = (Math.abs(pt.getY()-mousePosition.getY()));
-			double currentDistance = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
-			if(distance > currentDistance) {
-				distance = currentDistance;
-				newPoint = pt;
-			}
-		}
-		
-		return newPoint;
-	}
-	
-	private static Point[] ajustPointWithSnapgrid(SnapGrid snapgrid, Point mousePosition, Point lastMouseClickPosition, double strokeSize) {
+
+    private static Point computeNearestPoint(Point mousePosition, SnapGrid snapgrid) {
+        Point newPoint = new Point(0, 0);
+        double distance = Double.MAX_VALUE;
+        for (Point pt : snapgrid.getGridPoints()) {
+            double x = (Math.abs(pt.getX() - mousePosition.getX()));
+            double y = (Math.abs(pt.getY() - mousePosition.getY()));
+            double currentDistance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+            if (distance > currentDistance) {
+                distance = currentDistance;
+                newPoint = pt;
+            }
+        }
+
+        return newPoint;
+    }
+
+    private static Point[] ajustPointWithSnapgrid(SnapGrid snapgrid, Point mousePosition, Point lastMouseClickPosition) {
         Point newMousePosition = mousePosition;
         Point newLastMousePosition = lastMouseClickPosition;
         if (snapgrid.isActive()) {
-            newMousePosition = computeNearestPoint(mousePosition, snapgrid, strokeSize);
-            newLastMousePosition = computeNearestPoint(lastMouseClickPosition, snapgrid, strokeSize);
+            newMousePosition = computeNearestPoint(mousePosition, snapgrid);
+            newLastMousePosition = computeNearestPoint(lastMouseClickPosition, snapgrid);
             if (newMousePosition == newLastMousePosition) {
                 newMousePosition = getToNextPointInGrid(newMousePosition, snapgrid.getGridPoints());
             }

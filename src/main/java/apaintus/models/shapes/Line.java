@@ -12,10 +12,6 @@ public class Line extends DrawableShape {
         super(ShapeType.LINE, shapeAttributes);
     }
 
-    public void update(ShapeAttributes shapeAttributes) {
-        super.update(shapeAttributes);
-    }
-
     @Override
     public DrawService getDrawService() {
         return new LineDrawService(this);

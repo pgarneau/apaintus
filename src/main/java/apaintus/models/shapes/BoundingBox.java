@@ -2,15 +2,12 @@ package apaintus.models.shapes;
 
 import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
-import apaintus.services.draw.bounding_box.BoundingBoxDrawService;
+import apaintus.services.draw.boundingBox.BoundingBoxDrawService;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-//@XmlRootElement
 public class BoundingBox extends Shape {
-    private static int STROKE_SIZE = 2;
-    private static String STROKE_COLOR = "#000000";
-    private static int LINE_DASH_SIZE = 4;
+    private static final int STROKE_SIZE = 2;
+    private static final String STROKE_COLOR = "#000000";
+    private static final int LINE_DASH_SIZE = 4;
 
     private double shapeStrokeSize;
     private Point[] vertices;

@@ -4,27 +4,18 @@ import apaintus.models.Alignment;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
-import apaintus.services.draw.selection_box.SelectionBoxDrawService;
+import apaintus.services.draw.selectionBox.SelectionBoxDrawService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SelectionBox extends DrawableShape {
-    private final Map<Alignment, Runnable> alignmentFunctions;
     private List<DrawableShape> shapes;
 
     public SelectionBox(ShapeAttributes shapeAttributes) {
         super(ShapeType.SELECTION_BOX, shapeAttributes);
         boundingBox = new BoundingBox(shapeAttributes);
         shapes = new ArrayList<>();
-        alignmentFunctions = Map.of(
-                Alignment.LEFT, () -> alignLeft(),
-                Alignment.RIGHT, () -> alignRight(),
-                Alignment.TOP, () -> alignTop(),
-                Alignment.BOTTOM, () -> alignBottom()
-        );
     }
 
     public void update(Attribute attribute, double step) {
@@ -64,10 +55,6 @@ public class SelectionBox extends DrawableShape {
 
     public void add(DrawableShape shape) {
         shapes.add(shape);
-    }
-
-    public boolean remove(DrawableShape shape) {
-        return (shapes.remove(shape));
     }
 
     public List<DrawableShape> getShapes() {
@@ -152,9 +139,7 @@ public class SelectionBox extends DrawableShape {
         for (int index = 0; index < getSize(); index++) {
             if (shapes.get(index).getShapeType() == ShapeType.SELECTION_BOX) {
                 for (DrawableShape compositeShape : ((SelectionBox) shapes.get(index)).getShapes()) {
-                    if (remove(compositeShape)) {
-                        index--;
-                    }
+                    shapes.remove(compositeShape);
                 }
             }
         }
@@ -171,7 +156,27 @@ public class SelectionBox extends DrawableShape {
     }
 
     public void alignShapes(Alignment alignment) {
-        alignmentFunctions.get(alignment).run();
+        switch (alignment) {
+            case TOP:
+                alignTop();
+                break;
+
+            case RIGHT:
+                alignRight();
+                break;
+
+            case BOTTOM:
+                alignBottom();
+                break;
+
+            case LEFT:
+                alignLeft();
+                break;
+
+            default:
+                break;
+        }
+
         resize();
     }
 

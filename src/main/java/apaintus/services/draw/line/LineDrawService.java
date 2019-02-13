@@ -4,8 +4,6 @@ import apaintus.models.shapes.Line;
 import apaintus.services.draw.DrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Rotate;
 
 public class LineDrawService extends DrawService {
     Line line;

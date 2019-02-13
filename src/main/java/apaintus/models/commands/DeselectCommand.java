@@ -1,6 +1,5 @@
 package apaintus.models.commands;
 
-import apaintus.controllers.AttributeController;
 import apaintus.controllers.CanvasController;
 import apaintus.models.shapes.DrawableShape;
 
@@ -8,13 +7,11 @@ import java.util.Optional;
 
 public class DeselectCommand implements Command {
     private CanvasController canvasController;
-    private AttributeController attributeController;
     private Optional<DrawableShape> previousActiveShape;
     private String description = "hello";
 
-    public DeselectCommand(CanvasController canvasController, AttributeController attributeController, DrawableShape previousActiveShape) {
+    public DeselectCommand(CanvasController canvasController, DrawableShape previousActiveShape) {
         this.canvasController = canvasController;
-        this.attributeController = attributeController;
         this.previousActiveShape = Optional.ofNullable(previousActiveShape);
     }
 
