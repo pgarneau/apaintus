@@ -2,25 +2,41 @@ package apaintus.models;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestApplicationPreferences {
-    private String fakeConfigFilePath = "test.properties";
+    private String fakeConfigFilePath = "src/test/resources/test.properties";
 
     @Test
     public void testApplicationPreferencesCreate() {
         ApplicationPreferences test = ApplicationPreferences.getInstance();
         ApplicationPreferences test2 = ApplicationPreferences.getInstance();
-        assertEquals("ApplicationPreferences is a singleton, both should be the same", test2, test);
+        assertEquals(test2, test);
     }
 
     @Test
     public void testApplicationPreferencesSave() {
         ApplicationPreferences test = ApplicationPreferences.getInstance();
+        test.setPropertiesFilePath(fakeConfigFilePath);
+
+        String redColor = "0xff0000";
+        String width = "20.0";
+        String height = "30.0";
+        String strokeColor = "0x000000";
+
+        test.setPreference(Preference.FILL_COLOR, redColor);
+        test.setPreference(Preference.WIDTH, width);
+        test.setPreference(Preference.HEIGHT, height);
+        test.setPreference(Preference.STROKE_COLOR, strokeColor);
 
         test.savePreferences();
+        test.loadPreferences();
+
+        assertAll(() -> assertEquals(redColor, test.getPreference(Preference.FILL_COLOR)),
+                () -> assertEquals(width, test.getPreference(Preference.WIDTH)),
+                () -> assertEquals(height, test.getPreference(Preference.HEIGHT)),
+                () -> assertEquals(strokeColor, test.getPreference(Preference.STROKE_COLOR))
+        );
     }
 
     @Test
@@ -36,7 +52,7 @@ public class TestApplicationPreferences {
     @Test
     public void testApplicationPreferencesSetPreferences() {
         ApplicationPreferences applicationPreferencesTest = ApplicationPreferences.getInstance();
-        applicationPreferencesTest.setPropertiesFilePath("test.properties");
+        applicationPreferencesTest.setPropertiesFilePath(fakeConfigFilePath);
 
         String wrongWidthValue = "asdkfh";
         String wrongSavePathValue = "9292";

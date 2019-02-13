@@ -71,7 +71,7 @@ public class ApplicationPreferences {
                 break;
             case STROKE_COLOR:
             case FILL_COLOR:
-                if(!value.matches("[0-9,a-z,A-Z]"))
+                if(!value.matches("0x([0-9a-fA-F]{6})"))
                     return;
                 break;
         }
