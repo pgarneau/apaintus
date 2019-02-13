@@ -4,10 +4,11 @@ import apaintus.models.Attribute;
 import apaintus.models.shapes.DrawableShape;
 import apaintus.models.shapes.ShapeType;
 import apaintus.models.shapes.ShapeAttributes;
+import javafx.beans.property.ReadOnlyProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
@@ -37,9 +38,17 @@ public class AttributeController implements ChildController<Controller> {
     @FXML
     private ToolBar bar;
 
-    private Map<Attribute, SpinnerValueFactory<Double>> spinners = new HashMap<>();
+    private Map<Attribute, ReadOnlyProperty> attributes = new HashMap<>();
+    private Map<Attribute, ChangeListener> listeners = new HashMap<>();
     private Controller controller;
     private CanvasController canvasController;
+
+    private CanvasController.ShapeSpinnerChangeListener xListener;
+    private CanvasController.ShapeSpinnerChangeListener yListener;
+    private CanvasController.ShapeSpinnerChangeListener orientationListener;
+    private CanvasController.ShapeSpinnerChangeListener widthListener;
+    private CanvasController.ShapeSpinnerChangeListener heightListener;
+    private CanvasController.TextAreaChangeListener textListener;
 
     @Override
     public void injectParentController(Controller controller) {
@@ -47,81 +56,105 @@ public class AttributeController implements ChildController<Controller> {
         this.canvasController = this.controller.getCanvasController();
 
         ungroup.setOnAction(canvasController.new UngroupActionEvent());
-        setAttributeChangeListener();
+        createListeners();
+        fillListenerMap();
     }
 
     @Override
     public void initialize() {
-        createValueFactory();
-        fillSpinnerMap();
+        setValueFactory();
+        fillAttributesMap();
 
         ungroup.setVisible(false);
     }
 
-    private void createValueFactory() {
+    private void createListeners() {
+        xListener = canvasController.new ShapeSpinnerChangeListener(Attribute.COORDINATE_X);
+        yListener = canvasController.new ShapeSpinnerChangeListener(Attribute.COORDINATE_Y);
+        orientationListener = canvasController.new ShapeSpinnerChangeListener(Attribute.ORIENTATION);
+        widthListener = canvasController.new ShapeSpinnerChangeListener(Attribute.WIDTH);
+        heightListener = canvasController.new ShapeSpinnerChangeListener(Attribute.HEIGHT);
+        textListener = canvasController.new TextAreaChangeListener(Attribute.TEXT);
+    }
+
+    private void fillListenerMap() {
+        listeners.put(Attribute.COORDINATE_X, xListener);
+        listeners.put(Attribute.COORDINATE_Y, yListener);
+        listeners.put(Attribute.ORIENTATION, orientationListener);
+        listeners.put(Attribute.WIDTH, widthListener);
+        listeners.put(Attribute.HEIGHT, heightListener);
+        listeners.put(Attribute.TEXT, textListener);
+    }
+
+    private void fillAttributesMap() {
+        attributes.put(Attribute.COORDINATE_X, shapeX.valueProperty());
+        attributes.put(Attribute.COORDINATE_Y, shapeY.valueProperty());
+        attributes.put(Attribute.ORIENTATION, shapeOrientation.valueProperty());
+        attributes.put(Attribute.WIDTH, shapeWidth.valueProperty());
+        attributes.put(Attribute.HEIGHT, shapeHeight.valueProperty());
+        attributes.put(Attribute.TEXT, text.textProperty());
+    }
+
+    private void setValueFactory() {
         shapeX.setValueFactory(new DoubleSpinnerValueFactory(0.0, Double.MAX_VALUE, 0.0, 1));
         shapeY.setValueFactory(new DoubleSpinnerValueFactory(0.0, Double.MAX_VALUE, 0.0, 1));
         shapeWidth.setValueFactory(new DoubleSpinnerValueFactory(0.0, Double.MAX_VALUE, 0.0, 1));
         shapeHeight.setValueFactory(new DoubleSpinnerValueFactory(0.0, Double.MAX_VALUE, 0.0, 1));
         shapeOrientation.setValueFactory(new DoubleSpinnerValueFactory(0.0, 360.0, 0.0, 1));
+        text.setText("");
     }
 
-    private void setAttributeChangeListener() {
-        shapeX.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.COORDINATE_X));
-        shapeY.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.COORDINATE_Y));
-        shapeOrientation.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.ORIENTATION));
-        shapeWidth.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.WIDTH));
-        shapeHeight.valueProperty().addListener(canvasController.new ShapeSpinnerChangeListener(Attribute.HEIGHT));
-        text.textProperty().addListener(canvasController.new TextAreaChangeListener(Attribute.TEXT));
+    public void setAttributeChangeListeners() {
+        setListener(Attribute.COORDINATE_X);
+        setListener(Attribute.COORDINATE_Y);
+        setListener(Attribute.ORIENTATION);
+        setListener(Attribute.WIDTH);
+        setListener(Attribute.HEIGHT);
+        setListener(Attribute.TEXT);
     }
 
-    private void fillSpinnerMap() {
-        spinners.put(Attribute.COORDINATE_X, shapeX.getValueFactory());
-        spinners.put(Attribute.COORDINATE_Y, shapeY.getValueFactory());
-        spinners.put(Attribute.ORIENTATION, shapeOrientation.getValueFactory());
-        spinners.put(Attribute.WIDTH, shapeWidth.getValueFactory());
-        spinners.put(Attribute.HEIGHT, shapeHeight.getValueFactory());
+    public void unsetAttributeChangeListerners() {
+        unsetListener(Attribute.COORDINATE_X);
+        unsetListener(Attribute.COORDINATE_Y);
+        unsetListener(Attribute.ORIENTATION);
+        unsetListener(Attribute.WIDTH);
+        unsetListener(Attribute.HEIGHT);
+        unsetListener(Attribute.TEXT);
     }
 
-//	public void bindTo(AnchorPane mainPane) {
-//		bar.prefWidthProperty().bind(mainPane.prefWidthProperty());
-//	}
-
-    public double getSpinnerValue(Attribute attribute) {
-        return spinners.get(attribute).getValue();
+    private void setListener(Attribute attribute) {
+        attributes.get(attribute).addListener(listeners.get(attribute));
     }
-    
-    public String getTextAreaValue() {
-        return text.getText();
+
+    private void unsetListener(Attribute attribute) {
+        attributes.get(attribute).removeListener(listeners.get(attribute));
+    }
+
+    public double getDoubleAttribute(Attribute attribute) {
+        return Double.valueOf(attributes.get(attribute).getValue().toString());
+    }
+
+    public String getStringAttribute(Attribute attribute) {
+        return attributes.get(attribute).getValue().toString();
+    }
+
+    public void setAttributes(ShapeAttributes shapeAttributes) {
+        shapeX.getValueFactory().setValue(shapeAttributes.getCoordinates().getX());
+        shapeY.getValueFactory().setValue(shapeAttributes.getCoordinates().getY());
+        shapeOrientation.getValueFactory().setValue(shapeAttributes.getOrientation());
+        shapeWidth.getValueFactory().setValue(shapeAttributes.getWidth());
+        shapeHeight.getValueFactory().setValue(shapeAttributes.getHeight());
+        text.setText(shapeAttributes.getText() == null ? "" : shapeAttributes.getText());
     }
 
     public void update(DrawableShape shape) {
-        updateSpinners(shape.getShapeAttributes());
+        resetAttributes();
+        setAttributes(shape.getShapeAttributes());
         ungroup.setVisible(shape.getShapeType() == ShapeType.SELECTION_BOX);
     }
 
-    public void update(ShapeAttributes shapeAttributes) {
-        resetAttributes();
-        updateSpinners(shapeAttributes);
-        updateTextArea(shapeAttributes.getText());
-    }
-
     public void resetAttributes() {
-        for (Map.Entry<Attribute, SpinnerValueFactory<Double>> entry : spinners.entrySet()) {
-            entry.getValue().setValue(0.0);
-        }
+        setValueFactory();
         ungroup.setVisible(false);
-    }
-
-    private void updateSpinners(ShapeAttributes shapeAttributes) {
-        spinners.get(Attribute.COORDINATE_X).setValue(shapeAttributes.getCoordinates().getX());
-        spinners.get(Attribute.COORDINATE_Y).setValue(shapeAttributes.getCoordinates().getY());
-        spinners.get(Attribute.ORIENTATION).setValue(shapeAttributes.getOrientation());
-        spinners.get(Attribute.WIDTH).setValue(shapeAttributes.getWidth());
-        spinners.get(Attribute.HEIGHT).setValue(shapeAttributes.getHeight());
-    }
-    
-    private void updateTextArea(String text) {
-    	this.text.setText(text);;
     }
 }

@@ -71,4 +71,19 @@ public class TextBox extends DrawableShape {
     public void setText(String text) {
         this.text = text;
     }
+
+    @Override
+    public ShapeAttributes getShapeAttributes() {
+        return ShapeAttributes
+                .builder()
+                .withCoordinates(coordinates)
+                .withWidth(width)
+                .withHeight(height)
+                .withOrientation(orientation)
+                .withStrokeColor(strokeColor)
+                .withStrokeSize(strokeSize)
+                .withFillColor("")
+                .withText(text)
+                .build();
+    }
 }
