@@ -18,10 +18,12 @@ public class FigureLogController implements ChildController<Controller> {
 
 	public static final ObservableList<String> observableListFigures = FXCollections.observableArrayList();
 
-
 	@FXML
 	private ListView<String> figureList;
 	private List<DrawableShape> shapeList;
+
+	private static final int UP = -1;
+	private static final int DOWN = 1;
 
 	@Override
 	public void injectParentController(Controller controller) {
@@ -31,7 +33,7 @@ public class FigureLogController implements ChildController<Controller> {
 
 	@Override
 	public void initialize() {
-		figureList.setOnMouseClicked(Event ->{
+		figureList.setOnMouseClicked(Event -> {
 			int indexOfSelectedItem = figureList.getSelectionModel().getSelectedIndex();
 			canvasController.selectShape(shapeList.get(indexOfSelectedItem));
 			canvasController.redrawCanvas();
@@ -41,49 +43,44 @@ public class FigureLogController implements ChildController<Controller> {
 	public void updateFigureList(List<DrawableShape> drawnShapes) {
 		observableListFigures.clear();
 		shapeList = drawnShapes;
-		
+
 		for (DrawableShape shape : shapeList)
 			observableListFigures.add(shape.toString());
-		
+
 		figureList.setItems(observableListFigures);
-		
+
 		figureList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-            @Override
-            public ListCell<String> call(ListView<String> param) {
-                return new ListViewCell(controller.getFigureLogController());
-            }
-        });
+			@Override
+			public ListCell<String> call(ListView<String> param) {
+				return new ListViewCell(controller.getFigureLogController());
+			}
+		});
 	}
-	
+
 	public void selectFigureListItem(DrawableShape shape) {
 		figureList.getSelectionModel().select(shape.toString());
 	}
-	
+
 	public void moveShapeUp(String shapeName) {
-		int index = figureList.getItems().indexOf(shapeName);
-		DrawableShape shape = shapeList.get(index);
-		int newIndex = index - 1;
-		
-		if(index > 0) {
-			shapeList.remove(shape);
-			shapeList.add(newIndex, shape);
-			selectFigureListItem(shape);
-		}
-		updateFigureList(shapeList);
-		canvasController.selectShape(shapeList.get(newIndex));
-		canvasController.redrawCanvas();
+		moveShape(UP, shapeName);
 	}
-	
+
 	public void moveShapeDown(String shapeName) {
+		moveShape(DOWN, shapeName);
+	}
+
+	private void moveShape(int direction, String shapeName) {
 		int index = figureList.getItems().indexOf(shapeName);
+		int newIndex = index + direction;
 		DrawableShape shape = shapeList.get(index);
-		int newIndex = index + 1;
-		
-		if((index != - 1) && (index != figureList.getItems().size() - 1)) {
-			shapeList.remove(shape);
-			shapeList.add(newIndex, shape);
-			selectFigureListItem(shape);
-		}
+
+		if (newIndex < 0 || newIndex >= figureList.getItems().size())
+			return;
+
+		shapeList.remove(shape);
+		shapeList.add(newIndex, shape);
+		selectFigureListItem(shape);
+
 		updateFigureList(shapeList);
 		canvasController.selectShape(shapeList.get(newIndex));
 		canvasController.redrawCanvas();
