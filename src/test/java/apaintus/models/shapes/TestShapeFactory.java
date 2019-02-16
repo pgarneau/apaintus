@@ -2,7 +2,6 @@ package apaintus.models.shapes;
 
 import apaintus.models.Point;
 import apaintus.models.snapgrid.SnapGrid;
-import org.junit.experimental.theories.suppliers.TestedOn;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
