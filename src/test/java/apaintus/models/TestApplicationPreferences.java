@@ -26,11 +26,6 @@ public class TestApplicationPreferences {
     public void testApplicationPreferencesLoad(){
         ApplicationPreferences test = ApplicationPreferences.getInstance();
         test.loadPreferences();
-
-        for(Preference pref : Preference.values()){
-            System.out.println(pref.toString());
-            assertNotNull(test.getPreference(pref));
-        }
     }
 
     @Test
