@@ -6,9 +6,9 @@
 <?import javafx.scene.control.ListView?>
 <?import java.util.ArrayList?>
 
-<AnchorPane fx:id="root" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="apaintus.controllers.FigureLogController">
+<AnchorPane fx:id="root" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="apaintus.controllers.FigureLogController">
 	<children>
-		<ListView fx:id="figureList" prefWidth="300.0" editable="true"/>
+		<ListView fx:id="figureList" prefWidth="400.0" editable="true"/>
 	</children>
 </AnchorPane>
 

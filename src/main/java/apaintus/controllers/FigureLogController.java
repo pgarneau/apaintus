@@ -1,10 +1,13 @@
 package apaintus.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.util.Callback;
 
 import java.util.List;
 
+import apaintus.models.ListViewCell;
 import apaintus.models.shapes.DrawableShape;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,10 +16,12 @@ public class FigureLogController implements ChildController<Controller> {
 	private Controller controller;
 	private CanvasController canvasController;
 
-	public static final ObservableList<DrawableShape> observableListFigures = FXCollections.observableArrayList();
+	public static final ObservableList<String> observableListFigures = FXCollections.observableArrayList();
+
 
 	@FXML
-	private ListView<DrawableShape> figureList;
+	private ListView<String> figureList;
+	private List<DrawableShape> shapeList;
 
 	@Override
 	public void injectParentController(Controller controller) {
@@ -27,26 +32,60 @@ public class FigureLogController implements ChildController<Controller> {
 	@Override
 	public void initialize() {
 		figureList.setOnMouseClicked(Event ->{
-			DrawableShape shape = figureList.getSelectionModel().getSelectedItem();
-			canvasController.selectShape(shape);
+			int indexOfSelectedItem = figureList.getSelectionModel().getSelectedIndex();
+			canvasController.selectShape(shapeList.get(indexOfSelectedItem));
 			canvasController.redrawCanvas();
 		});
 	}
 
 	public void updateFigureList(List<DrawableShape> drawnShapes) {
 		observableListFigures.clear();
+		shapeList = drawnShapes;
 		
-		for (DrawableShape shape : drawnShapes)
-			observableListFigures.add(shape);
+		for (DrawableShape shape : shapeList)
+			observableListFigures.add(shape.toString());
 		
 		figureList.setItems(observableListFigures);
 		
-		// Implement this method to enable the modification of the shown text in the listView
-		// Add the CellFactory to the ListView
-		//figureList.setCellFactory(new Callback<ListView<DrawableShape>, javafx.scene.control.ListCell<DrawableShape>>());
+		figureList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                return new ListViewCell(controller.getFigureLogController());
+            }
+        });
 	}
 	
 	public void selectFigureListItem(DrawableShape shape) {
-		figureList.getSelectionModel().select(shape);
+		figureList.getSelectionModel().select(shape.toString());
+	}
+	
+	public void moveShapeUp(String shapeName) {
+		int index = figureList.getItems().indexOf(shapeName);
+		DrawableShape shape = shapeList.get(index);
+		int newIndex = index - 1;
+		
+		if(index > 0) {
+			shapeList.remove(shape);
+			shapeList.add(newIndex, shape);
+			selectFigureListItem(shape);
+		}
+		updateFigureList(shapeList);
+		canvasController.selectShape(shapeList.get(newIndex));
+		canvasController.redrawCanvas();
+	}
+	
+	public void moveShapeDown(String shapeName) {
+		int index = figureList.getItems().indexOf(shapeName);
+		DrawableShape shape = shapeList.get(index);
+		int newIndex = index + 1;
+		
+		if((index != - 1) && (index != figureList.getItems().size() - 1)) {
+			shapeList.remove(shape);
+			shapeList.add(newIndex, shape);
+			selectFigureListItem(shape);
+		}
+		updateFigureList(shapeList);
+		canvasController.selectShape(shapeList.get(newIndex));
+		canvasController.redrawCanvas();
 	}
 }
