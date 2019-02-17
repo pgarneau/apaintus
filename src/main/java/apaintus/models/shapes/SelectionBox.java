@@ -22,10 +22,6 @@ public class SelectionBox extends DrawableShape {
     }
 
     public void update(Attribute attribute, double step) {
-        if (originalCoordinates == null) {
-            originalCoordinates = coordinates;
-        }
-
         updateShape(attribute, step, this);
 
         for (DrawableShape shape : shapes) {
@@ -148,6 +144,7 @@ public class SelectionBox extends DrawableShape {
         for (DrawableShape shape : shapes) {
             shapesOriginalCoordinates.put(shape, shape.getCoordinates());
         }
+        originalCoordinates = coordinates;
     }
 
     public void setSelected(boolean selected) {
