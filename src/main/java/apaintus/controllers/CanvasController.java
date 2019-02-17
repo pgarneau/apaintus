@@ -272,6 +272,7 @@ public class CanvasController implements ChildController<Controller> {
         attributeController.update(activeShape);
         attributeController.setAttributeChangeListeners();
         toolBarController.setToolBarListeners();
+    	figureLogController.selectFigureListItem(activeShape);
     }
 
     public void clearActiveShape() {

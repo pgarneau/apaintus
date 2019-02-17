@@ -53,7 +53,7 @@ public class FigureLogController implements ChildController<Controller> {
 		shapeList = drawnShapes;
 
 		for (DrawableShape shape : shapeList)
-			observableListFigures.add(shape.getShapeType().toString() + " - " + shape.hashCode());
+			observableListFigures.add(shapeToString(shape));
 
 		figureList.setItems(observableListFigures);
 
@@ -66,7 +66,8 @@ public class FigureLogController implements ChildController<Controller> {
 	}
 
 	public void selectFigureListItem(DrawableShape shape) {
-		figureList.getSelectionModel().select(shape.toString());
+		if(shape != null)
+			figureList.getSelectionModel().select(shapeToString(shape));
 	}
 
 	public void moveShapeUp(String shapeName) {
@@ -87,10 +88,14 @@ public class FigureLogController implements ChildController<Controller> {
 
 		shapeList.remove(shape);
 		shapeList.add(newIndex, shape);
-		selectFigureListItem(shape);
 		updateFigureList(shapeList);
+		selectFigureListItem(shape);
 
 		DrawableShape previousActiveShape = canvasController.getActiveShape();
 		invoker.execute(new SelectCommand(canvasController, previousActiveShape, shape));
+	}
+
+	private String shapeToString(DrawableShape shape) {
+		return shape.getShapeType().toString() + " - " + shape.hashCode();
 	}
 }
