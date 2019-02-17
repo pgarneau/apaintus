@@ -8,6 +8,8 @@ import javafx.util.Callback;
 import java.util.List;
 
 import apaintus.models.ListViewCell;
+import apaintus.models.commands.Invoker;
+import apaintus.models.commands.SelectCommand;
 import apaintus.models.shapes.DrawableShape;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +17,7 @@ import javafx.collections.ObservableList;
 public class FigureLogController implements ChildController<Controller> {
 	private Controller controller;
 	private CanvasController canvasController;
+	private Invoker invoker;
 
 	public static final ObservableList<String> observableListFigures = FXCollections.observableArrayList();
 
@@ -29,6 +32,7 @@ public class FigureLogController implements ChildController<Controller> {
 	public void injectParentController(Controller controller) {
 		this.controller = controller;
 		this.canvasController = this.controller.getCanvasController();
+		invoker = controller.getInvoker();
 	}
 
 	@Override
@@ -37,8 +41,10 @@ public class FigureLogController implements ChildController<Controller> {
 			int indexOfSelectedItem = figureList.getSelectionModel().getSelectedIndex();
 			if (indexOfSelectedItem < 0)
 				return;
-			canvasController.selectShape(shapeList.get(indexOfSelectedItem));
-			canvasController.redrawCanvas();
+			DrawableShape newActiveShape = shapeList.get(indexOfSelectedItem);
+			DrawableShape previousActiveShape = canvasController.getActiveShape();
+
+			invoker.execute(new SelectCommand(canvasController, previousActiveShape, newActiveShape));
 		});
 	}
 
@@ -47,7 +53,7 @@ public class FigureLogController implements ChildController<Controller> {
 		shapeList = drawnShapes;
 
 		for (DrawableShape shape : shapeList)
-			observableListFigures.add(shape.getShapeType().toString() + " - " + shape.getClass().hashCode());
+			observableListFigures.add(shape.getShapeType().toString() + " - " + shape.hashCode());
 
 		figureList.setItems(observableListFigures);
 
@@ -82,9 +88,9 @@ public class FigureLogController implements ChildController<Controller> {
 		shapeList.remove(shape);
 		shapeList.add(newIndex, shape);
 		selectFigureListItem(shape);
-
 		updateFigureList(shapeList);
-		canvasController.selectShape(shapeList.get(newIndex));
-		canvasController.redrawCanvas();
+
+		DrawableShape previousActiveShape = canvasController.getActiveShape();
+		invoker.execute(new SelectCommand(canvasController, previousActiveShape, shape));
 	}
 }

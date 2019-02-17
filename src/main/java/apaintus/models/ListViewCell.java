@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
 public class ListViewCell extends ListCell<String> {
-    HBox hbox = new HBox();
+    HBox hBox = new HBox();
     Label label = new Label("(empty)");
     Pane emptyPane = new Pane();
     Button upButton = new Button("^");
@@ -20,7 +20,7 @@ public class ListViewCell extends ListCell<String> {
         super();
         upButton.setFocusTraversable(false);
     	downButton.setFocusTraversable(false);
-        hbox.getChildren().addAll(label, emptyPane, upButton, downButton);
+        hBox.getChildren().addAll(label, emptyPane, upButton, downButton);
         HBox.setHgrow(emptyPane, Priority.ALWAYS);
         
         upButton.setOnMouseClicked(Event ->{;
@@ -42,7 +42,7 @@ public class ListViewCell extends ListCell<String> {
         } else {
             lastItem = item;
             label.setText(item!=null ? item : "<null>");
-            setGraphic(hbox);
+            setGraphic(hBox);
         }
     }
 }
