@@ -15,18 +15,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class FigureLogController implements ChildController<Controller> {
+	public static final ObservableList<String> observableListFigures = FXCollections.observableArrayList();
+	private static final int UP = -1;
+	private static final int DOWN = 1;
+	
+	@FXML
+	private ListView<String> figureList;
+	
 	private Controller controller;
 	private CanvasController canvasController;
 	private Invoker invoker;
-
-	public static final ObservableList<String> observableListFigures = FXCollections.observableArrayList();
-
-	@FXML
-	private ListView<String> figureList;
 	private List<DrawableShape> shapeList;
-
-	private static final int UP = -1;
-	private static final int DOWN = 1;
 
 	@Override
 	public void injectParentController(Controller controller) {
