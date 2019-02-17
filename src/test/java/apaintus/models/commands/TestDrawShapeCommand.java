@@ -2,6 +2,7 @@ package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
 import apaintus.models.shapes.DrawableShape;
+import apaintus.models.shapes.Shape;
 import apaintus.models.shapes.ShapeType;
 import javafx.scene.image.Image;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,10 @@ class TestDrawShapeCommand {
         CanvasController testCanvasController = mock(CanvasController.class);
         DrawableShape testShape = mock(DrawableShape.class);
         SelectCommand testSelectCommand = mock(SelectCommand.class);
+
+        doCallRealMethod().when(testShape).getShapeType();
+        doCallRealMethod().when(testShape).setShapeType(any(ShapeType.class));
+        testShape.setShapeType(ShapeType.RECTANGLE);
 
         DrawShapeCommand test = new DrawShapeCommand(testCanvasController, testShape, testSelectCommand);
 
