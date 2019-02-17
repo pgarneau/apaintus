@@ -1,6 +1,7 @@
 package apaintus.models.shapes;
 
 import apaintus.models.Point;
+import apaintus.services.draw.DrawService;
 import apaintus.services.draw.NodeDrawService;
 
 import java.lang.reflect.Field;
@@ -25,7 +26,7 @@ public abstract class Node {
         center = computeCenter();
     }
 
-    public abstract NodeDrawService getDrawService();
+    public abstract DrawService getDrawService();
 
     public abstract void update(NodeAttributes nodeAttributes);
 

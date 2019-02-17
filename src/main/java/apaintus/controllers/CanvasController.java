@@ -132,8 +132,9 @@ public class CanvasController implements ChildController<Controller> {
         for (Node node : nodeList) {
             canvasService.drawNode(canvas.getGraphicsContext2D(), node);
         }
-        figureLogController.updateFigureList(drawnShapes);
-        figureLogController.selectFigureListItem(activeShape);
+
+        figureLogController.updateFigureList(nodeList);
+        figureLogController.selectFigureListItem(activeNode);
     }
 
     public void drawImage(Image image) {

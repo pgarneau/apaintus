@@ -1,5 +1,6 @@
 package apaintus.controllers;
 
+import apaintus.models.shapes.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -9,7 +10,6 @@ import java.util.List;
 
 import apaintus.models.commands.Invoker;
 import apaintus.models.commands.SelectCommand;
-import apaintus.models.shapes.DrawableShape;
 import apaintus.views.FigureListViewCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,14 +18,14 @@ public class FigureLogController implements ChildController<Controller> {
 	public static final ObservableList<String> observableListFigures = FXCollections.observableArrayList();
 	private static final int UP = -1;
 	private static final int DOWN = 1;
-	
+
 	@FXML
 	private ListView<String> figureList;
-	
+
 	private Controller controller;
 	private CanvasController canvasController;
 	private Invoker invoker;
-	private List<DrawableShape> shapeList;
+	private List<Node> nodeList;
 
 	@Override
 	public void injectParentController(Controller controller) {
@@ -42,16 +42,17 @@ public class FigureLogController implements ChildController<Controller> {
 			if (indexOfSelectedItem < 0)
 				return;
 
-			invoker.execute(new SelectCommand(canvasController, canvasController.getActiveShape(), shapeList.get(indexOfSelectedItem)));
+			invoker.execute(new SelectCommand(canvasController, canvasController.getActiveNode(), nodeList.get(indexOfSelectedItem)));
 		});
 	}
 
-	public void updateFigureList(List<DrawableShape> drawnShapes) {
+	public void updateFigureList(List<Node> nodeList) {
 		observableListFigures.clear();
-		shapeList = drawnShapes;
+		this.nodeList = nodeList;
 
-		for (int index = 0; index < shapeList.size(); index++)
-			observableListFigures.add((index + 1) + ". " + shapeToString(shapeList.get(index)));
+
+		for (int index = 0; index < nodeList.size(); index++)
+			observableListFigures.add((index + 1) + ". " + nodeToString(nodeList.get(index)));
 
 		figureList.setItems(observableListFigures);
 		figureList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
@@ -62,41 +63,39 @@ public class FigureLogController implements ChildController<Controller> {
 		});
 	}
 
-	public void selectFigureListItem(DrawableShape shape) {
-		int index = 0;
-
-		if (shape != null) {
-			for (index = 0; index < shapeList.size(); index++)
-				if (shape == shapeList.get(index))
+	public void selectFigureListItem(Node node) {
+		if (node != null) {
+			for (int index = 0; index < nodeList.size(); index++)
+				if (node == nodeList.get(index))
 					figureList.getSelectionModel().select(index);
 		}
 	}
 
-	public void moveShapeUp(String shapeName) {
-		moveShape(UP, shapeName);
+	public void moveNodeUp(String shapeName) {
+		moveNode(UP, shapeName);
 	}
 
-	public void moveShapeDown(String shapeName) {
-		moveShape(DOWN, shapeName);
+	public void moveNodeDown(String shapeName) {
+		moveNode(DOWN, shapeName);
 	}
 
-	private void moveShape(int direction, String shapeName) {
+	private void moveNode(int direction, String shapeName) {
 		int index = figureList.getItems().indexOf(shapeName);
 		int newIndex = index + direction;
-		DrawableShape shape = shapeList.get(index);
+		Node node = nodeList.get(index);
 
 		if (newIndex < 0 || newIndex >= figureList.getItems().size())
 			return;
 
-		shapeList.remove(shape);
-		shapeList.add(newIndex, shape);
-		updateFigureList(shapeList);
-		selectFigureListItem(shape);
+		nodeList.remove(node);
+		nodeList.add(newIndex, node);
+		updateFigureList(nodeList);
+		selectFigureListItem(node);
 
-		invoker.execute(new SelectCommand(canvasController, canvasController.getActiveShape(), shape));
+		invoker.execute(new SelectCommand(canvasController, canvasController.getActiveNode(), node));
 	}
 
-	private String shapeToString(DrawableShape shape) {
-		return shape.getShapeType().toString() + " - " + shape.hashCode();
+	private String nodeToString(Node node) {
+		return node.getNodeType().toString() + " - " + node.hashCode();
 	}
 }

@@ -24,11 +24,11 @@ public class FigureListViewCell extends ListCell<String> {
 		HBox.setHgrow(emptyPane, Priority.ALWAYS);
 
 		upButton.setOnMouseClicked(event -> {
-			figureLogController.moveShapeUp(lastItem);
+			figureLogController.moveNodeUp(lastItem);
 		});
 
 		downButton.setOnMouseClicked(event -> {
-			figureLogController.moveShapeDown(lastItem);
+			figureLogController.moveNodeDown(lastItem);
 		});
 	}
 
