@@ -1,13 +1,13 @@
 package apaintus.services.draw.smiley;
 
 import apaintus.models.shapes.Smiley;
-import apaintus.services.draw.DrawService;
+import apaintus.services.draw.ShapeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
 
-public class SmileyDrawService extends DrawService {
+public class SmileyDrawService extends ShapeDrawService {
     private Smiley smiley;
 
     public SmileyDrawService(Smiley smiley) {

@@ -1,66 +1,46 @@
 package apaintus.models.shapes;
 
 import apaintus.models.Point;
-import apaintus.services.draw.DrawService;
 
 import javax.xml.bind.annotation.XmlTransient;
 
 @XmlTransient
-public abstract class Shape {
-    protected ShapeType shapeType;
-    protected Point coordinates;
-    protected double orientation;
+public abstract class Shape extends Node {
+    protected String fillColor;
     protected String strokeColor;
     protected double strokeSize;
-    protected double width;
-    protected double height;
 
-    public Shape() {
+    protected Shape() {
+        super();
     }
 
-    public Shape(ShapeType shapeType, ShapeAttributes shapeAttributes) {
-        this.shapeType = shapeType;
-        this.coordinates = shapeAttributes.getCoordinates();
-        this.orientation = shapeAttributes.getOrientation();
-        this.strokeColor = shapeAttributes.getStrokeColor();
-        this.strokeSize = shapeAttributes.getStrokeSize();
-        this.width = shapeAttributes.getWidth();
-        this.height = shapeAttributes.getHeight();
+    public Shape(NodeAttributes nodeAttributes, ShapeAttributes shapeAttributes) {
+        super(nodeAttributes);
+        fillColor = shapeAttributes.getFillColor();
+        strokeColor = shapeAttributes.getStrokeColor();
+        strokeSize = shapeAttributes.getStrokeSize();
     }
 
-    public void update(ShapeAttributes shapeAttributes) {
-        this.coordinates = shapeAttributes.getCoordinates();
-        this.orientation = shapeAttributes.getOrientation();
-        this.strokeColor = shapeAttributes.getStrokeColor();
-        this.strokeSize = shapeAttributes.getStrokeSize();
-        this.width = shapeAttributes.getWidth();
-        this.height = shapeAttributes.getHeight();
+    @Override
+    public void update(NodeAttributes nodeAttributes) {
+        coordinates = nodeAttributes.getCoordinates();
+        width = nodeAttributes.getWidth();
+        height = nodeAttributes.getHeight();
+        orientation = nodeAttributes.getOrientation();
+        center = computeCenter();
+        boundingBox.update(
+                center,
+                width + strokeSize,
+                height + strokeSize,
+                orientation);
     }
 
-    public abstract DrawService getDrawService();
-
-    public ShapeType getShapeType() {
-        return shapeType;
+    public String getFillColor() {
+        return fillColor;
     }
 
-    public void setShapeType(ShapeType shapeType) {
-        this.shapeType = shapeType;
-    }
-
-    public Point getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(Point coordinates) {
-        this.coordinates = coordinates;
-    }
-
-    public double getOrientation() {
-        return orientation;
-    }
-
-    public void setOrientation(double orientation) {
-        this.orientation = orientation;
+    public void setFillColor(String fillColor) {
+        this.fillColor = fillColor;
     }
 
     public String getStrokeColor() {
@@ -77,21 +57,5 @@ public abstract class Shape {
 
     public void setStrokeSize(double strokeSize) {
         this.strokeSize = strokeSize;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
     }
 }

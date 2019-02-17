@@ -1,12 +1,12 @@
 package apaintus.services.draw.textbox;
 
 import apaintus.models.shapes.TextBox;
-import apaintus.services.draw.DrawService;
+import apaintus.services.draw.ShapeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
-public class TextBoxDrawService extends DrawService {
+public class TextBoxDrawService extends ShapeDrawService {
     private TextBox textbox;
 
     public TextBoxDrawService(TextBox textbox) {

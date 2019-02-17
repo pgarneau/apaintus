@@ -1,16 +1,20 @@
-package apaintus.models.shapes;
+package apaintus.models;
 
-public class ShapeAttributes {
-    private double strokeSize;
+public class ToolBarAttributes {
     private String fillColor;
     private String strokeColor;
+    private double strokeSize;
 
-    private ShapeAttributes() {}
+    private ToolBarAttributes() {}
 
-    public ShapeAttributes(Builder builder) {
-        this.strokeSize = builder.strokeSize;
+    public ToolBarAttributes(Builder builder) {
         this.fillColor = builder.fillColor;
         this.strokeColor = builder.strokeColor;
+        this.strokeSize = builder.strokeSize;
+    }
+
+    public String getFillColor() {
+        return fillColor;
     }
 
     public String getStrokeColor() {
@@ -21,25 +25,16 @@ public class ShapeAttributes {
         return strokeSize;
     }
 
-    public String getFillColor() {
-        return fillColor;
-    }
-    
     public static Builder builder() {
-        return new ShapeAttributes.Builder();
+        return new ToolBarAttributes.Builder();
     }
 
     public static class Builder {
-        private double strokeSize;
         private String fillColor;
         private String strokeColor;
+        private double strokeSize;
 
         private Builder() {}
-
-        public Builder withStrokeSize(double strokeSize) {
-            this.strokeSize = strokeSize;
-            return this;
-        }
 
         public Builder withFillColor(String fillColor) {
             this.fillColor = fillColor;
@@ -50,9 +45,15 @@ public class ShapeAttributes {
             this.strokeColor = strokeColor;
             return this;
         }
-        
-        public ShapeAttributes build() {
-            return new ShapeAttributes(this);
+
+        public Builder withStrokeSize(double strokeSize) {
+            this.strokeSize = strokeSize;
+            return this;
+        }
+
+        public ToolBarAttributes build() {
+            return new ToolBarAttributes(this);
         }
     }
 }
+

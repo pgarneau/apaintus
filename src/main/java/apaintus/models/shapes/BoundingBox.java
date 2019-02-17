@@ -1,61 +1,60 @@
 package apaintus.models.shapes;
 
 import apaintus.models.Point;
-import apaintus.services.draw.DrawService;
-import apaintus.services.draw.boundingBox.BoundingBoxDrawService;
 
-public class BoundingBox extends Shape {
-    private static final int STROKE_SIZE = 2;
-    private static final String STROKE_COLOR = "#000000";
-    private static final int LINE_DASH_SIZE = 4;
+public class BoundingBox {
+    public static final int STROKE_SIZE = 2;
 
-    private double shapeStrokeSize;
     private Point[] vertices;
+    private Point coordinates;
+    private Point center;
+    private double width;
+    private double height;
+    private double orientation;
 
-    private BoundingBox() {
-        super();
+    public BoundingBox(Point center, double width, double height, double orientation) {
+        this.center = center;
+//        this.coordinates = new Point(coordinates.getX() - STROKE_SIZE / 2, coordinates.getY() - STROKE_SIZE / 2);
+        this.width = width + STROKE_SIZE;
+        this.height = height + STROKE_SIZE;
+        this.orientation = orientation;
+
+        vertices = computeVertices();
     }
 
-    public BoundingBox(ShapeAttributes shapeAttributes) {
-        super(ShapeType.BOUNDING_BOX, ShapeAttributes.builder()
-                .withCoordinates(shapeAttributes.getCoordinates())
-                .withOrientation(shapeAttributes.getOrientation())
-                .withStrokeColor(STROKE_COLOR)
-                .withStrokeSize(STROKE_SIZE)
-                .withWidth(shapeAttributes.getWidth())
-                .withHeight(shapeAttributes.getHeight())
-                .build());
+    public void update(Point center, double width, double height, double orientation) {
+        this.center = center;
+//        this.coordinates = new Point(coordinates.getX() - STROKE_SIZE / 2, coordinates.getY() - STROKE_SIZE / 2);
+        this.width = width + STROKE_SIZE;
+        this.height = height + STROKE_SIZE;
+        this.orientation = orientation;
 
-        this.shapeStrokeSize = shapeAttributes.getStrokeSize();
-
-        this.vertices = computeVertices(coordinates, orientation, width, height);
+        vertices = computeVertices();
     }
 
-    public void update(ShapeAttributes shapeAttributes) {
-        super.update(ShapeAttributes.builder()
-                .withCoordinates(shapeAttributes.getCoordinates())
-                .withOrientation(shapeAttributes.getOrientation())
-                .withStrokeColor(STROKE_COLOR).withStrokeSize(STROKE_SIZE)
-                .withWidth(shapeAttributes.getWidth())
-                .withHeight(shapeAttributes.getHeight())
-                .build());
+    // Credit: https://stackoverflow.com/questions/8721406/how-to-determine-if-a-point-is-inside-a-2d-convex-polygon
+    public boolean contains(Point point) {
+        int i;
+        int j;
+        boolean result = false;
 
-        this.shapeStrokeSize = shapeAttributes.getStrokeSize();
+        for (i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+            if ((vertices[i].getY() > point.getY()) != (vertices[j].getY() > point.getY()) &&
+                    (point.getX() < (vertices[j].getX() - vertices[i].getX()) * (point.getY() - vertices[i].getY()) / (vertices[j].getY() - vertices[i].getY()) + vertices[i].getX())) {
+                result = !result;
+            }
+        }
 
-        this.vertices = computeVertices(coordinates, orientation, width, height);
+        return result;
     }
 
-    @Override
-    public DrawService getDrawService() {
-        return new BoundingBoxDrawService(this);
-    }
-
-    private Point[] computeVertices(Point coordinates, double orientation, double width, double height) {
+    private Point[] computeVertices() {
         return new Point[]{
-                coordinates,
-                computeCorner(coordinates, width, 0, orientation),
-                computeCorner(coordinates, width, height, orientation),
-                computeCorner(coordinates, 0, height, orientation)};
+                computeCorner(center, -width / 2, -height / 2, orientation),
+                computeCorner(center, width / 2, -height / 2, orientation),
+                computeCorner(center, width / 2, height / 2, orientation),
+                computeCorner(center, -width / 2, height / 2, orientation)
+        };
     }
 
     private Point computeCorner(Point origin, double x, double y, double orientation) {
@@ -63,27 +62,7 @@ public class BoundingBox extends Shape {
         return new Point(origin.getX() + (x * Math.cos(orientation) + y * Math.sin(orientation)), origin.getY() - (x * Math.sin(orientation) - y * Math.cos(orientation)));
     }
 
-    public int getLineDashSize() {
-        return LINE_DASH_SIZE;
-    }
-
-    public double getShapeStrokeSize() {
-        return shapeStrokeSize;
-    }
-
-    public void setShapeStrokeSize(double shapeStrokeSize) {
-        this.shapeStrokeSize = shapeStrokeSize;
-    }
-
     public Point[] getVertices() {
         return vertices;
-    }
-
-    public void setVertices(Point[] vertices) {
-        this.vertices = vertices;
-    }
-    
-    public static double getBoundingboxStrokeSize() {
-    	return STROKE_SIZE;
     }
 }

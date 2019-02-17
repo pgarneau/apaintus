@@ -1,12 +1,14 @@
 package apaintus.services;
 
 import apaintus.controllers.ToolBarController;
+import apaintus.models.ToolBarAttributes;
 import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Point;
 import apaintus.models.shapes.*;
-import apaintus.models.shapes.Shape;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.draw.DrawService;
+import apaintus.services.draw.ShapeDrawService;
+import apaintus.services.draw.SnapGridDrawService;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -22,94 +24,43 @@ public class CanvasService {
         this.toolBarController = toolBarController;
     }
 
-    public DrawableShape createShape(ActiveTool activeTool, MouseEvent mouseEvent, double[] canvasDimension) {
+    public Node createNode(ActiveTool activeTool, MouseEvent mouseEvent, double[] canvasDimensions) {
         Point mousePosition = getMousePosition(mouseEvent);
-        ShapeType shapeType = null;
 
-        switch (activeTool) {
-            case RECTANGLE:
-                shapeType = ShapeType.RECTANGLE;
-                break;
-
-            case CIRCLE:
-                shapeType = ShapeType.CIRCLE;
-                break;
-
-            case LINE:
-                shapeType = ShapeType.LINE;
-                break;
-
-            case SMILEY:
-                shapeType = ShapeType.SMILEY;
-                break;
-
-            case TEXT_BOX:
-                shapeType = ShapeType.TEXT_BOX;
-                break;
-            case SELECT:
-                shapeType = ShapeType.SELECTION_BOX;
-                break;
-            default:
-                break;
-        }
-
-        return ShapeFactory.createShape(
-                shapeType,
+        return NodeFactory.createNode(
+                activeTool,
                 mousePosition,
                 mousePosition,
-                toolBarController.getFillColor().toString(),
-                toolBarController.getStrokeColor().toString(),
-                toolBarController.getStrokeSize(),
-                canvasDimension[0],
-                canvasDimension[1]);
-
+                ToolBarAttributes
+                        .builder()
+                        .withFillColor(toolBarController.getFillColor().toString())
+                        .withStrokeColor(toolBarController.getStrokeColor().toString())
+                        .withStrokeSize(toolBarController.getStrokeSize())
+                        .build(),
+                canvasDimensions
+        );
     }
 
-    public void updateShape(Shape shape, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimension, SnapGrid snapgrid) {
+    public void updateNode(Node node, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimensions, SnapGrid snapGrid) {
         Point mousePosition = getMousePosition(mouseEvent);
 
-        ShapeFactory.updateShape(
-                shape,
+        NodeFactory.updateNode(
+                node,
                 mousePosition,
                 lastMouseClickPosition,
-                toolBarController.getFillColor().toString(),
-                toolBarController.getStrokeColor().toString(),
-                toolBarController.getStrokeSize(),
-                snapgrid,
-                canvasDimension[0],
-                canvasDimension[1]);
+                canvasDimensions,
+                snapGrid
+        );
     }
 
-    public void drawShape(GraphicsContext context, DrawableShape shape) {
-        DrawService drawService = shape.getDrawService();
+    public void drawNode(GraphicsContext context, Node node) {
+        DrawService drawService = node.getDrawService();
         drawService.draw(context);
-        if (shape.isSelected()) {
-            DrawService tempDrawService = shape.getBoundingBox().getDrawService();
-            tempDrawService.draw(context);
-        }
     }
 
-    public void drawSnapGrid(GraphicsContext context, SnapGrid snapgrid) {
-        context.save();
-        context.setStroke(Color.BLACK);
-
-        context.beginPath();
-        context.moveTo(0, 0);
-
-        for (int i = 0; i < (context.getCanvas().getHeight()); i += snapgrid.getSpacing()) {
-            context.moveTo(0, i);
-            context.lineTo(context.getCanvas().getWidth() + i, i);
-        }
-
-        for (int i = 0; i < (context.getCanvas().getWidth()); i += snapgrid.getSpacing()) {
-            context.moveTo(i, 0);
-            context.lineTo(i, context.getCanvas().getHeight() + i);
-        }
-
-        context.stroke();
-        context.closePath();
-
-        context.restore();
+    public void drawSnapGrid(GraphicsContext context, SnapGrid snapGrid) {
+        DrawService drawService = new SnapGridDrawService(snapGrid);
+        drawService.draw(context);
     }
 
     public void saveState(GraphicsContext canvasContext, Image image) {
@@ -132,7 +83,7 @@ public class CanvasService {
     }
 
     private Point computeInboundMousePosition(Point mousePosition, double[] dimensions) {
-        double strokeSize = toolBarController.getStrokeSize() / 2 + BoundingBox.getBoundingboxStrokeSize();
+        double strokeSize = toolBarController.getStrokeSize() / 2 + BoundingBox.STROKE_SIZE;
 
         double xPos = mousePosition.getX() > dimensions[0] ? dimensions[0] : mousePosition.getX();
         double yPos = mousePosition.getY() > dimensions[1] ? dimensions[1] : mousePosition.getY();

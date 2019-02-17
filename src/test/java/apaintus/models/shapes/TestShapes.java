@@ -126,6 +126,6 @@ public class TestShapes {
         when(mockedShapeAttributes.getStrokeSize()).thenReturn(6.0);
 
         Rectangle testRect = new Rectangle(mockedShapeAttributes);
-        assertNotNull("Shapes should always have a DrawService", testRect.getDrawService());
+        assertNotNull("Shapes should always have a ShapeDrawService", testRect.getDrawService());
     }
 }

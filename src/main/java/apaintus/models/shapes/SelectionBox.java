@@ -1,88 +1,57 @@
 package apaintus.models.shapes;
 
 import apaintus.models.Alignment;
-import apaintus.models.Attribute;
 import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
+import apaintus.services.draw.NodeDrawService;
+import apaintus.services.draw.ShapeDrawService;
 import apaintus.services.draw.selectionBox.SelectionBoxDrawService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class SelectionBox extends DrawableShape {
-    private List<DrawableShape> shapes;
-    private HashMap<DrawableShape, Point> shapesOriginalCoordinates = new HashMap<>();
-    private Point originalCoordinates;
+public class SelectionBox extends Node {
+    public static final int STROKE_SIZE = 2;
+    private static final String STROKE_COLOR = "#000000";
+    private static final int LINE_DASH_SIZE = 4;
 
-    public SelectionBox(ShapeAttributes shapeAttributes) {
-        super(ShapeType.SELECTION_BOX, shapeAttributes);
-        boundingBox = new BoundingBox(shapeAttributes);
-        shapes = new ArrayList<>();
+    private List<Node> nodeList;
+
+    public SelectionBox(NodeAttributes nodeAttributes) {
+        super();
+        nodeType = NodeType.SELECTION_BOX;
+        coordinates = nodeAttributes.getCoordinates();
+        width = nodeAttributes.getWidth();
+        height = nodeAttributes.getHeight();
+        orientation = nodeAttributes.getOrientation();
     }
 
-    public void update(Attribute attribute, double step) {
-        updateShape(attribute, step, this);
-
-        for (DrawableShape shape : shapes) {
-            if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
-                ((SelectionBox) shape).update(attribute, step);
-            }
-            updateShape(attribute, step, shape);
-            shape.getBoundingBox().update(shape.getShapeAttributes());
-        }
-
-        boundingBox.update(getShapeAttributes());
+    @Override
+    public void update(NodeAttributes nodeAttributes) {
+        coordinates = nodeAttributes.getCoordinates();
+        width = nodeAttributes.getWidth();
+        height = nodeAttributes.getHeight();
+        orientation = nodeAttributes.getOrientation();
+        boundingBox.update(coordinates, width, height, orientation);
     }
 
-    private void updateShape(Attribute attribute, double step, DrawableShape shape) {
-        switch (attribute) {
-            case COORDINATE_X:
-                shape.setCoordinates(new Point(shape.getCoordinates().getX() + step, shape.getCoordinates().getY()));
-                break;
-            case COORDINATE_Y:
-                shape.setCoordinates(new Point(shape.getCoordinates().getX(), shape.getCoordinates().getY() + step));
-                break;
-            case ORIENTATION:
-                shape.setOrientation(shape.getOrientation() + step);
-
-                if (shape.getShapeType() != ShapeType.SELECTION_BOX) {
-                    updateShapeCoordinates(shape);
-                }
-                break;
-            default:
-                break;
-        }
+    @Override
+    public NodeDrawService getDrawService() {
+        return new SelectionBoxDrawService(this);
     }
 
-    public void add(DrawableShape shape) {
-        shapes.add(shape);
+    public void add(Node node) {
+        nodeList.add(node);
+        resize();
     }
 
-    public List<DrawableShape> getShapes() {
-        return shapes;
-    }
-
-    public double getSize() {
-        return shapes.size();
-    }
-
-    public boolean isEmpty() {
-        return shapes.isEmpty();
-    }
-
-    public DrawableShape getShape(int i) {
-        return shapes.get(i);
-    }
-
-    public void resize() {
+    private void resize() {
         double left = coordinates.getX() + width;
         double top = coordinates.getY() + height;
         double right = coordinates.getX();
         double bottom = coordinates.getY();
 
-        for (DrawableShape shape : shapes) {
-            for (Point vertices : shape.getBoundingBox().getVertices()) {
+        for (Node node : nodeList) {
+            for (Point vertices : node.getBoundingBox().getVertices()) {
                 left = (left > vertices.getX()) ? vertices.getX() : left;
                 top = (top > vertices.getY()) ? vertices.getY() : top;
                 right = (right < vertices.getX()) ? vertices.getX() : right;
@@ -90,98 +59,170 @@ public class SelectionBox extends DrawableShape {
             }
         }
         coordinates = new Point(left, top);
+
         width = right - left;
         height = bottom - top;
-
-        boundingBox.update(getShapeAttributes());
+        boundingBox.update(coordinates, width, height, 0);
     }
 
-    public boolean isDuplicate(SelectionBox selectionBox) {
-        if (!shapes.contains(selectionBox))
-            return false;
 
-        if (shapes.size() - selectionBox.getSize() == 1 && shapes.containsAll(selectionBox.getShapes())) {
-            return true;
-        }
-        return false;
-    }
-
-    public void clear() {
-        shapes.clear();
-    }
-
-    public boolean contains(DrawableShape shape) {
-        for (Point vertices : shape.getBoundingBox().getVertices()) {
-            if (!super.contains(vertices)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void optimize() {
-        for (int index = 0; index < shapes.size(); index++) {
-            if (shapes.get(index).getShapeType() == ShapeType.SELECTION_BOX) {
-                shapes.removeAll(((SelectionBox) shapes.get(index)).getShapes());
-            }
-        }
-
-        for (DrawableShape shape : shapes) {
-            shapesOriginalCoordinates.put(shape, shape.getCoordinates());
-        }
-        originalCoordinates = coordinates;
-    }
-
-    public void setSelected(boolean selected) {
-        super.setSelected(selected);
-        resize();
-    }
-
-    @Override
-    public DrawService getDrawService() {
-        return new SelectionBoxDrawService(this);
-    }
-
-    public void alignShapes(Alignment alignment) {
-        switch (alignment) {
-            case TOP:
-            case BOTTOM:
-                alignVertically(alignment);
-                break;
-
-            case RIGHT:
-            case LEFT:
-                alignHorizontally(alignment);
-                break;
-            default:
-                break;
-        }
-
-        resize();
-    }
-
-    private void alignHorizontally(Alignment alignment) {
-        for (DrawableShape shape : shapes) {
-            double x = (alignment == Alignment.LEFT) ? coordinates.getX() : (coordinates.getX() + width) - shape.getWidth();
-            shape.setCoordinates(new Point(x, shape.getCoordinates().getY()));
-            shape.getBoundingBox().update(shape.getShapeAttributes());
-        }
-    }
-
-    private void alignVertically(Alignment alignment) {
-        for (DrawableShape shape : shapes) {
-            double y = (alignment == Alignment.TOP) ? coordinates.getY() : (coordinates.getY() + height) - shape.getHeight();
-            shape.setCoordinates(new Point(shape.getCoordinates().getX(), y));
-            shape.getBoundingBox().update(shape.getShapeAttributes());
-        }
-    }
-
-    private void updateShapeCoordinates(DrawableShape shape) {
-        double angle = Math.toRadians(shape.getOrientation());
-
-        Point shapeOriginalCoordinates = shapesOriginalCoordinates.get(shape);
-        double x = shapeOriginalCoordinates.getX() - originalCoordinates.getX();
-        double y = shapeOriginalCoordinates.getY() - originalCoordinates.getY();
-        shape.setCoordinates(new Point(originalCoordinates.getX() + (x * Math.cos(angle) + y * Math.sin(angle)), originalCoordinates.getY() - (x * Math.sin(angle) - y * Math.cos(angle))));
-    }
+//    public void update(Attribute attribute, double step) {
+//        if (shapes.isEmpty()) {
+//            return;
+//        }
+//        for (DrawableShape shape : shapes) {
+//            if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
+//                ((SelectionBox) shape).update(attribute, step);
+//            }
+//            updateShape(attribute, step, shape);
+//            shape.getBoundingBox().update(shape.getShapeAttributes());
+//        }
+//
+//        updateShape(attribute, step, this);
+//
+//        // This prevents the selection box to rotate too.
+//        orientation = 0;
+//        resize();
+//    }
+//
+//    private void updateShape(Attribute attribute, double step, DrawableShape shape) {
+//        switch (attribute) {
+//            case COORDINATE_X:
+//                shape.setCoordinates(new Point(shape.getCoordinates().getX() + step, shape.getCoordinates().getY()));
+//                break;
+//            case COORDINATE_Y:
+//                shape.setCoordinates(new Point(shape.getCoordinates().getX(), shape.getCoordinates().getY() + step));
+//                break;
+//            case ORIENTATION:
+//                shape.setOrientation(shape.getOrientation() + step);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+//
+//    public List<DrawableShape> getShapes() {
+//        return shapes;
+//    }
+//
+//    public double getSize() {
+//        return shapes.size();
+//    }
+//
+//    public boolean isEmpty() {
+//        return shapes.isEmpty();
+//    }
+//
+//    public DrawableShape getShape(int i) {
+//        return shapes.get(i);
+//    }
+//
+//
+//    public boolean isDuplicate(DrawableShape shape) {
+//        SelectionBox selectionBox = (SelectionBox) shape;
+//
+//        if (getCoordinates().getX() == selectionBox.getCoordinates().getX()
+//                && getCoordinates().getY() == selectionBox.getCoordinates().getY()
+//                && getWidth() == selectionBox.getWidth()
+//                && getHeight() == selectionBox.getHeight()) {
+//            for (DrawableShape compositeShape : selectionBox.getShapes()) {
+//                if (compositeShape.getShapeType() == ShapeType.SELECTION_BOX) {
+//                    if(isDuplicate(compositeShape)) {
+//                        return true;
+//                    }
+//                    continue;
+//                }
+//                if (!shapes.contains(compositeShape)) {
+//                    return false;
+//                }
+//            }
+//
+//            return true;
+//        }
+//
+//        return false;
+//    }
+//
+//    public void clear() {
+//        shapes.clear();
+//    }
+//
+//    public boolean contains(DrawableShape shape) {
+//        for (Point vertices : shape.getBoundingBox().getVertices()) {
+//            if (!super.contains(vertices)) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
+//
+//    public void optimize() {
+//        for (int index = 0; index < getSize(); index++) {
+//            if (shapes.get(index).getShapeType() == ShapeType.SELECTION_BOX) {
+//                for (DrawableShape compositeShape : ((SelectionBox) shapes.get(index)).getShapes()) {
+//                    shapes.remove(compositeShape);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void setSelected(boolean selected) {
+//        super.setSelected(selected);
+//        resize();
+//    }
+//
+//
+//    public void alignShapes(Alignment alignment) {
+//        switch (alignment) {
+//            case TOP:
+//                alignTop();
+//                break;
+//
+//            case RIGHT:
+//                alignRight();
+//                break;
+//
+//            case BOTTOM:
+//                alignBottom();
+//                break;
+//
+//            case LEFT:
+//                alignLeft();
+//                break;
+//
+//            default:
+//                break;
+//        }
+//
+//        resize();
+//    }
+//
+//    private void alignLeft() {
+//        for (DrawableShape shape : shapes) {
+//            shape.setCoordinates(new Point(coordinates.getX(), shape.getCoordinates().getY()));
+//            shape.getBoundingBox().update(shape.getShapeAttributes());
+//        }
+//    }
+//
+//    private void alignRight() {
+//        for (DrawableShape shape : shapes) {
+//            shape.setCoordinates(new Point((coordinates.getX() + width) - shape.getWidth(), shape.getCoordinates().getY()));
+//            shape.getBoundingBox().update(shape.getShapeAttributes());
+//        }
+//    }
+//
+//    private void alignTop() {
+//        for (DrawableShape shape : shapes) {
+//            shape.setCoordinates(new Point(shape.getCoordinates().getX(), coordinates.getY()));
+//            shape.getBoundingBox().update(shape.getShapeAttributes());
+//        }
+//    }
+//
+//    private void alignBottom() {
+//        for (DrawableShape shape : shapes) {
+//            shape.setCoordinates(new Point(shape.getCoordinates().getX(), (coordinates.getY() + height) - shape.getHeight()));
+//            shape.getBoundingBox().update(shape.getShapeAttributes());
+//        }
+//    }
 }

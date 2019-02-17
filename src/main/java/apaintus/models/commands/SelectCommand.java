@@ -1,46 +1,46 @@
 package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
-import apaintus.models.shapes.DrawableShape;
+import apaintus.models.shapes.Node;
 
 import java.util.Optional;
 
 public class SelectCommand implements Command {
     private CanvasController canvasController;
-    private String description = "Select";
-    private Optional<DrawableShape> previousActiveShape;
-    private DrawableShape newActiveShape;
+    private String description;
+    private Optional<Node> previousActiveNode;
+    private Node newActiveNode;
 
-    public SelectCommand(CanvasController canvasController, DrawableShape previousActiveShape, DrawableShape newActiveShape) {
+    public SelectCommand(CanvasController canvasController, Node previousActiveNode, Node newActiveNode) {
         this.canvasController = canvasController;
-        this.newActiveShape = newActiveShape;
-        this.previousActiveShape = Optional.ofNullable(previousActiveShape);
-        description = "Selected " + newActiveShape.getShapeType().toString();
+        this.newActiveNode = newActiveNode;
+        this.previousActiveNode = Optional.ofNullable(previousActiveNode);
+        description = "Selected " + newActiveNode.getNodeType().toString();
     }
 
     @Override
     public void execute() {
-        canvasController.clearActiveShape();
+        canvasController.clearActiveNode();
 
-        if (previousActiveShape.isPresent()) {
-            previousActiveShape.get().setSelected(false);
+        if (previousActiveNode.isPresent()) {
+            previousActiveNode.get().setSelected(false);
         }
 
-        newActiveShape.setSelected(true);
-        canvasController.setActiveShape(newActiveShape);
+        newActiveNode.setSelected(true);
+        canvasController.setActiveNode(newActiveNode);
         canvasController.redrawCanvas();
     }
 
     @Override
     public void undo() {
-        canvasController.clearActiveShape();
+        canvasController.clearActiveNode();
 
-        if (previousActiveShape.isPresent()) {
-            previousActiveShape.get().setSelected(true);
-            canvasController.setActiveShape(previousActiveShape.get());
+        if (previousActiveNode.isPresent()) {
+            previousActiveNode.get().setSelected(true);
+            canvasController.setActiveNode(previousActiveNode.get());
         }
 
-        newActiveShape.setSelected(false);
+        newActiveNode.setSelected(false);
         canvasController.redrawCanvas();
     }
 

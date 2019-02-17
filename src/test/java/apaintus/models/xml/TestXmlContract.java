@@ -1,8 +1,6 @@
 package apaintus.models.xml;
 
 import apaintus.models.Point;
-import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.ShapeType;
 import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
 

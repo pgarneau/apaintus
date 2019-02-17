@@ -10,19 +10,19 @@ import java.util.List;
 @XmlRootElement
 @XmlSeeAlso({Rectangle.class, Circle.class, Line.class, Smiley.class, TextBox.class, Point.class})
 public class XmlContract {
-    private List<DrawableShape> shapeList;
+    private List<Node> nodeList;
 
     private XmlContract() {}
 
-    public XmlContract(List<DrawableShape> shapeList) {
-        this.shapeList = shapeList;
+    public XmlContract(List<Node> nodeList) {
+        this.nodeList = nodeList;
     }
 
-    public List<DrawableShape> getShapeList() {
-        return shapeList;
+    public List<Node> getNodeList() {
+        return nodeList;
     }
 
-    public void setShapeList(List<DrawableShape> shapeList) {
-        this.shapeList = shapeList;
+    public void setNodeList(List<Node> nodeList) {
+        this.nodeList = nodeList;
     }
 }
