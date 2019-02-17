@@ -32,4 +32,12 @@ public class Point {
     public void setY(double y) {
         this.y = y;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Point pt = (Point) obj;
+        if (pt == null)
+            return false;
+        return (pt.x == this.x && pt.y == this.y);
+    }
 }
