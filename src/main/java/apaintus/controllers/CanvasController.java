@@ -110,6 +110,8 @@ public class CanvasController implements ChildController<Controller> {
                     invoker.execute(new DrawShapeCommand(this, tempActiveShape, new SelectCommand(this, activeShape, tempActiveShape)));
                 }
             }
+            figureLogController.selectFigureListItem(activeShape);
+            figureLogController.updateFigureList(drawnShapes);
 
             canvasChanged = true;
         });
@@ -180,7 +182,6 @@ public class CanvasController implements ChildController<Controller> {
     public void saveDrawLayer() {
         if (activeShape != null) {
             canvasService.saveState(canvas.getGraphicsContext2D(), canvasService.convertCanvasToImage(drawLayer));
-
             canvasService.clear(drawLayer.getGraphicsContext2D());
         }
     }

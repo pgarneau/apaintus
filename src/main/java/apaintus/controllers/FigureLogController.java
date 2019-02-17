@@ -35,6 +35,8 @@ public class FigureLogController implements ChildController<Controller> {
 	public void initialize() {
 		figureList.setOnMouseClicked(Event -> {
 			int indexOfSelectedItem = figureList.getSelectionModel().getSelectedIndex();
+			if (indexOfSelectedItem < 0)
+				return;
 			canvasController.selectShape(shapeList.get(indexOfSelectedItem));
 			canvasController.redrawCanvas();
 		});
@@ -45,7 +47,7 @@ public class FigureLogController implements ChildController<Controller> {
 		shapeList = drawnShapes;
 
 		for (DrawableShape shape : shapeList)
-			observableListFigures.add(shape.toString());
+			observableListFigures.add(shape.getShapeType().toString() + " - " + shape.getClass().hashCode());
 
 		figureList.setItems(observableListFigures);
 
