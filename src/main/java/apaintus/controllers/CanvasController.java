@@ -199,24 +199,23 @@ public class CanvasController implements ChildController<Controller> {
             return;
         }
 
+        selectionBox.resize();
+        selectionBox.optimize();
+
         if (selectionBox.getSize() == 1) {
             invoker.execute(new SelectCommand(this, activeShape, selectionBox.getShape(0)));
             return;
         }
 
-        selectionBox.resize();
-
         for (DrawableShape shape : drawnShapes) {
             if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
-                ((SelectionBox) shape).resize();
-                if (selectionBox.isDuplicate(shape)) {
-                    invoker.execute(new SelectCommand(this, activeShape, selectionBox.isDuplicate(shape) ? shape : selectionBox));
+                if (selectionBox.isDuplicate((SelectionBox) shape)) {
+                    invoker.execute(new SelectCommand(this, activeShape, shape));
                     return;
                 }
             }
         }
 
-        selectionBox.optimize();
         invoker.execute(new DrawShapeCommand(this, selectionBox, new SelectCommand(this, activeShape, selectionBox)));
     }
 

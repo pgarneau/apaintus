@@ -96,24 +96,11 @@ public class SelectionBox extends DrawableShape {
         boundingBox.update(getShapeAttributes());
     }
 
-    public boolean isDuplicate(DrawableShape shape) {
-        SelectionBox selectionBox = (SelectionBox) shape;
+    public boolean isDuplicate(SelectionBox selectionBox) {
+        if (!shapes.contains(selectionBox))
+            return false;
 
-        if (getCoordinates().getX() == selectionBox.getCoordinates().getX()
-                && getCoordinates().getY() == selectionBox.getCoordinates().getY()
-                && getWidth() == selectionBox.getWidth()
-                && getHeight() == selectionBox.getHeight()) {
-            for (DrawableShape compositeShape : selectionBox.getShapes()) {
-                if (compositeShape.getShapeType() == ShapeType.SELECTION_BOX) {
-                    if (isDuplicate(compositeShape)) {
-                        return true;
-                    }
-                    continue;
-                }
-                if (!shapes.contains(compositeShape)) {
-                    return false;
-                }
-            }
+        if (shapes.size() - selectionBox.getSize() == 1 && shapes.containsAll(selectionBox.getShapes())) {
             return true;
         }
         return false;
@@ -133,11 +120,9 @@ public class SelectionBox extends DrawableShape {
     }
 
     public void optimize() {
-        for (int index = 0; index < getSize(); index++) {
+        for (int index = 0; index < shapes.size(); index++) {
             if (shapes.get(index).getShapeType() == ShapeType.SELECTION_BOX) {
-                for (DrawableShape compositeShape : ((SelectionBox) shapes.get(index)).getShapes()) {
-                    shapes.remove(compositeShape);
-                }
+                shapes.removeAll(((SelectionBox) shapes.get(index)).getShapes());
             }
         }
 
