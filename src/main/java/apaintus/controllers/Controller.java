@@ -18,7 +18,7 @@ public class Controller {
 	@FXML private ScrollPane scrollPane;
 
 	private Stage primaryStage;
-	private Invoker invoker = new Invoker();
+	private Invoker invoker = new Invoker();;
 
 	public void initialize() {
 
@@ -28,6 +28,8 @@ public class Controller {
 		attributeController.injectParentController(this);
 		figureLogController.injectParentController(this);
 		actionLogController.injectParentController(this);
+		
+		invoker.setActionLogController(actionLogController);
 
 		menuController.bindTo(mainPane);
 		toolBarController.bindTo(mainPane);

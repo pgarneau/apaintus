@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class SelectCommand implements Command {
     private CanvasController canvasController;
-    private String description = "select";
+    private String description = "Select";
     private Optional<DrawableShape> previousActiveShape;
     private DrawableShape newActiveShape;
 
@@ -15,6 +15,7 @@ public class SelectCommand implements Command {
         this.canvasController = canvasController;
         this.newActiveShape = newActiveShape;
         this.previousActiveShape = Optional.ofNullable(previousActiveShape);
+        description = "Selected " + newActiveShape.getShapeType().toString();
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
 import apaintus.models.commands.Invoker;
 import apaintus.models.commands.SelectCommand;
 import apaintus.models.shapes.DrawableShape;
-import apaintus.views.ListViewCell;
+import apaintus.views.FigureListViewCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -57,7 +57,7 @@ public class FigureLogController implements ChildController<Controller> {
 		figureList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 			@Override
 			public ListCell<String> call(ListView<String> param) {
-				return new ListViewCell(controller.getFigureLogController());
+				return new FigureListViewCell(controller.getFigureLogController());
 			}
 		});
 	}
