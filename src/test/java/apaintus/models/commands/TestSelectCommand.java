@@ -2,6 +2,8 @@ package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
 import apaintus.models.shapes.DrawableShape;
+import apaintus.models.shapes.Shape;
+import apaintus.models.shapes.ShapeType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,6 +15,9 @@ class TestSelectCommand {
         CanvasController testCanvasController = mock(CanvasController.class);
         DrawableShape testPreviousActiveShape = mock(DrawableShape.class);
         DrawableShape testShape = mock(DrawableShape.class);
+        doCallRealMethod().when(testShape).getShapeType();
+        doCallRealMethod().when(testShape).setShapeType(any(ShapeType.class));
+        testShape.setShapeType(ShapeType.RECTANGLE);
         SelectCommand test = new SelectCommand(testCanvasController,testPreviousActiveShape,testShape);
 
         assertNotNull(test);
@@ -23,6 +28,10 @@ class TestSelectCommand {
         CanvasController testCanvasController = mock(CanvasController.class);
         DrawableShape testPreviousActiveShape = mock(DrawableShape.class);
         DrawableShape testShape = mock(DrawableShape.class);
+
+        doCallRealMethod().when(testShape).getShapeType();
+        doCallRealMethod().when(testShape).setShapeType(any(ShapeType.class));
+        testShape.setShapeType(ShapeType.RECTANGLE);
 
         doCallRealMethod().when(testShape).setSelected(anyBoolean());
         doCallRealMethod().when(testPreviousActiveShape).setSelected(anyBoolean());
@@ -42,6 +51,10 @@ class TestSelectCommand {
         CanvasController testCanvasController = mock(CanvasController.class);
         DrawableShape testPreviousActiveShape = mock(DrawableShape.class);
         DrawableShape testShape = mock(DrawableShape.class);
+
+        doCallRealMethod().when(testShape).getShapeType();
+        doCallRealMethod().when(testShape).setShapeType(any(ShapeType.class));
+        testShape.setShapeType(ShapeType.RECTANGLE);
 
         doCallRealMethod().when(testShape).setSelected(anyBoolean());
         doCallRealMethod().when(testPreviousActiveShape).setSelected(anyBoolean());
@@ -63,6 +76,10 @@ class TestSelectCommand {
         DrawableShape testPreviousActiveShape = mock(DrawableShape.class);
         DrawableShape testShape = mock(DrawableShape.class);
 
+        doCallRealMethod().when(testShape).getShapeType();
+        doCallRealMethod().when(testShape).setShapeType(any(ShapeType.class));
+        testShape.setShapeType(ShapeType.RECTANGLE);
+
         doCallRealMethod().when(testShape).setSelected(anyBoolean());
         doCallRealMethod().when(testPreviousActiveShape).setSelected(anyBoolean());
         doCallRealMethod().when(testShape).isSelected();
@@ -82,6 +99,11 @@ class TestSelectCommand {
     public void testCreateSelectCommandWithNullPreviousShape() {
         CanvasController testCanvasController = mock(CanvasController.class);
         DrawableShape testShape = mock(DrawableShape.class);
+
+        doCallRealMethod().when(testShape).getShapeType();
+        doCallRealMethod().when(testShape).setShapeType(any(ShapeType.class));
+        testShape.setShapeType(ShapeType.RECTANGLE);
+
         SelectCommand test = new SelectCommand(testCanvasController,null,testShape);
 
         assertNotNull(test);
@@ -92,8 +114,11 @@ class TestSelectCommand {
         CanvasController testCanvasController = mock(CanvasController.class);
         DrawableShape testShape = mock(DrawableShape.class);
 
+        doCallRealMethod().when(testShape).getShapeType();
+        doCallRealMethod().when(testShape).setShapeType(any(ShapeType.class));
         doCallRealMethod().when(testShape).setSelected(anyBoolean());
         doCallRealMethod().when(testShape).isSelected();
+        testShape.setShapeType(ShapeType.RECTANGLE);
 
         SelectCommand test = new SelectCommand(testCanvasController,null,testShape);
         test.execute();
@@ -105,6 +130,10 @@ class TestSelectCommand {
     void testUndoWithNullPreviousShape() {
         CanvasController testCanvasController = mock(CanvasController.class);
         DrawableShape testShape = mock(DrawableShape.class);
+
+        doCallRealMethod().when(testShape).getShapeType();
+        doCallRealMethod().when(testShape).setShapeType(any(ShapeType.class));
+        testShape.setShapeType(ShapeType.RECTANGLE);
 
         doCallRealMethod().when(testShape).setSelected(anyBoolean());
         doCallRealMethod().when(testShape).isSelected();
@@ -120,6 +149,10 @@ class TestSelectCommand {
     void testRedoWithNullPreviousShape() {
         CanvasController testCanvasController = mock(CanvasController.class);
         DrawableShape testShape = mock(DrawableShape.class);
+
+        doCallRealMethod().when(testShape).getShapeType();
+        doCallRealMethod().when(testShape).setShapeType(any(ShapeType.class));
+        testShape.setShapeType(ShapeType.RECTANGLE);
 
         doCallRealMethod().when(testShape).setSelected(anyBoolean());
         doCallRealMethod().when(testShape).isSelected();
