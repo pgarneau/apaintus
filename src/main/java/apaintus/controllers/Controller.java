@@ -12,12 +12,13 @@ public class Controller {
 	@FXML private ToolBarController toolBarController;
 	@FXML private AttributeController attributeController;
 	@FXML private FigureLogController figureLogController;
+	@FXML private ActionLogController actionLogController;
 
 	@FXML private AnchorPane mainPane;
 	@FXML private ScrollPane scrollPane;
 
 	private Stage primaryStage;
-	private Invoker invoker = new Invoker();
+	private Invoker invoker = new Invoker();;
 
 	public void initialize() {
 
@@ -26,6 +27,9 @@ public class Controller {
 		toolBarController.injectParentController(this);
 		attributeController.injectParentController(this);
 		figureLogController.injectParentController(this);
+		actionLogController.injectParentController(this);
+		
+		invoker.setActionLogController(actionLogController);
 
 		menuController.bindTo(mainPane);
 		toolBarController.bindTo(mainPane);
@@ -61,6 +65,10 @@ public class Controller {
 	
 	public FigureLogController getFigureLogController() {
 		return figureLogController;
+	}
+	
+	public ActionLogController getActionLogController() {
+		return actionLogController;
 	}
 }
 

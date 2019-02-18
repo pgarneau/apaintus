@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import java.util.ArrayList?>
+
+<AnchorPane fx:id="root" prefWidth="175.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.ActionLogController">
+<children>
+	<VBox alignment="CENTER">
+		<Label text="Actions History"/>
+		<ListView fx:id="actionList" prefWidth="175.0" editable="true"/>
+	</VBox>
+</children>
+</AnchorPane>
+

@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
-public class ListViewCell extends ListCell<String> {
+public class FigureListViewCell extends ListCell<String> {
 	HBox hBox = new HBox();
 	Label shapeName = new Label("(empty)");
 	Pane emptyPane = new Pane();
@@ -16,7 +16,7 @@ public class ListViewCell extends ListCell<String> {
 	Button downButton = new Button("v");
 	String lastItem;
 
-	public ListViewCell(FigureLogController figureLogController) {
+	public FigureListViewCell(FigureLogController figureLogController) {
 		super();
 		upButton.setFocusTraversable(false);
 		downButton.setFocusTraversable(false);
