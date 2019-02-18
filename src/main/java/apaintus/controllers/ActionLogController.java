@@ -1,6 +1,5 @@
 package apaintus.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import apaintus.models.commands.Command;
@@ -22,7 +21,6 @@ public class ActionLogController implements ChildController<Controller> {
 
 	@FXML
 	private ListView<String> actionList;
-	private List<Command> commandList;
 
 	@Override
 	public void injectParentController(Controller controller) {
@@ -45,14 +43,12 @@ public class ActionLogController implements ChildController<Controller> {
 			if(numberOfRedo > 0) {
 				for(int index = 0; index < numberOfRedo; index++) {
 					invoker.redo();
-					System.out.println("Index of redo: " + index);
 				}
 			}
 			
 			if(numberOfUndo > 0) {
 				for(int index = 0; index < numberOfUndo; index++) {
 					invoker.undo();
-					System.out.println("Index of undo: " + index);
 				}
 			}
 		});
