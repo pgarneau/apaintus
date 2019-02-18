@@ -9,7 +9,7 @@
 <children>
 	<VBox alignment="CENTER">
 		<Label text="Actions History" />
-		<ListView fx:id="actionList" editable="true" prefWidth="175.0" />
+		<ListView fx:id="actionList" editable="true" />
 	</VBox>
 </children>
 </AnchorPane>

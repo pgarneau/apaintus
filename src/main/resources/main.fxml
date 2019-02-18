@@ -3,7 +3,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="mainPane" minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.Controller">
@@ -12,19 +11,23 @@
             <children>
                 <fx:include fx:id="menu" source="Menu.fxml" />
                 <fx:include fx:id="toolBar" source="ToolBar.fxml" />
-            <SplitPane dividerPositions="0.5549568965517241" VBox.vgrow="ALWAYS">
+            <SplitPane dividerPositions="0.7467204843592331" VBox.vgrow="ALWAYS">
                <items>
                        <ScrollPane fx:id="scrollPane" prefHeight="580.0" prefWidth="512.0" style="-fx-border-color: transparent; -fx-background-color: transparent;">
                            <content>
                                <fx:include fx:id="canvas" source="Canvas.fxml" />
                            </content>
                        </ScrollPane>
-                  <HBox prefHeight="580.0" prefWidth="363.0" SplitPane.resizableWithParent="false">
-                     <children>
-                             <fx:include fx:id="figureLog" source="FigureLog.fxml" VBox.vgrow="ALWAYS" />
-                             <fx:include fx:id="actionLog" source="ActionLog.fxml" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </HBox>
+                  <ScrollPane hbarPolicy="NEVER" vbarPolicy="ALWAYS" SplitPane.resizableWithParent="false">
+                     <content>
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+                          <items>
+                                   <fx:include fx:id="figureLog" source="FigureLog.fxml" VBox.vgrow="ALWAYS" />
+                                   <fx:include fx:id="actionLog" source="ActionLog.fxml" VBox.vgrow="ALWAYS" />
+                          </items>
+                        </SplitPane>
+                     </content>
+                  </ScrollPane>
                </items>
             </SplitPane>
                 <fx:include fx:id="attribute" source="Attribute.fxml" />

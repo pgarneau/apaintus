@@ -9,7 +9,7 @@
 <children>
 	<VBox alignment="CENTER">
 		<Label text="Drawn Shapes History" />
-		<ListView fx:id="figureList" editable="true" prefWidth="225.0" />
+		<ListView fx:id="figureList" editable="true" />
 	</VBox>
 </children>
 </AnchorPane>
