@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.*?>
 
 
+<?import javafx.scene.control.Tooltip?>
 <AnchorPane fx:id="root" prefHeight="45.0" prefWidth="812.0" xmlns="http://javafx.com/javafx/10.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.ToolBarController">
     <fx:define>
@@ -23,36 +23,44 @@
         <Image fx:id="lineBtn" url="@icons/line.png"/>
         <Image fx:id="smileyBtn" url="@icons/smiley.png"/>
         <Image fx:id="textBtn" url="@icons/text.png"/>
+        <Image fx:id="gridBtn" url="@icons/grid.png"/>
+        <Image fx:id="alignLeftBtn" url="@icons/alignLeft.png"/>
+        <Image fx:id="alignRightBtn" url="@icons/alignRight.png"/>
+        <Image fx:id="alignTopBtn" url="@icons/alignTop.png"/>
+        <Image fx:id="alignDownBtn" url="@icons/alignDown.png"/>
     </fx:define>
 
     <children>
         <ToolBar fx:id="toolBar">
             <items>
-                <ToggleButton fx:id="select" mnemonicParsing="false">
-                    <graphic>
-                        <ImageView image="$selectBtn"/>
-                    </graphic>
-                </ToggleButton>
-                <VBox prefHeight="42.0" prefWidth="141.0">
+
+                <VBox prefHeight="42.0">
                     <children>
                         <Label alignment="TOP_LEFT" text="Spacing"/>
-                        <HBox prefHeight="25.0" prefWidth="133.0">
+                        <HBox prefHeight="25.0">
                             <children>
-                                <ToggleButton fx:id="snapGrid" mnemonicParsing="false" text="Snap Grid"/>
+                                <ToggleButton fx:id="snapGrid" mnemonicParsing="false">
+                                    <tooltip>
+                                        <Tooltip text="Snap Grid"/>
+                                    </tooltip>
+                                    <graphic>
+                                        <ImageView image="$gridBtn"/>
+                                    </graphic>
+                                </ToggleButton>
                                 <Spinner fx:id="spacingSize" amountToStepBy="1.0" editable="true" initialValue="5.0"
                                          max="10" min="1.0" prefHeight="25.0" prefWidth="64.0"/>
                             </children>
                         </HBox>
                     </children>
                 </VBox>
-                <VBox prefHeight="40.0" prefWidth="100.0">
+                <VBox prefHeight="40.0">
                     <children>
                         <Label text="Stroke Size"/>
                         <Spinner fx:id="strokeSize" amountToStepBy="1.0" editable="true" initialValue="12.0" max="36.0"
                                  min="0.0" prefWidth="90.0"/>
                     </children>
                 </VBox>
-                <VBox prefHeight="40.0" prefWidth="100.0">
+                <VBox prefHeight="40.0">
                     <children>
                         <Label text="Fill Color"/>
                         <ColorPicker fx:id="fillColor" promptText="Fill">
@@ -62,7 +70,7 @@
                         </ColorPicker>
                     </children>
                 </VBox>
-                <VBox prefHeight="40.0" prefWidth="100.0">
+                <VBox prefHeight="40.0">
                     <children>
                         <Label text="Stroke Color"/>
                         <ColorPicker fx:id="strokeColor" promptText="Stroke">
@@ -72,32 +80,55 @@
                         </ColorPicker>
                     </children>
                 </VBox>
-                <VBox prefHeight="40.0" prefWidth="242.0">
+                <VBox prefHeight="40.0">
                     <children>
-                        <Label text="Shapes" textAlignment="CENTER"/>
-                        <HBox prefHeight="51.0" prefWidth="242.0">
+                        <Label text="Tools" textAlignment="CENTER"/>
+                        <HBox prefHeight="51.0">
                             <children>
+                                <ToggleButton fx:id="select" mnemonicParsing="false">
+                                    <tooltip>
+                                        <Tooltip text="Selector"/>
+                                    </tooltip>
+                                    <graphic>
+                                        <ImageView image="$selectBtn"/>
+                                    </graphic>
+                                </ToggleButton>
                                 <ToggleButton fx:id="rectangle" mnemonicParsing="false">
+                                    <tooltip>
+                                        <Tooltip text="Draw Rectangle"/>
+                                    </tooltip>
                                     <graphic>
                                         <ImageView image="$rectangleBtn"/>
                                     </graphic>
                                 </ToggleButton>
                                 <ToggleButton fx:id="circle" mnemonicParsing="false">
+                                    <tooltip>
+                                        <Tooltip text="Draw Circle"/>
+                                    </tooltip>
                                     <graphic>
                                         <ImageView image="$circleBtn"/>
                                     </graphic>
                                 </ToggleButton>
                                 <ToggleButton fx:id="line" mnemonicParsing="false">
+                                    <tooltip>
+                                        <Tooltip text="Draw Line"/>
+                                    </tooltip>
                                     <graphic>
                                         <ImageView image="$lineBtn"/>
                                     </graphic>
                                 </ToggleButton>
                                 <ToggleButton fx:id="smiley" mnemonicParsing="false">
+                                    <tooltip>
+                                        <Tooltip text="Draw Smiley Face"/>
+                                    </tooltip>
                                     <graphic>
                                         <ImageView image="$smileyBtn"/>
                                     </graphic>
                                 </ToggleButton>
                                 <ToggleButton fx:id="textBox" mnemonicParsing="false">
+                                    <tooltip>
+                                        <Tooltip text="Add Text Box"/>
+                                    </tooltip>
                                     <graphic>
                                         <ImageView image="$textBtn"/>
                                     </graphic>
@@ -106,15 +137,43 @@
                         </HBox>
                     </children>
                 </VBox>
-                <VBox prefHeight="40.0" prefWidth="242.0">
+                <VBox prefHeight="40.0">
                     <children>
-                        <Label text="Shapes" textAlignment="CENTER"/>
-                        <HBox prefHeight="51.0" prefWidth="242.0">
+                        <Label text="Align" textAlignment="CENTER"/>
+                        <HBox prefHeight="51.0">
                             <children>
-                                <Button fx:id="alignLeft" text="Align left"/>
-                                <Button fx:id="alignTop" text="Align top0"/>
-                                <Button fx:id="alignRight" text="Align right"/>
-                                <Button fx:id="alignBottom" text="Align bottom"/>
+                                <Button fx:id="alignLeft">
+                                    <tooltip>
+                                        <Tooltip text="Align Shapes To Left"/>
+                                    </tooltip>
+                                    <graphic>
+                                        <ImageView image="$alignLeftBtn"/>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="alignTop">
+                                    <tooltip>
+                                        <Tooltip text="Align Shapes To Top"/>
+                                    </tooltip>
+                                    <graphic>
+                                        <ImageView image="$alignTopBtn"/>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="alignRight">
+                                    <tooltip>
+                                        <Tooltip text="Align Shapes to Right"/>
+                                    </tooltip>
+                                    <graphic>
+                                        <ImageView image="$alignRightBtn"/>
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="alignBottom">
+                                    <tooltip>
+                                        <Tooltip text="Align Shapes To Bottom"/>
+                                    </tooltip>
+                                    <graphic>
+                                        <ImageView image="$alignDownBtn"/>
+                                    </graphic>
+                                </Button>
                             </children>
                         </HBox>
                     </children>
