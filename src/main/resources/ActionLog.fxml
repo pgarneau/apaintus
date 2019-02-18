@@ -7,9 +7,9 @@
 
 <AnchorPane fx:id="root" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.ActionLogController">
 <children>
-	<VBox alignment="CENTER">
-		<Label text="Actions History" />
-		<ListView fx:id="actionList" editable="true" />
+	<VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		<Label text="Actions History" VBox.vgrow="NEVER" />
+		<ListView fx:id="actionList" editable="true" VBox.vgrow="ALWAYS" />
 	</VBox>
 </children>
 </AnchorPane>

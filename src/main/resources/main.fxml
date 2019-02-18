@@ -11,14 +11,14 @@
             <children>
                 <fx:include fx:id="menu" source="Menu.fxml" />
                 <fx:include fx:id="toolBar" source="ToolBar.fxml" />
-            <SplitPane dividerPositions="0.7467204843592331" VBox.vgrow="ALWAYS">
+            <SplitPane dividerPositions="0.73" VBox.vgrow="SOMETIMES">
                <items>
-                       <ScrollPane fx:id="scrollPane" prefHeight="580.0" prefWidth="512.0" style="-fx-border-color: transparent; -fx-background-color: transparent;">
+                       <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="580.0" prefWidth="512.0" style="-fx-border-color: transparent; -fx-background-color: transparent;">
                            <content>
                                <fx:include fx:id="canvas" source="Canvas.fxml" />
                            </content>
                        </ScrollPane>
-                  <ScrollPane hbarPolicy="NEVER" vbarPolicy="ALWAYS" SplitPane.resizableWithParent="false">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportWidth="100.0" vbarPolicy="ALWAYS" SplitPane.resizableWithParent="false">
                      <content>
                         <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                           <items>
