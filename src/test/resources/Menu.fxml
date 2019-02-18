@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.input.KeyCodeCombination?>
+
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.MenuController">
+    <menus>
+        <Menu mnemonicParsing="false" text="File">
+            <items>
+                <MenuItem fx:id="menuNew" mnemonicParsing="false" onAction="#newCanvas" text="New" />
+                <MenuItem fx:id="menuSave" mnemonicParsing="false" onAction="#savePng" text="Save PNG" />
+                <MenuItem fx:id="menuOpen" mnemonicParsing="false" onAction="#loadPng" text="Load PNG" />
+                <MenuItem fx:id="menuExportXml" mnemonicParsing="false" onAction="#exportXml" text="Export XML" />
+                <MenuItem fx:id="menuImportXml" mnemonicParsing="false" onAction="#importXml" text="Import XML" />
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+            <items>
+                <MenuItem fx:id="menuClear" mnemonicParsing="false" onAction="#clear" text="Clear" />
+                <MenuItem fx:id="menuUndo" mnemonicParsing="false" onAction="#undo" text="Undo">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator></MenuItem>
+                <MenuItem fx:id="menuRedo" mnemonicParsing="false" onAction="#redo" text="Redo">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                    </accelerator></MenuItem>
+            </items>
+        </Menu>
+    </menus>
+</MenuBar>

@@ -10,7 +10,6 @@ public class TestSnapGrid {
     double testSpacing = 4.0;
     double testCanvasWidth = 600.0;
     double testCanvasHeight = 800.0;
-    double strokeSize = 5.0;
     boolean active = false;
 
     @Test
