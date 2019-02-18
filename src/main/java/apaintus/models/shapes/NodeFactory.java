@@ -146,9 +146,23 @@ public class NodeFactory {
             case CIRCLE:
             case SMILEY:
             case TEXT_BOX:
-            case SELECTION_BOX:
                 dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasDimensions, Node.get(node, "strokeSize"));
                 coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, Node.get(node, "strokeSize"));
+
+                node.update(
+                        NodeAttributes
+                                .builder()
+                                .withCoordinates(coordinates)
+                                .withWidth(dimensions[0])
+                                .withHeight(dimensions[1])
+                                .build()
+
+                );
+                break;
+
+            case SELECTION_BOX:
+                dimensions = computeDimensions(mousePosition, lastMouseClickPosition, canvasDimensions, 0);
+                coordinates = computeCoordinates(mousePosition, lastMouseClickPosition, 0);
 
                 node.update(
                         NodeAttributes

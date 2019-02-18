@@ -11,11 +11,6 @@ public class Circle extends Shape {
     public Circle(NodeAttributes nodeAttributes, ShapeAttributes shapeAttributes) {
         super(nodeAttributes, shapeAttributes);
         nodeType = NodeType.CIRCLE;
-        boundingBox = new BoundingBox(
-                center,
-                width + strokeSize,
-                height + strokeSize,
-                orientation);
     }
 
     @Override

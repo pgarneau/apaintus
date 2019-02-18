@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -47,7 +48,6 @@ public class CanvasController implements ChildController<Controller> {
     private Point lastMouseClickPosition;
     private Node activeNode;
     private Node tempActiveNode;
-    private SelectionBox selectionBox;
     private List<Node> nodeList = new ArrayList<>();
     private Image baseImage;
     private boolean canvasChanged;
@@ -74,12 +74,9 @@ public class CanvasController implements ChildController<Controller> {
             activeTool = toolBarController.getActiveTool();
 
             tempActiveNode = canvasService.createNode(activeTool, event, getCanvasDimension());
+
             deselectCommand = new DeselectCommand(this, activeNode);
             deselectCommand.execute();
-
-            if (activeTool == ActiveTool.SELECT) {
-                selectionBox = (SelectionBox) tempActiveNode;
-            }
         });
 
         canvas.setOnMouseReleased(event -> {
@@ -105,7 +102,7 @@ public class CanvasController implements ChildController<Controller> {
                 }
             } else {
                 if (activeTool == ActiveTool.SELECT) {
-//                    saveSelectionBox();
+                    saveSelectionBox((SelectionBox) tempActiveNode);
                 } else {
                     invoker.execute(new DrawNodeCommand(this, tempActiveNode, new SelectCommand(this, activeNode, tempActiveNode)));
                 }
@@ -187,39 +184,37 @@ public class CanvasController implements ChildController<Controller> {
         }
     }
 
-//    private void saveSelectionBox() {
-//        canvasService.clear(drawLayer.getGraphicsContext2D());
-//
-//        for (Node shape : nodeList) {
-//            if (selectionBox.contains(shape)) {
-//                selectionBox.add(shape);
-//            }
-//        }
-//
-//        if (selectionBox.isEmpty()) {
-//            return;
-//        }
-//
-//        if (selectionBox.getSize() == 1) {
-//            invoker.execute(new SelectCommand(this, activeNode, selectionBox.getShape(0)));
-//            return;
-//        }
-//
-//        selectionBox.resize();
-//
-//        for (Node shape : nodeList) {
-//            if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
-//                ((SelectionBox) shape).resize();
-//                if (selectionBox.isDuplicate(shape)) {
-//                    invoker.execute(new SelectCommand(this, activeNode, selectionBox.isDuplicate(shape) ? shape : selectionBox));
-//                    return;
-//                }
-//            }
-//        }
-//
-//        selectionBox.optimize();
-//        invoker.execute(new DrawNodeCommand(this, selectionBox, new SelectCommand(this, activeNode, selectionBox)));
-//    }
+    private void saveSelectionBox(SelectionBox selectionBox) {
+        canvasService.clear(drawLayer.getGraphicsContext2D());
+
+        for (Node node : nodeList) {
+            if (selectionBox.contains(node)) {
+                selectionBox.add(node);
+            }
+        }
+
+        if (selectionBox.getNodeList().isEmpty()) {
+            return;
+        }
+
+        selectionBox.resize();
+        selectionBox.optimize();
+
+        if (selectionBox.getNodeList().size() == 1) {
+            invoker.execute(new SelectCommand(this, activeNode, selectionBox.getNodeList().get(0)));
+            return;
+        }
+
+        for (Node node : nodeList) {
+            if (node.getNodeType() == NodeType.SELECTION_BOX) {
+                if (selectionBox.isDuplicate((SelectionBox) node)) {
+                    invoker.execute(new SelectCommand(this, activeNode, node));
+                }
+            }
+        }
+
+        invoker.execute(new DrawNodeCommand(this, selectionBox, new SelectCommand(this, activeNode, selectionBox)));
+    }
 
     public double[] getCanvasDimension() {
         double[] dimension = new double[2];

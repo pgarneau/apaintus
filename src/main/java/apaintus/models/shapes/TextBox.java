@@ -14,11 +14,6 @@ public class TextBox extends Shape {
     public TextBox(NodeAttributes nodeAttributes, ShapeAttributes shapeAttributes) {
         super(nodeAttributes, shapeAttributes);
         nodeType = NodeType.RECTANGLE;
-        boundingBox = new BoundingBox(
-                new Point(coordinates.getX() - strokeSize / 2, coordinates.getY() - strokeSize / 2),
-                width + strokeSize,
-                height + strokeSize,
-                orientation);
         this.text = DEFAULT_TEXT;
     }
 

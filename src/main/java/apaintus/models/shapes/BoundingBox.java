@@ -12,19 +12,10 @@ public class BoundingBox {
     private double height;
     private double orientation;
 
-    public BoundingBox(Point center, double width, double height, double orientation) {
-        this.center = center;
-//        this.coordinates = new Point(coordinates.getX() - STROKE_SIZE / 2, coordinates.getY() - STROKE_SIZE / 2);
-        this.width = width + STROKE_SIZE;
-        this.height = height + STROKE_SIZE;
-        this.orientation = orientation;
-
-        vertices = computeVertices();
-    }
+    public BoundingBox() {}
 
     public void update(Point center, double width, double height, double orientation) {
         this.center = center;
-//        this.coordinates = new Point(coordinates.getX() - STROKE_SIZE / 2, coordinates.getY() - STROKE_SIZE / 2);
         this.width = width + STROKE_SIZE;
         this.height = height + STROKE_SIZE;
         this.orientation = orientation;

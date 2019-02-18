@@ -12,33 +12,25 @@ public class Line extends Shape {
     public Line(NodeAttributes nodeAttributes, ShapeAttributes shapeAttributes) {
         super(nodeAttributes, shapeAttributes);
         nodeType = NodeType.LINE;
-        boundingBox = new BoundingBox(
-                center,
-                width,
-                height,
-                orientation);
     }
 
     @Override
-    public void update(NodeAttributes nodeAttributes) {
-        coordinates = nodeAttributes.getCoordinates();
-        width = nodeAttributes.getWidth();
-        orientation = nodeAttributes.getOrientation();
-        center = computeCenter();
+    public void updateBoundingBox() {
         boundingBox.update(
                 center,
                 width,
                 height,
-                orientation);
+                orientation
+        );
     }
 
     @Override
-    public Point computeCenter() {
+    public void computeCenter() {
         double radianOrientation = Math.toRadians(orientation);
         double tempWidth = width / 2;
         double tempHeight = height / 2;
 
-        return new Point(
+        center =  new Point(
                 coordinates.getX() + (tempWidth * Math.cos(radianOrientation) + tempHeight * Math.sin(radianOrientation)),
                 coordinates.getY() - (tempWidth * Math.sin(radianOrientation) - tempHeight * Math.cos(radianOrientation))
         );

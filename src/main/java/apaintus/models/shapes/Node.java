@@ -5,6 +5,9 @@ import apaintus.services.draw.DrawService;
 import apaintus.services.draw.NodeDrawService;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
 
 public abstract class Node {
     protected NodeType nodeType;
@@ -23,15 +26,27 @@ public abstract class Node {
         width = nodeAttributes.getWidth();
         height = nodeAttributes.getHeight();
         orientation = nodeAttributes.getOrientation();
-        center = computeCenter();
+        computeCenter();
+        boundingBox = new BoundingBox();
     }
 
     public abstract DrawService getDrawService();
 
-    public abstract void update(NodeAttributes nodeAttributes);
+    public abstract void updateBoundingBox();
 
-    public Point computeCenter() {
-        return new Point(coordinates.getX() + width / 2, coordinates.getY() + height / 2);
+    public abstract List<Node> getNodeList();
+
+    public void update(NodeAttributes nodeAttributes) {
+        coordinates = nodeAttributes.getCoordinates();
+        width = nodeAttributes.getWidth();
+        height = nodeAttributes.getHeight();
+        orientation = nodeAttributes.getOrientation();
+        computeCenter();
+        updateBoundingBox();
+    }
+
+    public void computeCenter() {
+        center = new Point(coordinates.getX() + width / 2, coordinates.getY() + height / 2);
     }
 
     public static <V> V get(Object object, String fieldName) {
@@ -81,13 +96,8 @@ public abstract class Node {
 
     public void setCoordinates(Point coordinates) {
         this.coordinates = coordinates;
-        update(NodeAttributes
-                .builder()
-                .withCoordinates(coordinates)
-                .withWidth(width)
-                .withHeight(height)
-                .withOrientation(orientation)
-                .build());
+        computeCenter();
+        updateBoundingBox();
     }
 
     public Point getCenter() {
@@ -100,13 +110,8 @@ public abstract class Node {
 
     public void setWidth(double width) {
         this.width = width;
-        update(NodeAttributes
-                .builder()
-                .withCoordinates(coordinates)
-                .withWidth(width)
-                .withHeight(height)
-                .withOrientation(orientation)
-                .build());
+        computeCenter();
+        updateBoundingBox();
     }
 
     public double getHeight() {
@@ -115,13 +120,8 @@ public abstract class Node {
 
     public void setHeight(double height) {
         this.height = height;
-        update(NodeAttributes
-                .builder()
-                .withCoordinates(coordinates)
-                .withWidth(width)
-                .withHeight(height)
-                .withOrientation(orientation)
-                .build());
+        computeCenter();
+        updateBoundingBox();
     }
 
     public double getOrientation() {
@@ -130,13 +130,8 @@ public abstract class Node {
 
     public void setOrientation(double orientation) {
         this.orientation = orientation;
-        update(NodeAttributes
-                .builder()
-                .withCoordinates(coordinates)
-                .withWidth(width)
-                .withHeight(height)
-                .withOrientation(orientation)
-                .build());
+        computeCenter();
+        updateBoundingBox();
     }
 
     public boolean isSelected() {

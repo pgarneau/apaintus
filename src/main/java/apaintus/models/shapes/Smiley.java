@@ -11,11 +11,6 @@ public class Smiley extends Shape {
     public Smiley(NodeAttributes nodeAttributes, ShapeAttributes shapeAttributes) {
         super(nodeAttributes, shapeAttributes);
         nodeType = NodeType.CIRCLE;
-        boundingBox = new BoundingBox(
-                new Point(coordinates.getX() - strokeSize / 2, coordinates.getY() - strokeSize / 2),
-                width + strokeSize,
-                height + strokeSize,
-                orientation);
     }
 
     @Override

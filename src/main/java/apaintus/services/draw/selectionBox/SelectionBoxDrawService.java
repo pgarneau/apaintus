@@ -11,6 +11,6 @@ public class SelectionBoxDrawService extends NodeDrawService {
     }
 
     public void draw(GraphicsContext context) {
-        return;
+    	super.draw(context);
     }
 }

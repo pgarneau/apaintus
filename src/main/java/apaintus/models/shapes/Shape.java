@@ -1,8 +1,7 @@
 package apaintus.models.shapes;
 
-import apaintus.models.Point;
-
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 @XmlTransient
 public abstract class Shape extends Node {
@@ -22,17 +21,18 @@ public abstract class Shape extends Node {
     }
 
     @Override
-    public void update(NodeAttributes nodeAttributes) {
-        coordinates = nodeAttributes.getCoordinates();
-        width = nodeAttributes.getWidth();
-        height = nodeAttributes.getHeight();
-        orientation = nodeAttributes.getOrientation();
-        center = computeCenter();
+    public void updateBoundingBox() {
         boundingBox.update(
                 center,
                 width + strokeSize,
                 height + strokeSize,
-                orientation);
+                orientation
+        );
+    }
+
+    @Override
+    public List<Node> getNodeList() {
+        return null;
     }
 
     public String getFillColor() {
