@@ -20,6 +20,7 @@
 	               </content>
 	            </ScrollPane>
 	            <fx:include fx:id="figureLog" source="FigureLog.fxml" />
+	            <fx:include fx:id="actionLog" source="ActionLog.fxml" />
             </HBox>
             <fx:include fx:id="attribute" source="Attribute.fxml" />
          </children>
