@@ -22,6 +22,6 @@ public abstract class ShapeDrawService extends NodeDrawService {
         context.save();
         context.setStroke(Paint.valueOf(shape.getStrokeColor()));
         context.setLineWidth(shape.getStrokeSize());
-        context.transform(new Affine(new Rotate(-shape.getOrientation(), shape.getCenter().getX(), shape.getCenter().getY())));
+        context.transform(new Affine(new Rotate(-shape.getOrientation(), shape.getCoordinates().getX(), shape.getCoordinates().getY())));
     }
 }

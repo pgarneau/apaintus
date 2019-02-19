@@ -168,12 +168,13 @@ public class SelectionBox extends Node {
 	@Override
 	public void setOrientation(double orientation) {
 		for (Node node : nodeList) {
-			updateNodeCoordinates(node, orientation);
 			node.setOrientation(node.getOrientation() + orientation - this.orientation);
+			updateNodeCoordinates(node, orientation);
+			node.computeCenter();
 		}
 
 		this.orientation = orientation;
-		computeCenter();
+		computeCoordinates();
 		updateBoundingBox();
 	}
 }

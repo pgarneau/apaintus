@@ -16,6 +16,8 @@ public class Line extends Shape {
 
     @Override
     public void updateBoundingBox() {
+        System.out.println("I AM A LINE");
+        System.out.println(height);
         boundingBox.update(
                 center,
                 width,

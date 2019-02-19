@@ -184,6 +184,7 @@ public class NodeFactory {
                                 .builder()
                                 .withCoordinates(lastMouseClickPosition)
                                 .withWidth(dimensions[0])
+                                .withHeight(Node.get(node, "strokeSize"))
                                 .withOrientation(orientation)
                                 .build()
                 );

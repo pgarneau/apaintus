@@ -46,7 +46,26 @@ public abstract class Node {
     }
 
     public void computeCenter() {
-        center = new Point(coordinates.getX() + width / 2, coordinates.getY() + height / 2);
+//        center = new Point(coordinates.getX() + width / 2, coordinates.getY() + height / 2);
+        double radianOrientation = Math.toRadians(orientation);
+        double tempWidth = width / 2;
+        double tempHeight = height / 2;
+
+        center =  new Point(
+                coordinates.getX() + (tempWidth * Math.cos(radianOrientation) + tempHeight * Math.sin(radianOrientation)),
+                coordinates.getY() - (tempWidth * Math.sin(radianOrientation) - tempHeight * Math.cos(radianOrientation))
+        );
+    }
+
+    public void computeCoordinates() {
+        double radianOrientation = Math.toRadians(orientation);
+        double tempWidth = -width / 2;
+        double tempHeight = -height / 2;
+
+        coordinates =  new Point(
+                center.getX() + (tempWidth * Math.cos(radianOrientation) + tempHeight * Math.sin(radianOrientation)),
+                center.getY() - (tempWidth * Math.sin(radianOrientation) - tempHeight * Math.cos(radianOrientation))
+        );
     }
 
     public static <V> V get(Object object, String fieldName) {
@@ -130,7 +149,7 @@ public abstract class Node {
 
     public void setOrientation(double orientation) {
         this.orientation = orientation;
-        computeCenter();
+        computeCoordinates();
         updateBoundingBox();
     }
 

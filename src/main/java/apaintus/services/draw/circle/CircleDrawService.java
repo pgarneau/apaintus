@@ -24,5 +24,8 @@ public class CircleDrawService extends ShapeDrawService {
         context.strokeOval(coordinates.getX(), coordinates.getY(), width, height);
         context.fillOval(coordinates.getX() + strokeSize / 2 - 1, coordinates.getY() + strokeSize / 2 - 1, width - strokeSize + 2, height - strokeSize + 2);
         context.restore();
+
+        context.fillOval(circle.getCoordinates().getX(), circle.getCoordinates().getY(), 10, 10);
+        context.fillOval(circle.getCenter().getX(), circle.getCenter().getY(), 10, 10);
     }
 }
