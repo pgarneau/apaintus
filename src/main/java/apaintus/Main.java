@@ -11,77 +11,77 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	private static final double MIN_WIDTH = 800;
-	private static final double MIN_HEIGHT = 600;
+    private static final double MIN_WIDTH = 800;
+    private static final double MIN_HEIGHT = 600;
 
-	private Controller controller;
-	private static Main instance;
-	private AnchorPane root;
-	private ApplicationPreferences applicationPreferences;
-	private Stage primaryStage;
+    private Controller controller;
+    private static Main instance;
+    private AnchorPane root;
+    private ApplicationPreferences applicationPreferences;
+    private Stage primaryStage;
 
-	public static Main getInstance() {
-		return instance;
-	}
+    public static Main getInstance() {
+        return instance;
+    }
 
-	public static void setInstance(Main instance) {
-		Main.instance = instance;
-	}
+    public static void setInstance(Main instance) {
+        Main.instance = instance;
+    }
 
-	public AnchorPane getRoot() {
-		return root;
-	}
+    public AnchorPane getRoot() {
+        return root;
+    }
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		setInstance(this);
-		this.primaryStage = primaryStage;
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        setInstance(this);
+        this.primaryStage = primaryStage;
 
-		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main.fxml"));
-		loader.load();
-		controller = loader.getController();
-		controller.injectPrimaryStage(primaryStage);
-		this.root = loader.getRoot();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main.fxml"));
+        loader.load();
+        controller = loader.getController();
+        controller.injectPrimaryStage(primaryStage);
+        this.root = loader.getRoot();
 
-		primaryStage.setMinWidth(MIN_WIDTH);
-		primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMinHeight(MIN_HEIGHT);
 
-		primaryStage.setTitle("PaintUS");
-		primaryStage.setScene(new Scene(root, MIN_WIDTH, MIN_HEIGHT));
+        primaryStage.setTitle("PaintUS");
+        primaryStage.setScene(new Scene(root, MIN_WIDTH, MIN_HEIGHT));
 
 
-		applicationPreferences = ApplicationPreferences.getInstance();
-		applicationPreferences.loadPreferences();
-		controller.getToolBarController().setPreferences(applicationPreferences);
-		controller.getMenuController().setPreferences(applicationPreferences);
+        applicationPreferences = ApplicationPreferences.getInstance();
+        applicationPreferences.loadPreferences();
+        controller.getToolBarController().setPreferences(applicationPreferences);
+        controller.getMenuController().setPreferences(applicationPreferences);
 
-		String width = applicationPreferences.getPreference(Preference.WIDTH);
-		boolean fullScreen = Boolean.getBoolean(applicationPreferences.getPreference(Preference.FULLSCREEN));
-		if(width != null && !fullScreen)
-			primaryStage.setWidth(Double.valueOf(width));
-		String height = applicationPreferences.getPreference(Preference.HEIGHT);
-		if(width != null && !fullScreen)
-			primaryStage.setHeight(Double.valueOf(height));
+        String width = applicationPreferences.getPreference(Preference.WIDTH);
+        boolean fullScreen = Boolean.getBoolean(applicationPreferences.getPreference(Preference.FULLSCREEN));
+        if (width != null && !fullScreen)
+            primaryStage.setWidth(Double.valueOf(width));
+        String height = applicationPreferences.getPreference(Preference.HEIGHT);
+        if (width != null && !fullScreen)
+            primaryStage.setHeight(Double.valueOf(height));
 
-		primaryStage.setFullScreen(fullScreen);
+        primaryStage.setFullScreen(fullScreen);
 
-		primaryStage.show();
-	}
+        primaryStage.show();
+    }
 
-	@Override
-	public void stop() {
-		applicationPreferences.setPreference(Preference.WIDTH, Double.toString(primaryStage.getWidth()));
-		applicationPreferences.setPreference(Preference.HEIGHT, Double.toString(primaryStage.getHeight()));
-		applicationPreferences.setPreference(Preference.FULLSCREEN, Boolean.toString(primaryStage.isFullScreen()));
-		applicationPreferences.savePreferences();
+    @Override
+    public void stop() {
+        applicationPreferences.setPreference(Preference.WIDTH, Double.toString(primaryStage.getWidth()));
+        applicationPreferences.setPreference(Preference.HEIGHT, Double.toString(primaryStage.getHeight()));
+        applicationPreferences.setPreference(Preference.FULLSCREEN, Boolean.toString(primaryStage.isFullScreen()));
+        applicationPreferences.savePreferences();
 
-		MenuController menuController = controller.getMenuController();
-		if (menuController.hasUnsavedWork()) {
+        MenuController menuController = controller.getMenuController();
+        if (menuController.hasUnsavedWork()) {
 //			menuController.saveDialogBox();
-		}
-	}
+        }
+    }
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
