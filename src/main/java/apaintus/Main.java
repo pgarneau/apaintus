@@ -48,24 +48,32 @@ public class Main extends Application {
 
 		primaryStage.setTitle("PaintUS");
 		primaryStage.setScene(new Scene(root, MIN_WIDTH, MIN_HEIGHT));
-		primaryStage.show();
+
 
 		applicationPreferences = ApplicationPreferences.getInstance();
 		applicationPreferences.loadPreferences();
 		controller.getToolBarController().setPreferences(applicationPreferences);
 		controller.getMenuController().setPreferences(applicationPreferences);
+
 		String width = applicationPreferences.getPreference(Preference.WIDTH);
-		if(width != null)
+		boolean fullScreen = Boolean.getBoolean(applicationPreferences.getPreference(Preference.FULLSCREEN));
+		if(width != null && !fullScreen)
 			primaryStage.setWidth(Double.valueOf(width));
 		String height = applicationPreferences.getPreference(Preference.HEIGHT);
-		if(width != null)
+		if(width != null && !fullScreen)
 			primaryStage.setHeight(Double.valueOf(height));
+
+		primaryStage.setFullScreen(fullScreen);
+
+		primaryStage.show();
 	}
 
 	@Override
 	public void stop() {
 		applicationPreferences.setPreference(Preference.WIDTH, Double.toString(primaryStage.getWidth()));
 		applicationPreferences.setPreference(Preference.HEIGHT, Double.toString(primaryStage.getHeight()));
+		System.out.println(primaryStage.isFullScreen());
+		applicationPreferences.setPreference(Preference.FULLSCREEN, Boolean.toString(primaryStage.isFullScreen()));
 		applicationPreferences.savePreferences();
 
 		MenuController menuController = controller.getMenuController();
