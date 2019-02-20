@@ -5,13 +5,16 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.input.KeyCodeCombination?>
 
+<?import javafx.scene.control.SeparatorMenuItem?>
 <MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.MenuController">
     <menus>
         <Menu mnemonicParsing="false" text="File">
             <items>
                 <MenuItem fx:id="menuNew" mnemonicParsing="false" onAction="#newCanvas" text="New" />
+                <SeparatorMenuItem/>
                 <MenuItem fx:id="menuSave" mnemonicParsing="false" onAction="#savePng" text="Save PNG" />
                 <MenuItem fx:id="menuOpen" mnemonicParsing="false" onAction="#loadPng" text="Load PNG" />
+                <SeparatorMenuItem/>
                 <MenuItem fx:id="menuExportXml" mnemonicParsing="false" onAction="#exportXml" text="Export XML" />
                 <MenuItem fx:id="menuImportXml" mnemonicParsing="false" onAction="#importXml" text="Import XML" />
             </items>
@@ -19,6 +22,7 @@
         <Menu mnemonicParsing="false" text="Edit">
             <items>
                 <MenuItem fx:id="menuClear" mnemonicParsing="false" onAction="#clear" text="Clear" />
+                <SeparatorMenuItem/>
                 <MenuItem fx:id="menuUndo" mnemonicParsing="false" onAction="#undo" text="Undo">
                     <accelerator>
                         <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
