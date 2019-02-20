@@ -72,7 +72,6 @@ public class Main extends Application {
 	public void stop() {
 		applicationPreferences.setPreference(Preference.WIDTH, Double.toString(primaryStage.getWidth()));
 		applicationPreferences.setPreference(Preference.HEIGHT, Double.toString(primaryStage.getHeight()));
-		System.out.println(primaryStage.isFullScreen());
 		applicationPreferences.setPreference(Preference.FULLSCREEN, Boolean.toString(primaryStage.isFullScreen()));
 		applicationPreferences.savePreferences();
 
