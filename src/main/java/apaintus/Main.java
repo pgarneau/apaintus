@@ -2,6 +2,7 @@ package apaintus;
 
 import apaintus.controllers.Controller;
 import apaintus.controllers.MenuController;
+import apaintus.logger.Logger;
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Preference;
 import javafx.application.Application;
@@ -82,6 +83,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        Logger.setVerboseLevel(3);
+
         launch(args);
     }
 }
