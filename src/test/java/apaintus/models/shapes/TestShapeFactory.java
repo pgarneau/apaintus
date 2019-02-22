@@ -89,7 +89,7 @@
 //        SnapGrid testSnapGrid = mock(SnapGrid.class);
 //        when(testSnapGrid.isActive()).thenReturn(false);
 //        when(testSnapGrid.getGridPoints()).thenReturn(new ArrayList<Point>());
-//        when(testSnapGrid.getSpacing()).thenReturn(spacing);
+//        when(testSnapGrid.getGradation()).thenReturn(spacing);
 //
 //        ShapeFactory.updateShape(testRectShape,
 //                lastMouseClickPositionUpdate,
@@ -133,7 +133,7 @@
 //        SnapGrid testSnapGrid = mock(SnapGrid.class);
 //        when(testSnapGrid.isActive()).thenReturn(false);
 //        when(testSnapGrid.getGridPoints()).thenReturn(new ArrayList<Point>());
-//        when(testSnapGrid.getSpacing()).thenReturn(spacing);
+//        when(testSnapGrid.getGradation()).thenReturn(spacing);
 //
 //        ShapeFactory.updateShape(testCircleShape,
 //                mousePositionUpdate,
@@ -175,7 +175,7 @@
 //        SnapGrid testSnapGrid = mock(SnapGrid.class);
 //        when(testSnapGrid.isActive()).thenReturn(false);
 //        when(testSnapGrid.getGridPoints()).thenReturn(new ArrayList<Point>());
-//        when(testSnapGrid.getSpacing()).thenReturn(spacing);
+//        when(testSnapGrid.getGradation()).thenReturn(spacing);
 //
 //        ShapeFactory.updateShape(testLineShape,
 //                mousePositionUpdate,
@@ -218,7 +218,7 @@
 //        SnapGrid testSnapGrid = mock(SnapGrid.class);
 //        when(testSnapGrid.isActive()).thenReturn(false);
 //        when(testSnapGrid.getGridPoints()).thenReturn(new ArrayList<Point>());
-//        when(testSnapGrid.getSpacing()).thenReturn(spacing);
+//        when(testSnapGrid.getGradation()).thenReturn(spacing);
 //
 //        ShapeFactory.updateShape(testSmileyShape,
 //                mousePositionUpdate,
@@ -262,7 +262,7 @@
 //        SnapGrid testSnapGrid = mock(SnapGrid.class);
 //        when(testSnapGrid.isActive()).thenReturn(false);
 //        when(testSnapGrid.getGridPoints()).thenReturn(new ArrayList<Point>());
-//        when(testSnapGrid.getSpacing()).thenReturn(spacing);
+//        when(testSnapGrid.getGradation()).thenReturn(spacing);
 //
 //        ShapeFactory.updateShape(testTextBox,
 //                mousePositionUpdate,
@@ -303,7 +303,7 @@
 //        SnapGrid testSnapGrid = mock(SnapGrid.class);
 //        when(testSnapGrid.isActive()).thenReturn(false);
 //        when(testSnapGrid.getGridPoints()).thenReturn(new ArrayList<Point>());
-//        when(testSnapGrid.getSpacing()).thenReturn(spacing);
+//        when(testSnapGrid.getGradation()).thenReturn(spacing);
 //
 //        ShapeFactory.updateShape(testBoundingBox,
 //                mousePositionUpdate,
@@ -343,7 +343,7 @@
 //        SnapGrid testSnapGrid = mock(SnapGrid.class);
 //        when(testSnapGrid.isActive()).thenReturn(false);
 //        when(testSnapGrid.getGridPoints()).thenReturn(new ArrayList<Point>());
-//        when(testSnapGrid.getSpacing()).thenReturn(spacing);
+//        when(testSnapGrid.getGradation()).thenReturn(spacing);
 //
 //        ShapeFactory.updateShape(testSelectionBox,
 //                mousePositionUpdate,

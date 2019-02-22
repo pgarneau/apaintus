@@ -5,7 +5,7 @@ import apaintus.models.Point;
 import java.util.ArrayList;
 
 public class SnapGrid {
-	private double spacing = 10;
+	private double gradation = 10;
 	private double drawingAreaWidth;
 	private double drawingAreaHeight;
 	
@@ -21,9 +21,9 @@ public class SnapGrid {
 
 	private void computeAllPointInGrid() {
 		snapGridPoints.clear();
-		for (int y = 0; y <= drawingAreaHeight; y += (size)) {
-			for (int x = 0; x <= drawingAreaWidth; x += (size)) {
-				snapGridPoints.add(new Point(x, y));
+		for (int y = 0; y <= drawingAreaHeight; y+=(gradation)) {
+			for (int x = 0; x <= drawingAreaWidth; x+=(gradation)) {
+				snapgridPoints.add(new Point(x,y));
 			}
 		}
 	}
@@ -44,12 +44,15 @@ public class SnapGrid {
 		isActive = active;
 	}
 
-	public void setSpacing(Double newValue) {
-		this.spacing = newValue;
-		
-		//we need to recompute all the points when the spacing has changed.
+	public void setGradation(Double newValue) {
+		this.gradation = newValue;
 		computeAllPointInGrid();
 	}
+
+	public double getGradation() {
+		return gradation;
+	}
+	
 	
 	public ArrayList<Point> getSnapGridPoints() {
 		return snapGridPoints;

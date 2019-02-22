@@ -20,9 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import org.apache.logging.log4j.core.appender.AppenderLoggingException;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -78,7 +76,7 @@ public class CanvasController implements ChildController<Controller> {
         ruler = new Ruler(xRule, yRule,snapGridActive);
         ruler.setGrading(10.0);
 
-        canvas.setOnMouseMoved(event -> {
+        root.setOnMouseMoved(event -> {
             ruler.update(event.getX(),event.getY());
         });
 
@@ -300,6 +298,10 @@ public class CanvasController implements ChildController<Controller> {
         toolBarController.unsetToolBarListeners();
     }
 
+    public void update() {
+        ruler.resizeUpdate();
+    }
+
     public class ColorChangeListener implements ChangeListener<Color> {
         private Attribute attribute;
 
@@ -333,7 +335,7 @@ public class CanvasController implements ChildController<Controller> {
     public class GridComboBoxChangeListener implements ChangeListener<Double> {
         @Override
         public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-            snapGrid.setSpacing(newValue);
+            snapGrid.setGradation(newValue);
             ruler.setGrading(newValue);
             if (snapGrid.isActive()) {
                 clearSnapGrid();

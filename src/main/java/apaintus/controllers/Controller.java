@@ -1,74 +1,81 @@
 package apaintus.controllers;
 
 import apaintus.models.commands.Invoker;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Controller {
-	@FXML private CanvasController canvasController;
-	@FXML private MenuController menuController;
-	@FXML private ToolBarController toolBarController;
-	@FXML private AttributeController attributeController;
-	@FXML private FigureLogController figureLogController;
-	@FXML private ActionLogController actionLogController;
-
-	@FXML private AnchorPane mainPane;
-	@FXML private ScrollPane scrollPane;
+    @FXML
+    private CanvasController canvasController;
+    @FXML
+    private MenuController menuController;
+    @FXML
+    private ToolBarController toolBarController;
+    @FXML
+    private AttributeController attributeController;
+    @FXML
+    private FigureLogController figureLogController;
+    @FXML
+    private ActionLogController actionLogController;
+    @FXML
+    private AnchorPane mainPane;
+    @FXML
+    private ScrollPane scrollPane;
 
 	private Stage primaryStage;
 	private Invoker invoker = new Invoker();
+    public void initialize() {
+        canvasController.injectParentController(this);
+        menuController.injectParentController(this);
+        toolBarController.injectParentController(this);
+        attributeController.injectParentController(this);
+        figureLogController.injectParentController(this);
+        actionLogController.injectParentController(this);
 
-	public void initialize() {
+        invoker.setActionLogController(actionLogController);
 
-		canvasController.injectParentController(this);
-		menuController.injectParentController(this);
-		toolBarController.injectParentController(this);
-		attributeController.injectParentController(this);
-		figureLogController.injectParentController(this);
-		actionLogController.injectParentController(this);
+        menuController.bindTo(mainPane);
+        toolBarController.bindTo(mainPane);
+    }
 
-		invoker.setActionLogController(actionLogController);
+    public void injectPrimaryStage(Stage stage) {
+        primaryStage = stage;
+    }
 
-		menuController.bindTo(mainPane);
-		toolBarController.bindTo(mainPane);
-	}
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
-	public void injectPrimaryStage(Stage stage) {
-		primaryStage = stage;
-	}
+    public CanvasController getCanvasController() {
+        return canvasController;
+    }
 
-	public Stage getPrimaryStage() {
-		return primaryStage;
-	}
+    public MenuController getMenuController() {
+        return menuController;
+    }
 
-	public CanvasController getCanvasController() {
-		return canvasController;
-	}
+    public ToolBarController getToolBarController() {
+        return toolBarController;
+    }
 
-	public MenuController getMenuController() {
-		return menuController;
-	}
+    public AttributeController getAttributeController() {
+        return attributeController;
+    }
 
-	public ToolBarController getToolBarController() {
-		return toolBarController;
-	}
+    public Invoker getInvoker() {
+        return invoker;
+    }
 
-	public AttributeController getAttributeController() {
-		return attributeController;
-	}
+    public FigureLogController getFigureLogController() {
+        return figureLogController;
+    }
 
-	public Invoker getInvoker() {
-		return invoker;
-	}
-
-	public FigureLogController getFigureLogController() {
-		return figureLogController;
-	}
-
-	public ActionLogController getActionLogController() {
-		return actionLogController;
-	}
+    public ActionLogController getActionLogController() {
+        return actionLogController;
+    }
 }
 
