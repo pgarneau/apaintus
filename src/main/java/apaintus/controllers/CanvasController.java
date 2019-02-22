@@ -1,7 +1,6 @@
 package apaintus.controllers;
 
-import apaintus.models.Alignment;
-import apaintus.models.Ruler;
+import apaintus.models.*;
 import apaintus.models.commands.*;
 import apaintus.models.nodes.Node;
 import apaintus.models.nodes.NodeType;
@@ -21,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import org.apache.logging.log4j.core.appender.AppenderLoggingException;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -73,8 +73,10 @@ public class CanvasController implements ChildController<Controller> {
 
     @Override
     public void initialize() {
-        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight(), false);
-        ruler = new Ruler(xRule, yRule);
+        boolean snapGridActive = Boolean.getBoolean(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID));
+        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight(),snapGridActive);
+        ruler = new Ruler(xRule, yRule,snapGridActive);
+        ruler.setGrading(10.0);
 
         canvas.setOnMouseMoved(event -> {
             ruler.update(event.getX(),event.getY());
@@ -242,10 +244,12 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public void drawSnapGrid() {
+        ruler.draw();
         canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
     }
 
-    public void clearSnapGrid() {
+    public void clearSnapgrid() {
+        ruler.clear();
         snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
     }
 
@@ -253,9 +257,11 @@ public class CanvasController implements ChildController<Controller> {
         if (snapGrid.isActive()) {
             clearSnapGrid();
             snapGrid.setActive(false);
+            ruler.setActive(false);
         } else {
             drawSnapGrid();
             snapGrid.setActive(true);
+            ruler.setActive(true);
         }
     }
 
@@ -324,10 +330,11 @@ public class CanvasController implements ChildController<Controller> {
         }
     }
 
-    public class SnapGridSizeListener implements ChangeListener<Double> {
+    public class GridComboBoxChangeListener implements ChangeListener<Double> {
         @Override
         public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-            snapGrid.setSize(newValue);
+            snapGrid.setSpacing(newValue);
+            ruler.setGrading(newValue);
             if (snapGrid.isActive()) {
                 clearSnapGrid();
                 drawSnapGrid();

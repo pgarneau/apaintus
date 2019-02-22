@@ -7,6 +7,8 @@ import apaintus.models.Preference;
 import apaintus.models.nodes.Node;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import apaintus.util.ReflectionUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -59,7 +61,7 @@ public class ToolBarController implements ChildController<Controller> {
     private CanvasController.ColorChangeListener fillColorListener;
     private CanvasController.ColorChangeListener strokeColorListener;
     private CanvasController.ShapeSpinnerChangeListener strokeSizeListener;
-    private CanvasController.SnapGridSizeListener snapGridSizeListener;
+    private CanvasController.GridComboBoxChangeListener gridSpacingListener;
 
     @Override
     public void injectParentController(Controller controller) {
@@ -85,6 +87,11 @@ public class ToolBarController implements ChildController<Controller> {
         activeToolToggleGroup.add(line);
         activeToolToggleGroup.add(smiley);
         activeToolToggleGroup.add(textBox);
+
+        ObservableList<Double> spacingValues = FXCollections.observableArrayList(10.0,20.0,40.0);
+        spacingSize.setItems(spacingValues);
+        spacingSize.setValue(spacingValues.get(0));
+        spacingSize.setEditable(false);
 
         select.setOnMouseClicked(event -> {
             toolBarService.toggle(select, activeToolToggleGroup);
@@ -139,7 +146,7 @@ public class ToolBarController implements ChildController<Controller> {
         fillColorListener = canvasController.new ColorChangeListener(Attribute.FILL_COLOR);
         strokeColorListener = canvasController.new ColorChangeListener(Attribute.STROKE_COLOR);
         strokeSizeListener = canvasController.new ShapeSpinnerChangeListener(Attribute.STROKE_SIZE);
-        snapGridSizeListener = canvasController.new SnapGridSizeListener();
+        gridSpacingListener = canvasController.new GridComboBoxChangeListener();
     }
 
     public void setToolBarListeners() {

@@ -44,6 +44,13 @@ public class SnapGrid {
 		isActive = active;
 	}
 
+	public void setSpacing(Double newValue) {
+		this.spacing = newValue;
+		
+		//we need to recompute all the points when the spacing has changed.
+		computeAllPointInGrid();
+	}
+	
 	public ArrayList<Point> getSnapGridPoints() {
 		return snapGridPoints;
 	}

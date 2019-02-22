@@ -4,8 +4,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-import java.awt.event.MouseEvent;
-
 public class Ruler {
 
     private Pane x;
@@ -14,9 +12,10 @@ public class Ruler {
     private Pane mouseY;
     private Line xLine = new Line();
     private Line yLine = new Line();
-    private int gradation = 10;
+    private double gradation;
+    private boolean isActive = false;
 
-    public Ruler(Pane x, Pane y) {
+    public Ruler(Pane x, Pane y, boolean active) {
         this.x = x;
         this.y = y;
 
@@ -40,11 +39,45 @@ public class Ruler {
         x.getChildren().add(mouseX);
         y.getChildren().add(mouseY);
 
-        computeGradation(800, 600);
+        isActive = active;
     }
 
-    private void computeGradation(double width, double hieght) {
-        for (int i = 25; i < width; i += gradation) {
+    public void setActive(boolean active){
+        this.isActive = active;
+    }
+
+    public void update(double x, double y) {
+        if(!isActive)
+            return;
+
+        clearMousePosition();
+
+        xLine.setStartY(0);
+        xLine.setEndY(25);
+        xLine.setStartX(x + 25);
+        xLine.setEndX(x + 25);
+        mouseX.getChildren().add(xLine);
+
+        yLine.setStartX(0);
+        yLine.setEndX(25);
+        yLine.setStartY(y + 25);
+        yLine.setEndY(y + 25);
+        mouseY.getChildren().add(yLine);
+    }
+
+    private void clearMousePosition() {
+        mouseX.getChildren().clear();
+        mouseY.getChildren().clear();
+    }
+
+    public void clear() {
+        clearMousePosition();
+        x.getChildren().clear();
+        y.getChildren().clear();
+    }
+
+    public void draw() {
+        for (int i = 25; i < 800; i += gradation) {
             Line line = new Line();
             line.setStartX(i);
             line.setEndX(i);
@@ -55,7 +88,7 @@ public class Ruler {
             x.getChildren().add(line);
         }
 
-        for (int i = 25; i < hieght; i += gradation) {
+        for (int i = 25; i < 600; i += gradation) {
             Line line = new Line();
             line.setStartY(i);
             line.setEndY(i);
@@ -67,24 +100,7 @@ public class Ruler {
         }
     }
 
-    public void update(double x, double y) {
-        clear();
-
-        xLine.setStartY(0);
-        xLine.setEndY(25);
-        xLine.setStartX(x);
-        xLine.setEndX(x);
-        mouseX.getChildren().add(xLine);
-
-        yLine.setStartX(0);
-        yLine.setEndX(25);
-        yLine.setStartY(y);
-        yLine.setEndY(y);
-        mouseY.getChildren().add(yLine);
-    }
-
-    private void clear() {
-        mouseX.getChildren().clear();
-        mouseY.getChildren().clear();
+    public void setGrading(Double newValue) {
+        gradation = newValue;
     }
 }
