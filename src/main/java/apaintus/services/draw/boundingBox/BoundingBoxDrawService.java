@@ -1,14 +1,10 @@
 package apaintus.services.draw.boundingBox;
 
 import apaintus.models.Point;
-import apaintus.models.shapes.BoundingBox;
-import apaintus.models.shapes.Shape;
+import apaintus.models.nodes.BoundingBox;
 import apaintus.services.draw.DrawService;
-import apaintus.services.draw.ShapeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Rotate;
 
 public class BoundingBoxDrawService implements DrawService {
     private static final Color STROKE_COLOR = Color.BLACK;

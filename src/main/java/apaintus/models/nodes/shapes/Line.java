@@ -1,8 +1,12 @@
-package apaintus.models.shapes;
+package apaintus.models.nodes.shapes;
 
 import apaintus.models.Point;
-import apaintus.services.draw.ShapeDrawService;
+import apaintus.models.nodes.NodeAttributes;
+import apaintus.models.nodes.NodeType;
+import apaintus.services.draw.DrawService;
 import apaintus.services.draw.line.LineDrawService;
+import apaintus.services.update.LineUpdateService;
+import apaintus.services.update.UpdateService;
 
 public class Line extends Shape {
     private Line() {
@@ -16,8 +20,6 @@ public class Line extends Shape {
 
     @Override
     public void updateBoundingBox() {
-        System.out.println("I AM A LINE");
-        System.out.println(height);
         boundingBox.update(
                 center,
                 width,
@@ -39,7 +41,12 @@ public class Line extends Shape {
     }
 
     @Override
-    public ShapeDrawService getDrawService() {
+    public DrawService getDrawService() {
         return new LineDrawService(this);
+    }
+
+    @Override
+    public UpdateService getUpdateService() {
+        return new LineUpdateService(this);
     }
 }

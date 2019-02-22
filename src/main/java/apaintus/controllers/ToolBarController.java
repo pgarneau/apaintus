@@ -4,9 +4,10 @@ import apaintus.models.Alignment;
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Attribute;
 import apaintus.models.Preference;
-import apaintus.models.shapes.Node;
+import apaintus.models.nodes.Node;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
+import apaintus.util.ReflectionUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -154,9 +155,18 @@ public class ToolBarController implements ChildController<Controller> {
     }
 
     public void update(Node node) {
-        strokeSize.getValueFactory().setValue(Node.get(node, Attribute.STROKE_SIZE.toString()));
-        setColorPicker(strokeColor, Node.get(node, Attribute.STROKE_COLOR.toString()));
-        setColorPicker(fillColor, Node.get(node, Attribute.FILL_COLOR.toString()));
+    	Double tempStrokeSize = ReflectionUtil.get(node, Attribute.STROKE_SIZE.toString());
+    	String tempStrokeColor = ReflectionUtil.get(node, Attribute.STROKE_COLOR.toString());
+    	String tempFillColor = ReflectionUtil.get(node, Attribute.FILL_COLOR.toString());
+
+    	if (tempStrokeSize != null)
+			strokeSize.getValueFactory().setValue(tempStrokeSize);
+
+    	if (tempStrokeColor != null)
+            setColorPicker(strokeColor, tempStrokeColor);
+
+    	if (tempFillColor != null)
+    	    setColorPicker(fillColor, tempFillColor);
     }
 
     // Binds the Toolbar's size to the main anchorpane

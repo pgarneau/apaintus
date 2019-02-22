@@ -1,6 +1,6 @@
 package apaintus.controllers;
 
-import apaintus.models.shapes.Node;
+import apaintus.models.nodes.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;

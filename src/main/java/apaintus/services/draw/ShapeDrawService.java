@@ -1,6 +1,6 @@
 package apaintus.services.draw;
 
-import apaintus.models.shapes.Shape;
+import apaintus.models.nodes.shapes.Shape;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 import javafx.scene.transform.Affine;

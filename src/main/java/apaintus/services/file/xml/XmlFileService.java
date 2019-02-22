@@ -2,7 +2,7 @@ package apaintus.services.file.xml;
 
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Preference;
-import apaintus.models.shapes.Node;
+import apaintus.models.nodes.Node;
 import apaintus.models.xml.XmlContract;
 import apaintus.models.xml.XmlContractTranslator;
 import apaintus.services.file.FileService;

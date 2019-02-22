@@ -1,4 +1,7 @@
-package apaintus.models.shapes;
+package apaintus.models.nodes.shapes;
+
+import apaintus.models.nodes.Node;
+import apaintus.models.nodes.NodeAttributes;
 
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
@@ -57,5 +60,6 @@ public abstract class Shape extends Node {
 
     public void setStrokeSize(double strokeSize) {
         this.strokeSize = strokeSize;
+        updateBoundingBox();
     }
 }

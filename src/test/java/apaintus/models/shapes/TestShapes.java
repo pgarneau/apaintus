@@ -1,6 +1,7 @@
 package apaintus.models.shapes;
 
 import apaintus.models.Point;
+import apaintus.models.nodes.shapes.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;

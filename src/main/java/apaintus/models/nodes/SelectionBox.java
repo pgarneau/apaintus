@@ -1,11 +1,11 @@
-package apaintus.models.shapes;
+package apaintus.models.nodes;
 
 import apaintus.models.Alignment;
 import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
-import apaintus.services.draw.NodeDrawService;
-import apaintus.services.draw.ShapeDrawService;
 import apaintus.services.draw.selectionBox.SelectionBoxDrawService;
+import apaintus.services.update.SelectionBoxUpdateService;
+import apaintus.services.update.UpdateService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +14,6 @@ import java.util.Map;
 
 public class SelectionBox extends Node {
 	public static final int STROKE_SIZE = 2;
-	private static final String STROKE_COLOR = "#000000";
-	private static final int LINE_DASH_SIZE = 4;
 
 	private List<Node> nodeList = new ArrayList<>();
 	private Map<Node, Point> nodeOriginalCoordinates = new HashMap<>();
@@ -38,6 +36,11 @@ public class SelectionBox extends Node {
 	@Override
 	public DrawService getDrawService() {
 		return new SelectionBoxDrawService(this);
+	}
+
+	@Override
+	public UpdateService getUpdateService() {
+		return new SelectionBoxUpdateService(this);
 	}
 
 	public void add(Node node) {
@@ -105,8 +108,6 @@ public class SelectionBox extends Node {
 		for (Node node : nodeList) {
 			nodeOriginalCoordinates.put(node, node.getCoordinates());
 		}
-
-//		originalCoordinates = coordinates;
 	}
 
 	public void setSelected(boolean selected) {
@@ -157,11 +158,15 @@ public class SelectionBox extends Node {
 
 	@Override
 	public void setCoordinates(Point coordinates) {
+		double xDiff = coordinates.getX() - this.coordinates.getX();
+		double yDiff = coordinates.getY() - this.coordinates.getY();
+
 		this.coordinates = coordinates;
-//		computeCenter();
+		computeCenter();
+		updateBoundingBox();
 
 		for (Node node : nodeList) {
-			updateNodeCoordinates(node, 0);
+			node.setCoordinates(new Point(node.getCoordinates().getX() + xDiff, node.getCoordinates().getY() + yDiff));
 		}
 	}
 

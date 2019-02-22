@@ -1,7 +1,8 @@
 package apaintus.models.xml;
 
 import apaintus.models.Point;
-import apaintus.models.shapes.*;
+import apaintus.models.nodes.Node;
+import apaintus.models.nodes.shapes.*;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;

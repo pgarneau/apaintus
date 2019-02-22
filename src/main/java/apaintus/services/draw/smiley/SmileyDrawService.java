@@ -1,6 +1,6 @@
 package apaintus.services.draw.smiley;
 
-import apaintus.models.shapes.Smiley;
+import apaintus.models.nodes.shapes.Smiley;
 import apaintus.services.draw.ShapeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

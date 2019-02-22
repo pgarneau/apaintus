@@ -1,4 +1,4 @@
-package apaintus.models.shapes;
+package apaintus.models.nodes.shapes;
 
 public class ShapeAttributes {
     private double strokeSize;

@@ -2,13 +2,16 @@ package apaintus.services;
 
 import apaintus.controllers.ToolBarController;
 import apaintus.models.ToolBarAttributes;
+import apaintus.models.nodes.BoundingBox;
+import apaintus.models.nodes.Node;
+import apaintus.models.nodes.NodeFactory;
+import apaintus.models.nodes.shapes.ShapeFactory;
 import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Point;
-import apaintus.models.shapes.*;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.draw.DrawService;
-import apaintus.services.draw.ShapeDrawService;
 import apaintus.services.draw.SnapGridDrawService;
+import apaintus.services.update.UpdateService;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -27,25 +30,36 @@ public class CanvasService {
     public Node createNode(ActiveTool activeTool, MouseEvent mouseEvent, double[] canvasDimensions) {
         Point mousePosition = getMousePosition(mouseEvent);
 
-        return NodeFactory.createNode(
-                activeTool,
-                mousePosition,
-                mousePosition,
-                ToolBarAttributes
-                        .builder()
-                        .withFillColor(toolBarController.getFillColor().toString())
-                        .withStrokeColor(toolBarController.getStrokeColor().toString())
-                        .withStrokeSize(toolBarController.getStrokeSize())
-                        .build(),
-                canvasDimensions
-        );
+        if (activeTool == ActiveTool.SELECT) {
+            return NodeFactory.createNode(
+                    activeTool,
+                    mousePosition,
+                    mousePosition,
+                    canvasDimensions
+            );
+        } else {
+            return ShapeFactory.createShape(
+                    activeTool,
+                    mousePosition,
+                    mousePosition,
+                    ToolBarAttributes
+                            .builder()
+                            .withFillColor(toolBarController.getFillColor().toString())
+                            .withStrokeColor(toolBarController.getStrokeColor().toString())
+                            .withStrokeSize(toolBarController.getStrokeSize())
+                            .build(),
+                    canvasDimensions
+            );
+        }
+
     }
 
     public void updateNode(Node node, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimensions, SnapGrid snapGrid) {
         Point mousePosition = getMousePosition(mouseEvent);
 
-        NodeFactory.updateNode(
-                node,
+        UpdateService updateService = node.getUpdateService();
+
+        updateService.update(
                 mousePosition,
                 lastMouseClickPosition,
                 canvasDimensions,

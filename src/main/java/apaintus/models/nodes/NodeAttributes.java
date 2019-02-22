@@ -1,4 +1,4 @@
-package apaintus.models.shapes;
+package apaintus.models.nodes;
 
 import apaintus.models.Point;
 

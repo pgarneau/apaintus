@@ -1,7 +1,7 @@
 package apaintus.services.draw;
 
 import apaintus.models.Point;
-import apaintus.models.shapes.Node;
+import apaintus.models.nodes.Node;
 import apaintus.services.draw.boundingBox.BoundingBoxDrawService;
 import javafx.scene.canvas.GraphicsContext;
 

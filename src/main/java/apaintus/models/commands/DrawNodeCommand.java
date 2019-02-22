@@ -1,7 +1,7 @@
 package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
-import apaintus.models.shapes.Node;
+import apaintus.models.nodes.Node;
 
 import java.util.List;
 

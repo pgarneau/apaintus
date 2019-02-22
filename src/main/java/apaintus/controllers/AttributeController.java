@@ -1,8 +1,9 @@
 package apaintus.controllers;
 
 import apaintus.models.Attribute;
-import apaintus.models.shapes.Node;
-import apaintus.models.shapes.NodeType;
+import apaintus.models.nodes.Node;
+import apaintus.models.nodes.NodeType;
+import apaintus.util.ReflectionUtil;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -144,7 +145,11 @@ public class AttributeController implements ChildController<Controller> {
         shapeWidth.getValueFactory().setValue(node.getWidth());
         shapeHeight.getValueFactory().setValue(node.getHeight());
         shapeOrientation.getValueFactory().setValue(node.getOrientation());
-        text.setText(Node.get(node, "text"));
+
+        String tempText = ReflectionUtil.get(node, Attribute.TEXT.toString());
+
+        if (tempText != null)
+            text.setText(tempText);
 
         ungroup.setVisible(node.getNodeType() == NodeType.SELECTION_BOX);
     }

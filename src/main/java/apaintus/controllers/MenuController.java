@@ -5,7 +5,7 @@ import apaintus.models.commands.ClearCommand;
 import apaintus.models.commands.DrawImageCommand;
 import apaintus.models.commands.Invoker;
 import apaintus.models.commands.LoadPngCommand;
-import apaintus.models.shapes.Node;
+import apaintus.models.nodes.Node;
 import apaintus.services.MenuService;
 import apaintus.services.file.FileService;
 import apaintus.services.file.png.PngFileService;

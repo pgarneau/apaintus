@@ -1,6 +1,6 @@
 package apaintus.services.draw.rectangle;
 
-import apaintus.models.shapes.Rectangle;
+import apaintus.models.nodes.shapes.Rectangle;
 import apaintus.services.draw.ShapeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;

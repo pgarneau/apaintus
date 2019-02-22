@@ -2,12 +2,12 @@ package apaintus.controllers;
 
 import apaintus.models.Alignment;
 import apaintus.models.commands.*;
-import apaintus.models.shapes.Node;
-import apaintus.models.shapes.NodeType;
+import apaintus.models.nodes.Node;
+import apaintus.models.nodes.NodeType;
 import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
-import apaintus.models.shapes.SelectionBox;
+import apaintus.models.nodes.SelectionBox;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.CanvasService;
 import apaintus.services.update.UpdateService;
@@ -42,7 +42,6 @@ public class CanvasController implements ChildController<Controller> {
     private FigureLogController figureLogController;
 
     private CanvasService canvasService;
-    private UpdateService updateService;
 
     private Point lastMouseClickPosition;
     private Node activeNode;
@@ -60,7 +59,6 @@ public class CanvasController implements ChildController<Controller> {
         this.attributeController = controller.getAttributeController();
         this.figureLogController = controller.getFigureLogController();
         this.canvasService = new CanvasService(this.toolBarController);
-        this.updateService = new UpdateService(this.attributeController, this.toolBarController);
 
         snapGrid = new SnapGrid(toolBarController.getSnapGridSize(), canvas.getWidth(), canvas.getHeight(), false);
         invoker = controller.getInvoker();
@@ -303,14 +301,6 @@ public class CanvasController implements ChildController<Controller> {
             if (activeNode != null) {
                 invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, oldValue, newValue));
             }
-//            if (activeNode != null && activeNode.isSelected() && nodeList.contains(activeNode)) {
-//                if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
-//                    ((SelectionBox) activeNode).update(attribute, newValue - oldValue);
-//                    redrawCanvas();
-//                } else {
-//                    invoker.execute(new UpdateCommand(CanvasController.this, activeNode, updateService.getAttributes(), attribute));
-//                }
-//            }
         }
     }
 
@@ -328,13 +318,13 @@ public class CanvasController implements ChildController<Controller> {
     public class UngroupActionEvent implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-//            if (activeNode.getShapeType() == ShapeType.SELECTION_BOX) {
-//                ((SelectionBox) activeNode).clear();
-//                nodeList.remove(activeNode);
-//                activeNode.setSelected(false);
-//                attributeController.resetAttributes();
-//                redrawCanvas();
-//            }
+            if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
+                ((SelectionBox) activeNode).clear();
+                nodeList.remove(activeNode);
+                activeNode.setSelected(false);
+                attributeController.resetAttributes();
+                redrawCanvas();
+            }
         }
     }
 
@@ -362,10 +352,10 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void handle(ActionEvent event) {
-//            if (activeNode.getShapeType() == ShapeType.SELECTION_BOX) {
-//                ((SelectionBox) activeNode).alignShapes(alignment);
-//                redrawCanvas();
-//            }
+        	if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
+                ((SelectionBox) activeNode).alignShapes(alignment);
+                redrawCanvas();
+            }
         }
     }
 }

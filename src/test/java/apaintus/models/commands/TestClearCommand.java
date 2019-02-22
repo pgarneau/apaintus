@@ -1,13 +1,9 @@
 package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
-import apaintus.controllers.Controller;
-import apaintus.controllers.ToolBarController;
 import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.Circle;
-import apaintus.models.shapes.Rectangle;
-import apaintus.services.CanvasService;
-import org.junit.Before;
+import apaintus.models.nodes.shapes.Circle;
+import apaintus.models.nodes.shapes.Rectangle;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package apaintus.services.draw.line;
 
-import apaintus.models.shapes.Line;
+import apaintus.models.nodes.shapes.Line;
 import apaintus.services.draw.DrawService;
 import apaintus.services.draw.ShapeDrawService;
 import apaintus.services.draw.boundingBox.BoundingBoxDrawService;

@@ -1,6 +1,6 @@
 package apaintus.models.xml;
 
-import apaintus.models.shapes.Node;
+import apaintus.models.nodes.Node;
 
 import java.util.List;
 

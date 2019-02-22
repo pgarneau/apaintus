@@ -1,7 +1,10 @@
-package apaintus.models.shapes;
+package apaintus.models.nodes.shapes;
 
-import apaintus.models.Point;
+import apaintus.models.nodes.NodeAttributes;
+import apaintus.models.nodes.NodeType;
 import apaintus.services.draw.textbox.TextBoxDrawService;
+import apaintus.services.update.TextBoxUpdateService;
+import apaintus.services.update.UpdateService;
 
 public class TextBox extends Shape {
     private static final String DEFAULT_TEXT = "Enter text";
@@ -13,13 +16,18 @@ public class TextBox extends Shape {
 
     public TextBox(NodeAttributes nodeAttributes, ShapeAttributes shapeAttributes) {
         super(nodeAttributes, shapeAttributes);
-        nodeType = NodeType.RECTANGLE;
+        nodeType = NodeType.TEXT_BOX;
         this.text = DEFAULT_TEXT;
     }
 
     @Override
     public TextBoxDrawService getDrawService() {
         return new TextBoxDrawService(this);
+    }
+
+    @Override
+    public UpdateService getUpdateService() {
+        return new TextBoxUpdateService(this);
     }
 
     public String getText() {

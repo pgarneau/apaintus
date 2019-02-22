@@ -3,9 +3,8 @@ package apaintus.models.commands;
 import apaintus.controllers.CanvasController;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
-import apaintus.models.shapes.Node;
-import apaintus.models.shapes.ShapeAttributes;
-import org.w3c.dom.Attr;
+import apaintus.models.nodes.Node;
+import apaintus.util.ReflectionUtil;
 
 public class UpdateCommand<T> implements Command {
     private CanvasController canvasController;
@@ -72,7 +71,7 @@ public class UpdateCommand<T> implements Command {
                 break;
 
             default:
-                Node.set(node, attribute.toString(), value);
+                ReflectionUtil.set(node, attribute.toString(), value);
         }
     }
 
