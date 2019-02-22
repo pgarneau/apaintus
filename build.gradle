@@ -68,3 +68,9 @@ test {
         destinationFile = file("$buildDir/reports/jacoco-it.exec")
     }
 }
+
+run {
+    if (project.hasProperty('args')) {
+        args project.args.split(',')
+    }
+}

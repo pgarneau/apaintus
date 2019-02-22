@@ -91,7 +91,6 @@ public class Main extends Application {
             argsMap.put(split[0].toLowerCase(), split[1]);
         }
 
-        System.out.println(argsMap.get("verbose"));
         Logger.setVerboseLevel(argsMap.containsKey("verbose") ? Integer.parseInt(argsMap.get("verbose")) : 0);
 
         launch(args);
