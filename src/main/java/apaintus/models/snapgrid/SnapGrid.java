@@ -5,21 +5,18 @@ import apaintus.models.Point;
 import java.util.ArrayList;
 
 public class SnapGrid {
-	private double size;
+	private double spacing = 10;
 	private double drawingAreaWidth;
 	private double drawingAreaHeight;
-
+	
 	private boolean isActive;
-
-	private ArrayList<Point> snapGridPoints;
-
-	public SnapGrid(double size, double drawingAreaWidth, double drawingAreaHeight, boolean active) {
-		this.size = size * 10;
+	
+	private ArrayList<Point> snapgridPoints= new ArrayList<>();
+	
+	public SnapGrid(double drawingAreaWidth, double drawingAreaHeight, boolean active){
 		this.drawingAreaWidth = drawingAreaWidth;
 		this.drawingAreaHeight = drawingAreaHeight;
 		this.isActive = active;
-		this.snapGridPoints = new ArrayList<>();
-		computeAllPointInGrid();
 	}
 
 	private void computeAllPointInGrid() {

@@ -1,6 +1,7 @@
 package apaintus.controllers;
 
 import apaintus.models.Alignment;
+import apaintus.models.Ruler;
 import apaintus.models.commands.*;
 import apaintus.models.nodes.Node;
 import apaintus.models.nodes.NodeType;
@@ -18,8 +19,10 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -33,8 +36,13 @@ public class CanvasController implements ChildController<Controller> {
     private Canvas canvas;
     @FXML
     private Canvas snapGridCanvas;
+    @FXML
+    private Pane xRule;
+    @FXML
+    private Pane yRule;
 
     private SnapGrid snapGrid;
+    private Ruler ruler;
 
     private ToolBarController toolBarController;
     private AttributeController attributeController;
@@ -59,13 +67,19 @@ public class CanvasController implements ChildController<Controller> {
         this.attributeController = controller.getAttributeController();
         this.figureLogController = controller.getFigureLogController();
         this.canvasService = new CanvasService(this.toolBarController);
-
-        snapGrid = new SnapGrid(toolBarController.getSnapGridSize(), canvas.getWidth(), canvas.getHeight(), false);
+        this.updateService = new UpdateService(this.attributeController, this.toolBarController);
         invoker = controller.getInvoker();
     }
 
     @Override
     public void initialize() {
+        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight(), false);
+        ruler = new Ruler(xRule, yRule);
+
+        canvas.setOnMouseMoved(event -> {
+            ruler.update(event.getX(),event.getY());
+        });
+
         canvas.setOnMousePressed(event -> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
             activeTool = toolBarController.getActiveTool();
@@ -114,6 +128,7 @@ public class CanvasController implements ChildController<Controller> {
         });
 
         canvas.setOnMouseDragged(event -> {
+            ruler.update(event.getX(), event.getY());
             canvasService.updateNode(tempActiveNode, event, lastMouseClickPosition, getCanvasDimension(), snapGrid);
             attributeController.update(tempActiveNode);
             canvasService.clear(drawLayer.getGraphicsContext2D());
@@ -171,7 +186,7 @@ public class CanvasController implements ChildController<Controller> {
         return image;
     }
 
-    public Canvas getCanvas(){
+    public Canvas getCanvas() {
         return this.canvas;
     }
 

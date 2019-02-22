@@ -41,7 +41,7 @@ public class ToolBarController implements ChildController<Controller> {
     @FXML
     private ToggleButton snapGrid;
     @FXML
-    private Spinner<Double> snapGridSize;
+    private ComboBox<Double> spacingSize;
     @FXML
     private Button alignLeft;
     @FXML
