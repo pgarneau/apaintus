@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
+
 public class Main extends Application {
     private static final double MIN_WIDTH = 800;
     private static final double MIN_HEIGHT = 600;
@@ -83,7 +85,14 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        Logger.setVerboseLevel(3);
+        HashMap<String, String> argsMap = new HashMap<>();
+        for (String arg : args) {
+            String[] split = arg.split("=");
+            argsMap.put(split[0].toLowerCase(), split[1]);
+        }
+
+        System.out.println(argsMap.get("verbose"));
+        Logger.setVerboseLevel(argsMap.containsKey("verbose") ? Integer.parseInt(argsMap.get("verbose")) : 0);
 
         launch(args);
     }

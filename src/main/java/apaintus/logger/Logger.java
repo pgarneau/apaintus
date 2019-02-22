@@ -1,5 +1,8 @@
 package apaintus.logger;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 public abstract class Logger {
     private static int verboseLevel;
 
@@ -12,8 +15,9 @@ public abstract class Logger {
 
     public void message(String msg) {
         if ((verboseLevel & loggerType.getLoggerType()) != 0) {
-            writeMessage(msg);
+            writeMessage(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME) + " " + msg + "\n");
         }
+
         if (next != null) {
             next.message(msg);
         }
@@ -21,7 +25,7 @@ public abstract class Logger {
 
     public Logger setNext(Logger next) {
         this.next = next;
-        return this;
+        return next;
     }
 
     public static void setVerboseLevel(int level) {

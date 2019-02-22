@@ -24,7 +24,7 @@ public class Invoker {
         undoStack.push(command);
         redoStack.clear();
         command.execute();
-        logger.message(command.getDescription());
+        log(command.getDescription());
         actionLogController.updateActionList();
     }
 
@@ -33,7 +33,7 @@ public class Invoker {
             Command command = undoStack.pop();
             command.undo();
             redoStack.push(command);
-            logger.message("Undo " + command.getDescription());
+            log("Undo " + command.getDescription());
             actionLogController.updateActionList();
         }
     }
@@ -43,7 +43,7 @@ public class Invoker {
             Command command = redoStack.pop();
             command.redo();
             undoStack.push(command);
-            logger.message("Redo" + command.getDescription());
+            log("Redo" + command.getDescription());
             actionLogController.updateActionList();
         }
     }
@@ -64,5 +64,9 @@ public class Invoker {
     
     public Stack<Command> getRedoStack(){
     	return redoStack;
+    }
+
+    private void log(String message) {
+        logger.message(message);
     }
 }

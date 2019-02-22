@@ -6,5 +6,6 @@
 build/
 out/
 bin/
+events/
 .scannerwork/
 config.properties
