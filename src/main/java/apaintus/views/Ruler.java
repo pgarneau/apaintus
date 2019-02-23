@@ -1,4 +1,4 @@
-package apaintus.uicomponents;
+package apaintus.views;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
