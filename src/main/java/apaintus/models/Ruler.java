@@ -30,13 +30,10 @@ public class Ruler {
         mouseY.prefWidthProperty().bind(y.widthProperty());
         mouseY.prefHeightProperty().bind(y.heightProperty());
 
-
-
         mouseX.setLayoutX(25.0);
         mouseY.setLayoutY(25.0);
 
         x.setPrefHeight(25.0);
-
         y.setPrefWidth(25.0);
 
         xLine.setStroke(Color.BLACK);

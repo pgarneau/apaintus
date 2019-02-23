@@ -255,14 +255,14 @@ public class CanvasController implements ChildController<Controller> {
 
     public void toggleSnapGrid() {
         if (snapGrid.isActive()) {
-            clearSnapGrid();
-            snapGrid.setActive(false);
+            clearSnapgrid();
+            snapGrid.toggle(false);
             ruler.toogleRulers(false);
             canvasHolder.setLayoutX(0);
             canvasHolder.setLayoutY(0);
         } else {
             drawSnapGrid();
-            snapGrid.setActive(true);
+            snapGrid.toggle(true);
             ruler.toogleRulers(true);
             canvasHolder.setLayoutX(35);
             canvasHolder.setLayoutY(35);

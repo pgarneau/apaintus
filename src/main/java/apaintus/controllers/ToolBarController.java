@@ -21,7 +21,6 @@ import java.util.List;
 public class ToolBarController implements ChildController<Controller> {
     @FXML
     private ToolBar toolBar;
-
     @FXML
     private Spinner<Double> strokeSize;
     @FXML
@@ -88,9 +87,9 @@ public class ToolBarController implements ChildController<Controller> {
         activeToolToggleGroup.add(smiley);
         activeToolToggleGroup.add(textBox);
 
-        ObservableList<Double> spacingValues = FXCollections.observableArrayList(10.0,20.0,40.0);
-        spacingSize.setItems(spacingValues);
-        spacingSize.setValue(spacingValues.get(0));
+        ObservableList<Double> gradationValues = FXCollections.observableArrayList(10.0,20.0,40.0);
+        spacingSize.setItems(gradationValues);
+        spacingSize.setValue(gradationValues.get(0));
         spacingSize.setEditable(false);
 
         select.setOnMouseClicked(event -> {

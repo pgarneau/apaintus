@@ -1,8 +1,6 @@
 package apaintus.controllers;
 
 import apaintus.models.commands.Invoker;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;

@@ -52,10 +52,10 @@ public class TestSnapGrid {
                 testCanvasHeight,
                 active);
 
-        test.setActive(true);
+        test.toggle(true);
         assertTrue(test.isActive());
 
-        test.setActive(false);
+        test.toggle(false);
         assertFalse(test.isActive());
     }
 
