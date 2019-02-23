@@ -43,7 +43,13 @@ public class SelectionBox extends Node {
 		return new SelectionBoxUpdateService(this);
 	}
 
-	public void add(Node node) {
+	@Override
+	public List<Node> getNodeList() {
+		return nodeList;
+	}
+
+	@Override
+	public void addNode(Node node) {
 		nodeList.add(node);
 	}
 
@@ -78,14 +84,6 @@ public class SelectionBox extends Node {
 			return true;
 
 		return false;
-	}
-
-	public List<Node> getNodeList() {
-		return nodeList;
-	}
-
-	public void clear() {
-		nodeList.clear();
 	}
 
 	public boolean contains(Node node) {

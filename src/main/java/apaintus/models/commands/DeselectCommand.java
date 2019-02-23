@@ -8,7 +8,7 @@ import java.util.Optional;
 public class DeselectCommand implements Command {
     private CanvasController canvasController;
     private Optional<Node> previousActiveNode;
-    private String description = "hello";
+    private String description = "Deselected";
 
     public DeselectCommand(CanvasController canvasController, Node previousActiveNode) {
         this.canvasController = canvasController;

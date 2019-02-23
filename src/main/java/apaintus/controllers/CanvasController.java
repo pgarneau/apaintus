@@ -10,7 +10,6 @@ import apaintus.models.Point;
 import apaintus.models.nodes.SelectionBox;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.CanvasService;
-import apaintus.services.update.UpdateService;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -46,6 +45,7 @@ public class CanvasController implements ChildController<Controller> {
     private Point lastMouseClickPosition;
     private Node activeNode;
     private Node tempActiveNode;
+    private SelectionBox selectionBox;
     private List<Node> nodeList = new ArrayList<>();
     private Image baseImage;
     private boolean canvasChanged;
@@ -70,7 +70,12 @@ public class CanvasController implements ChildController<Controller> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
             activeTool = toolBarController.getActiveTool();
 
-            tempActiveNode = canvasService.createNode(activeTool, event, getCanvasDimension());
+            if (activeTool == ActiveTool.SELECT) {
+                selectionBox = canvasService.createNode(activeTool, event, getCanvasDimension());
+                tempActiveNode = selectionBox;
+            } else {
+                tempActiveNode = canvasService.createNode(activeTool, event, getCanvasDimension());
+            }
 
             deselectCommand = new DeselectCommand(this, activeNode);
             deselectCommand.execute();
@@ -186,7 +191,7 @@ public class CanvasController implements ChildController<Controller> {
 
         for (Node node : nodeList) {
             if (selectionBox.contains(node)) {
-                selectionBox.add(node);
+                selectionBox.addNode(node);
             }
         }
 
@@ -319,7 +324,7 @@ public class CanvasController implements ChildController<Controller> {
         @Override
         public void handle(ActionEvent event) {
             if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
-                ((SelectionBox) activeNode).clear();
+                activeNode.getNodeList().clear();
                 nodeList.remove(activeNode);
                 activeNode.setSelected(false);
                 attributeController.resetAttributes();

@@ -33,11 +33,6 @@ public abstract class Shape extends Node {
         );
     }
 
-    @Override
-    public List<Node> getNodeList() {
-        return null;
-    }
-
     public String getFillColor() {
         return fillColor;
     }

@@ -1,13 +1,13 @@
 package apaintus.models.snapgrid;
 
 import apaintus.models.Point;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class SnapGrid {
-	private double size = 0;
-	private double drawingAreaWidth = 0;
-	private double drawingAreaHeight = 0;
+	private double size;
+	private double drawingAreaWidth;
+	private double drawingAreaHeight;
 
 	private boolean isActive;
 

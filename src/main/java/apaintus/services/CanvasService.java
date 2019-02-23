@@ -1,13 +1,13 @@
 package apaintus.services;
 
 import apaintus.controllers.ToolBarController;
+import apaintus.models.Point;
 import apaintus.models.ToolBarAttributes;
 import apaintus.models.nodes.BoundingBox;
 import apaintus.models.nodes.Node;
 import apaintus.models.nodes.NodeFactory;
 import apaintus.models.nodes.shapes.ShapeFactory;
 import apaintus.models.snapgrid.SnapGrid;
-import apaintus.models.Point;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.draw.DrawService;
 import apaintus.services.draw.SnapGridDrawService;
@@ -27,7 +27,7 @@ public class CanvasService {
         this.toolBarController = toolBarController;
     }
 
-    public Node createNode(ActiveTool activeTool, MouseEvent mouseEvent, double[] canvasDimensions) {
+    public <T extends Node> T createNode(ActiveTool activeTool, MouseEvent mouseEvent, double[] canvasDimensions) {
         Point mousePosition = getMousePosition(mouseEvent);
 
         if (activeTool == ActiveTool.SELECT) {
@@ -38,7 +38,7 @@ public class CanvasService {
                     canvasDimensions
             );
         } else {
-            return ShapeFactory.createShape(
+            return (T) ShapeFactory.createShape(
                     activeTool,
                     mousePosition,
                     mousePosition,
@@ -51,7 +51,6 @@ public class CanvasService {
                     canvasDimensions
             );
         }
-
     }
 
     public void updateNode(Node node, MouseEvent mouseEvent, Point lastMouseClickPosition, double[] canvasDimensions, SnapGrid snapGrid) {

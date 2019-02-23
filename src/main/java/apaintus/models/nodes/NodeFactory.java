@@ -16,13 +16,13 @@ public class NodeFactory {
 	private NodeFactory() {
 	}
 
-	public static Node createNode(ActiveTool activeTool, Point mousePosition, Point lastMouseClickPosition, double[] canvasDimensions) {
+	public static <T extends Node> T createNode(ActiveTool activeTool, Point mousePosition, Point lastMouseClickPosition, double[] canvasDimensions) {
 		switch (activeTool) {
 			case SELECT:
 				dimensions = FactoryUtil.computeDimensions(mousePosition, lastMouseClickPosition, canvasDimensions, SelectionBox.STROKE_SIZE);
 				coordinates = FactoryUtil.computeShapeCoordinates(mousePosition, lastMouseClickPosition, SelectionBox.STROKE_SIZE);
 
-				return new SelectionBox(
+				return (T) new SelectionBox(
 						NodeAttributes
 								.builder()
 								.withCoordinates(coordinates)
