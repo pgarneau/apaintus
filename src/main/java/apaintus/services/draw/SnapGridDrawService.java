@@ -19,12 +19,12 @@ public class SnapGridDrawService implements DrawService {
         context.beginPath();
         context.moveTo(0, 0);
 
-        for (int i = 0; i < (context.getCanvas().getHeight()); i += snapGrid.getSize()) {
+        for (int i = 0; i < (context.getCanvas().getHeight()); i += snapGrid.getGradation()) {
             context.moveTo(0, i);
             context.lineTo(context.getCanvas().getWidth() + i, i);
         }
 
-        for (int i = 0; i < (context.getCanvas().getWidth()); i += snapGrid.getSize()) {
+        for (int i = 0; i < (context.getCanvas().getWidth()); i += snapGrid.getGradation()) {
             context.moveTo(i, 0);
             context.lineTo(i, context.getCanvas().getHeight() + i);
         }

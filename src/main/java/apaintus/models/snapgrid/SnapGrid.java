@@ -11,49 +11,39 @@ public class SnapGrid {
 	
 	private boolean isActive;
 	
-	private ArrayList<Point> snapgridPoints= new ArrayList<>();
+	private ArrayList<Point> snapGridPoints= new ArrayList<>();
 	
-	public SnapGrid(double drawingAreaWidth, double drawingAreaHeight, boolean active){
+	public SnapGrid(double drawingAreaWidth, double drawingAreaHeight){
 		this.drawingAreaWidth = drawingAreaWidth;
 		this.drawingAreaHeight = drawingAreaHeight;
-		this.isActive = active;
 	}
 
 	private void computeAllPointInGrid() {
 		snapGridPoints.clear();
 		for (int y = 0; y <= drawingAreaHeight; y+=(gradation)) {
 			for (int x = 0; x <= drawingAreaWidth; x+=(gradation)) {
-				snapgridPoints.add(new Point(x,y));
+				snapGridPoints.add(new Point(x,y));
 			}
 		}
 	}
 
-	public double getSize() {
-		return size;
+	public double getGradation() {
+		return gradation;
 	}
 
-	public void setSize(double size) {
-		this.size = size;
+	public void setGradation(double size) {
+		this.gradation = size;
+		computeAllPointInGrid();
 	}
 
 	public boolean isActive() {
 		return isActive;
 	}
 
-	public void setActive(boolean active) {
+	public void toggle(boolean active) {
 		isActive = active;
 	}
 
-	public void setGradation(Double newValue) {
-		this.gradation = newValue;
-		computeAllPointInGrid();
-	}
-
-	public double getGradation() {
-		return gradation;
-	}
-	
-	
 	public ArrayList<Point> getSnapGridPoints() {
 		return snapGridPoints;
 	}

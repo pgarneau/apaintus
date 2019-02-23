@@ -18,7 +18,7 @@ public class Ruler {
     private double gradation;
     private boolean isActive = false;
 
-    public Ruler(Pane x, Pane y, boolean active) {
+    public Ruler(Pane x, Pane y) {
         this.x = x;
         this.y = y;
 
@@ -42,17 +42,17 @@ public class Ruler {
         x.getChildren().add(mouseX);
         y.getChildren().add(mouseY);
 
-        isActive = active;
-
         x.widthProperty().addListener((observable, oldValue, newValue) -> {
             resizeUpdate();
         });
         y.heightProperty().addListener((observable, oldValue, newValue) -> {
             resizeUpdate();
         });
+
+        togleRulers(false); //We do not want to show at the creation.
     }
 
-    public void toogleRulers(boolean active) {
+    public void togleRulers(boolean active) {
         this.isActive = active;
         if(active){
             mouseX.setStyle("-fx-background-color: white; -fx-border-color: black");
@@ -150,7 +150,7 @@ public class Ruler {
         }
     }
 
-    public void setGrading(Double newValue) {
+    public void setGradation(Double newValue) {
         gradation = newValue;
     }
 

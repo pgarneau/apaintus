@@ -42,7 +42,7 @@ public class ToolBarController implements ChildController<Controller> {
     @FXML
     private ToggleButton snapGrid;
     @FXML
-    private ComboBox<Double> spacingSize;
+    private ComboBox<Double> gridGradation;
     @FXML
     private Button alignLeft;
     @FXML
@@ -72,7 +72,7 @@ public class ToolBarController implements ChildController<Controller> {
         alignTop.setOnAction(canvasController.new AlignmentActionEvent(Alignment.TOP));
 
         createListeners();
-        snapGridSize.valueProperty().addListener(snapGridSizeListener);
+        gridGradation.valueProperty().addListener(gridSpacingListener);
     }
 
     @Override
@@ -88,9 +88,9 @@ public class ToolBarController implements ChildController<Controller> {
         activeToolToggleGroup.add(textBox);
 
         ObservableList<Double> gradationValues = FXCollections.observableArrayList(10.0,20.0,40.0);
-        spacingSize.setItems(gradationValues);
-        spacingSize.setValue(gradationValues.get(0));
-        spacingSize.setEditable(false);
+        gridGradation.setItems(gradationValues);
+        gridGradation.setValue(gradationValues.get(0));
+        gridGradation.setEditable(false);
 
         select.setOnMouseClicked(event -> {
             toolBarService.toggle(select, activeToolToggleGroup);
@@ -122,7 +122,10 @@ public class ToolBarController implements ChildController<Controller> {
             activeTool = ActiveTool.TEXT_BOX;
         });
 
-        snapGrid.setOnMouseClicked(event -> canvasController.toggleSnapGrid());
+        snapGrid.setOnMouseClicked(event -> {
+            canvasController.toggleSnapGrid(snapGrid.isSelected());
+            applicationPreferences.setPreference(Preference.SNAP_GRID, String.valueOf(snapGrid.isSelected()));
+        });
 
         strokeSize.setOnMouseClicked(event ->
                 applicationPreferences.setPreference(Preference.STROKE_SIZE, strokeSize.getValue().toString()));
@@ -138,7 +141,7 @@ public class ToolBarController implements ChildController<Controller> {
         select.setSelected(true);
         activeTool = ActiveTool.SELECT;
 
-        snapGrid.setSelected(false);
+        snapGrid.setSelected(Boolean.valueOf(applicationPreferences.getInstance().getPreference(Preference.SNAP_GRID)));
     }
 
     private void createListeners() {
@@ -204,6 +207,8 @@ public class ToolBarController implements ChildController<Controller> {
         fillColor.setValue(Color.valueOf(color));
     }
 
+    private void setGridGradation(String gradation) {gridGradation.setValue(Double.parseDouble(gradation));}
+
     public ActiveTool getActiveTool() {
         return activeTool;
     }
@@ -215,13 +220,14 @@ public class ToolBarController implements ChildController<Controller> {
     }
 
     public Double getSnapGridSize() {
-        return snapGridSize.getValue();
+        return gridGradation.getValue();
     }
 
     public void setPreferences(ApplicationPreferences applicationPreferences) {
         String preferenceStrokeSize = applicationPreferences.getPreference(Preference.STROKE_SIZE);
         String preferenceStrokeColor = applicationPreferences.getPreference(Preference.STROKE_COLOR);
         String preferenceFillColor = applicationPreferences.getPreference(Preference.FILL_COLOR);
+        String preferenceSnapGridGradation = applicationPreferences.getPreference(Preference.SNAP_GRID_GRADATION);
 
         if (preferenceStrokeSize != null) {
             setStrokeSize(Double.valueOf(preferenceStrokeSize));
@@ -233,6 +239,10 @@ public class ToolBarController implements ChildController<Controller> {
 
         if (preferenceFillColor != null) {
             setFillColor(preferenceFillColor);
+        }
+
+        if(preferenceSnapGridGradation != null){
+            setGridGradation(preferenceSnapGridGradation);
         }
     }
 }

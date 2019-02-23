@@ -68,19 +68,32 @@ public class CanvasController implements ChildController<Controller> {
         this.attributeController = controller.getAttributeController();
         this.figureLogController = controller.getFigureLogController();
         this.canvasService = new CanvasService(this.toolBarController);
-        this.updateService = new UpdateService(this.attributeController, this.toolBarController);
         invoker = controller.getInvoker();
+
+        toggleSnapGrid(snapGrid.isActive());
     }
 
     @Override
     public void initialize() {
-        boolean snapGridActive = Boolean.getBoolean(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID));
-        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight(), snapGridActive);
-        ruler = new Ruler(xRule, yRule, snapGridActive);
-        ruler.setGrading(10.0);
+        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight());
+        ruler = new Ruler(xRule, yRule);
+        try {
+            boolean snapGridActive = Boolean.getBoolean(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID));
+            snapGrid.toggle(snapGridActive);
+            double gradation =  Double.parseDouble(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID_GRADATION));
+            snapGrid.setGradation(gradation);
+            ruler.setGradation(gradation);
+        } catch (NumberFormatException e) {
+            snapGrid.setGradation(10.0);
+            ruler.setGradation(10.0);
+            //TODO: link logger here.
+        }catch (NullPointerException e){
+            snapGrid.setGradation(10.0);
+            ruler.setGradation(10.0);
+        }
 
         root.setOnMouseMoved(event -> {
-            ruler.update(event.getX(),event.getY());
+            ruler.update(event.getX(), event.getY());
         });
 
         canvas.setOnMousePressed(event -> {
@@ -249,22 +262,22 @@ public class CanvasController implements ChildController<Controller> {
         canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
     }
 
-    public void clearSnapgrid() {
+    public void clearSnapGrid() {
         ruler.clear();
         snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
     }
 
-    public void toggleSnapGrid() {
-        if (snapGrid.isActive()) {
-            clearSnapgrid();
+    public void toggleSnapGrid(boolean toggle) {
+        if (!toggle) {
+            clearSnapGrid();
             snapGrid.toggle(false);
-            ruler.toogleRulers(false);
+            ruler.togleRulers(false);
             canvasHolder.setLayoutX(0);
             canvasHolder.setLayoutY(0);
         } else {
             drawSnapGrid();
             snapGrid.toggle(true);
-            ruler.toogleRulers(true);
+            ruler.togleRulers(true);
             canvasHolder.setLayoutX(35);
             canvasHolder.setLayoutY(35);
         }
@@ -343,11 +356,12 @@ public class CanvasController implements ChildController<Controller> {
         @Override
         public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
             snapGrid.setGradation(newValue);
-            ruler.setGrading(newValue);
+            ruler.setGradation(newValue);
             if (snapGrid.isActive()) {
                 clearSnapGrid();
                 drawSnapGrid();
             }
+            ApplicationPreferences.getInstance().setPreference(Preference.SNAP_GRID_GRADATION,newValue.toString());
         }
     }
 
@@ -388,7 +402,7 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void handle(ActionEvent event) {
-        	if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
+            if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
                 ((SelectionBox) activeNode).alignShapes(alignment);
                 redrawCanvas();
             }

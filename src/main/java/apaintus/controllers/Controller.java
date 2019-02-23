@@ -38,8 +38,6 @@ public class Controller {
 
         menuController.bindTo(mainPane);
         toolBarController.bindTo(mainPane);
-
-        canvasController.activateSnapGrid();
     }
 
     public void injectPrimaryStage(Stage stage) {

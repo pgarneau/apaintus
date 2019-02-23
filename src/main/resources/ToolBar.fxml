@@ -49,7 +49,7 @@
                                         <ImageView image="$gridBtn"/>
                                     </graphic>
                                 </ToggleButton>
-                                <ComboBox fx:id="spacingSize" editable="true" prefHeight="25.0" prefWidth="65.0"/>
+                                <ComboBox fx:id="gridGradation" editable="true" prefHeight="25.0" prefWidth="65.0"/>
                             </children>
                         </HBox>
                     </children>
