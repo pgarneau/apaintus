@@ -1,11 +1,11 @@
 package apaintus.services.draw.line;
 
-import apaintus.models.shapes.Line;
-import apaintus.services.draw.DrawService;
+import apaintus.models.nodes.shapes.Line;
+import apaintus.services.draw.ShapeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-public class LineDrawService extends DrawService {
+public class LineDrawService extends ShapeDrawService {
     Line line;
 
     public LineDrawService(Line line) {

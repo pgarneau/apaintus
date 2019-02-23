@@ -1,30 +1,29 @@
 package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
-import apaintus.models.shapes.DrawableShape;
+import apaintus.models.nodes.Node;
 
 import java.util.List;
 
-public class DrawShapeCommand implements Command {
+public class DrawNodeCommand implements Command {
     private String description;
     private CanvasController canvasController;
-    private List<DrawableShape> drawableShapeList;
-    private DrawableShape shape;
+    private List<Node> nodeList;
+    private Node node;
     private SelectCommand selectCommand;
 
-    public DrawShapeCommand(CanvasController canvasController, DrawableShape shape, SelectCommand selectCommand) {
+    public DrawNodeCommand(CanvasController canvasController, Node node, SelectCommand selectCommand) {
         this.canvasController = canvasController;
-        this.shape = shape;
-
-        description = "Draw " + shape.getShapeType().toString();
-        drawableShapeList = this.canvasController.getDrawnShapes();
+        this.node = node;
         this.selectCommand = selectCommand;
+        nodeList = this.canvasController.getNodeList();
+        description = "Draw " + node.getNodeType().toString();
     }
 
     @Override
     public void execute() {
         selectCommand.execute();
-        drawableShapeList.add(shape);
+        nodeList.add(node);
         canvasController.saveDrawLayer();
         canvasController.redrawCanvas();
     }
@@ -32,14 +31,14 @@ public class DrawShapeCommand implements Command {
     @Override
     public void undo() {
         selectCommand.undo();
-        drawableShapeList.remove(shape);
+        nodeList.remove(node);
         canvasController.redrawCanvas();
     }
 
     @Override
     public void redo() {
         selectCommand.redo();
-        drawableShapeList.add(shape);
+        nodeList.add(node);
         canvasController.redrawCanvas();
     }
 

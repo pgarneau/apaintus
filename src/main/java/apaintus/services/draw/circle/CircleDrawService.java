@@ -1,11 +1,11 @@
 package apaintus.services.draw.circle;
 
-import apaintus.models.shapes.Circle;
-import apaintus.services.draw.DrawService;
+import apaintus.models.nodes.shapes.Circle;
+import apaintus.services.draw.ShapeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-public class CircleDrawService extends DrawService {
+public class CircleDrawService extends ShapeDrawService {
     Circle circle;
 
     public CircleDrawService(Circle circle) {
@@ -19,7 +19,6 @@ public class CircleDrawService extends DrawService {
         double height = circle.getHeight();
 
         super.draw(context);
-
 
         context.setFill(Paint.valueOf(circle.getFillColor()));
         context.strokeOval(coordinates.getX(), coordinates.getY(), width, height);

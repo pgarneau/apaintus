@@ -1,6 +1,7 @@
 package apaintus.models.shapes;
 
 import apaintus.models.Point;
+import apaintus.models.nodes.shapes.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -126,6 +127,6 @@ public class TestShapes {
         when(mockedShapeAttributes.getStrokeSize()).thenReturn(6.0);
 
         Rectangle testRect = new Rectangle(mockedShapeAttributes);
-        assertNotNull("Shapes should always have a DrawService", testRect.getDrawService());
+        assertNotNull("Shapes should always have a ShapeDrawService", testRect.getDrawService());
     }
 }

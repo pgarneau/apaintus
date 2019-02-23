@@ -48,7 +48,7 @@
                                         <ImageView image="$gridBtn"/>
                                     </graphic>
                                 </ToggleButton>
-                                <Spinner fx:id="spacingSize" amountToStepBy="1.0" editable="true" initialValue="5.0"
+                                <Spinner fx:id="snapGridSize" amountToStepBy="1.0" editable="true" initialValue="5.0"
                                          max="10" min="1.0" prefHeight="25.0" prefWidth="60.0"/>
                             </children>
                         </HBox>

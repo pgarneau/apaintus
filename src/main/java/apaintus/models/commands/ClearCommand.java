@@ -1,7 +1,7 @@
 package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
-import apaintus.models.shapes.DrawableShape;
+import apaintus.models.nodes.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,13 @@ public class ClearCommand implements Command {
     private static final String DESCRIPTION = "Clear Canvas";
 
     private CanvasController canvasController;
-    private List<DrawableShape> drawableShapeList;
-    private List<DrawableShape> oldDrawableShapeList;
+    private List<Node> nodeList;
+    private List<Node> oldNodeList;
 
     public ClearCommand(CanvasController canvasController) {
         this.canvasController = canvasController;
-        drawableShapeList = canvasController.getDrawnShapes();
-        oldDrawableShapeList = new ArrayList<>(drawableShapeList);
+        nodeList = canvasController.getNodeList();
+        oldNodeList = new ArrayList<>(nodeList);
     }
 
     @Override
@@ -26,8 +26,8 @@ public class ClearCommand implements Command {
 
     @Override
     public void undo() {
-        drawableShapeList.addAll(oldDrawableShapeList);
-        canvasController.setDrawnShapes(drawableShapeList);
+        nodeList.addAll(oldNodeList);
+        canvasController.setNodeList(nodeList);
         canvasController.redrawCanvas();
     }
 

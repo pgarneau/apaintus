@@ -2,7 +2,6 @@ package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
 import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.Shape;
 import apaintus.models.shapes.ShapeType;
 import org.junit.jupiter.api.Test;
 

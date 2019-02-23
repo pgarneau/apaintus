@@ -5,7 +5,7 @@ import apaintus.models.commands.ClearCommand;
 import apaintus.models.commands.DrawImageCommand;
 import apaintus.models.commands.Invoker;
 import apaintus.models.commands.LoadPngCommand;
-import apaintus.models.shapes.DrawableShape;
+import apaintus.models.nodes.Node;
 import apaintus.services.MenuService;
 import apaintus.services.file.FileService;
 import apaintus.services.file.png.PngFileService;
@@ -23,7 +23,7 @@ public class MenuController implements ChildController<Controller> {
     private CanvasController canvasController;
 
     private FileService<Image, Image> pngFileService;
-    private FileService<List<DrawableShape>, List<DrawableShape>> xmlFileService;
+    private FileService<List<Node>, List<Node>> xmlFileService;
     private MenuService menuService;
 
     private Invoker invoker;
@@ -86,7 +86,7 @@ public class MenuController implements ChildController<Controller> {
     }
 
     public void exportXml() {
-        xmlFileService.save(canvasController.getDrawnShapes());
+        xmlFileService.save(canvasController.getNodeList());
         canvasController.setCanvasChanged(false);
     }
 
@@ -96,7 +96,7 @@ public class MenuController implements ChildController<Controller> {
         }
 
         canvasController.clearCanvas();
-        canvasController.setDrawnShapes(xmlFileService.load());
+        canvasController.setNodeList(xmlFileService.load());
         canvasController.redrawCanvas();
         invoker.clear();
     }

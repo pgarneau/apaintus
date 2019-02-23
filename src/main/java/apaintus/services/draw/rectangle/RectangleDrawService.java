@@ -1,11 +1,11 @@
 package apaintus.services.draw.rectangle;
 
-import apaintus.models.shapes.Rectangle;
-import apaintus.services.draw.DrawService;
+import apaintus.models.nodes.shapes.Rectangle;
+import apaintus.services.draw.ShapeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-public class RectangleDrawService extends DrawService {
+public class RectangleDrawService extends ShapeDrawService {
     private Rectangle rectangle;
 
     public RectangleDrawService(Rectangle rectangle) {

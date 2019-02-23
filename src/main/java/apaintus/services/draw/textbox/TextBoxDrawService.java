@@ -1,12 +1,12 @@
 package apaintus.services.draw.textbox;
 
-import apaintus.models.shapes.TextBox;
-import apaintus.services.draw.DrawService;
+import apaintus.models.nodes.shapes.TextBox;
+import apaintus.services.draw.ShapeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
-public class TextBoxDrawService extends DrawService {
+public class TextBoxDrawService extends ShapeDrawService {
     private TextBox textbox;
 
     public TextBoxDrawService(TextBox textbox) {
@@ -19,10 +19,7 @@ public class TextBoxDrawService extends DrawService {
         
         double fontSize = textbox.getStrokeSize();
 
-        if (textbox.getFillColor().compareTo("0x00000000") == 0)
-            textbox.setFillColor("0x000000ff");
-        
-        context.setFill(Paint.valueOf(textbox.getFillColor()));
+        context.setFill(Paint.valueOf(textbox.getStrokeColor()));
         context.setFont(Font.font ("Verdana", fontSize));
         context.fillText(textbox.getText(), coordinates.getX(), coordinates.getY() + fontSize, textbox.getWidth());
         context.restore();

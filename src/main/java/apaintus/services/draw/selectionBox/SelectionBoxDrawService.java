@@ -1,16 +1,18 @@
 package apaintus.services.draw.selectionBox;
 
-import apaintus.models.shapes.SelectionBox;
-import apaintus.services.draw.DrawService;
+import apaintus.models.nodes.SelectionBox;
+import apaintus.services.draw.NodeDrawService;
 import javafx.scene.canvas.GraphicsContext;
 
-public class SelectionBoxDrawService extends DrawService {
-    public SelectionBoxDrawService(SelectionBox selectionBox) {
-        super(selectionBox);
-    }
+public class SelectionBoxDrawService extends NodeDrawService {
+	SelectionBox selectionBox;
 
-    @Override
-    public void draw(GraphicsContext context) {
-        return;
-    }
+	public SelectionBoxDrawService(SelectionBox selectionBox) {
+		super(selectionBox);
+		this.selectionBox = selectionBox;
+	}
+
+	public void draw(GraphicsContext context) {
+		super.draw(context);
+	}
 }

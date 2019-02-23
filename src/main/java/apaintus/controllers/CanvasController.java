@@ -2,15 +2,14 @@ package apaintus.controllers;
 
 import apaintus.models.Alignment;
 import apaintus.models.commands.*;
+import apaintus.models.nodes.Node;
+import apaintus.models.nodes.NodeType;
 import apaintus.models.snapgrid.SnapGrid;
 import apaintus.models.Attribute;
 import apaintus.models.Point;
-import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.SelectionBox;
-import apaintus.models.shapes.ShapeType;
+import apaintus.models.nodes.SelectionBox;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.CanvasService;
-import apaintus.services.update.UpdateService;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -42,13 +41,12 @@ public class CanvasController implements ChildController<Controller> {
     private FigureLogController figureLogController;
 
     private CanvasService canvasService;
-    private UpdateService updateService;
 
     private Point lastMouseClickPosition;
-    private DrawableShape tempActiveShape;
-    private DrawableShape activeShape;
+    private Node activeNode;
+    private Node tempActiveNode;
     private SelectionBox selectionBox;
-    private List<DrawableShape> drawnShapes = new ArrayList<>();
+    private List<Node> nodeList = new ArrayList<>();
     private Image baseImage;
     private boolean canvasChanged;
     private ActiveTool activeTool;
@@ -61,9 +59,8 @@ public class CanvasController implements ChildController<Controller> {
         this.attributeController = controller.getAttributeController();
         this.figureLogController = controller.getFigureLogController();
         this.canvasService = new CanvasService(this.toolBarController);
-        this.updateService = new UpdateService(this.attributeController, this.toolBarController);
 
-        snapGrid = new SnapGrid(toolBarController.getGridSpacing(), canvas.getWidth(), canvas.getHeight(), false);
+        snapGrid = new SnapGrid(toolBarController.getSnapGridSize(), canvas.getWidth(), canvas.getHeight(), false);
         invoker = controller.getInvoker();
     }
 
@@ -73,13 +70,15 @@ public class CanvasController implements ChildController<Controller> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
             activeTool = toolBarController.getActiveTool();
 
-            tempActiveShape = canvasService.createShape(activeTool, event, getCanvasDimension());
-            deselectCommand = new DeselectCommand(this, activeShape);
-            deselectCommand.execute();
-
             if (activeTool == ActiveTool.SELECT) {
-                selectionBox = (SelectionBox) tempActiveShape;
+                selectionBox = canvasService.createNode(activeTool, event, getCanvasDimension());
+                tempActiveNode = selectionBox;
+            } else {
+                tempActiveNode = canvasService.createNode(activeTool, event, getCanvasDimension());
             }
+
+            deselectCommand = new DeselectCommand(this, activeNode);
+            deselectCommand.execute();
         });
 
         canvas.setOnMouseReleased(event -> {
@@ -87,27 +86,27 @@ public class CanvasController implements ChildController<Controller> {
 
             if (event.getX() == lastMouseClickPosition.getX() && event.getY() == lastMouseClickPosition.getY()) {
                 if (activeTool == ActiveTool.SELECT) {
-                    ListIterator<DrawableShape> iterator = drawnShapes.listIterator(drawnShapes.size());
+                    ListIterator<Node> iterator = nodeList.listIterator(nodeList.size());
 
                     while (iterator.hasPrevious()) {
-                        DrawableShape shape = iterator.previous();
+                        Node node = iterator.previous();
 
-                        if (shape.contains(lastMouseClickPosition)) {
-                            invoker.execute(new SelectCommand(this, activeShape, shape));
+                        if (node.getBoundingBox().contains(lastMouseClickPosition)) {
+                            invoker.execute(new SelectCommand(this, activeNode, node));
 
                             return;
                         }
                     }
 
-                    if (activeShape != null) {
-                        invoker.execute(new DeselectCommand(this, activeShape));
+                    if (activeNode != null) {
+                        invoker.execute(new DeselectCommand(this, activeNode));
                     }
                 }
             } else {
                 if (activeTool == ActiveTool.SELECT) {
-                    saveSelectionBox();
+                    saveSelectionBox((SelectionBox) tempActiveNode);
                 } else {
-                    invoker.execute(new DrawShapeCommand(this, tempActiveShape, new SelectCommand(this, activeShape, tempActiveShape)));
+                    invoker.execute(new DrawNodeCommand(this, tempActiveNode, new SelectCommand(this, activeNode, tempActiveNode)));
                 }
             }
 
@@ -115,10 +114,10 @@ public class CanvasController implements ChildController<Controller> {
         });
 
         canvas.setOnMouseDragged(event -> {
-            canvasService.updateShape(tempActiveShape, event, lastMouseClickPosition, getCanvasDimension(), snapGrid);
-            attributeController.update(tempActiveShape);
+            canvasService.updateNode(tempActiveNode, event, lastMouseClickPosition, getCanvasDimension(), snapGrid);
+            attributeController.update(tempActiveNode);
             canvasService.clear(drawLayer.getGraphicsContext2D());
-            canvasService.drawShape(drawLayer.getGraphicsContext2D(), tempActiveShape);
+            canvasService.drawNode(drawLayer.getGraphicsContext2D(), tempActiveNode);
         });
     }
 
@@ -129,11 +128,12 @@ public class CanvasController implements ChildController<Controller> {
             drawImage(baseImage);
         }
 
-        for (DrawableShape shape : drawnShapes) {
-            canvasService.drawShape(canvas.getGraphicsContext2D(), shape);
+        for (Node node : nodeList) {
+            canvasService.drawNode(canvas.getGraphicsContext2D(), node);
         }
-        figureLogController.updateFigureList(drawnShapes);
-        figureLogController.selectFigureListItem(activeShape);
+
+        figureLogController.updateFigureList(nodeList);
+        figureLogController.selectFigureListItem(activeNode);
     }
 
     public void drawImage(Image image) {
@@ -142,18 +142,18 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public void clearCanvas() {
-        drawnShapes.clear();
-        figureLogController.updateFigureList(drawnShapes);
+        nodeList.clear();
+        figureLogController.updateFigureList(nodeList);
         canvasService.clear(drawLayer.getGraphicsContext2D());
         canvasService.clear(canvas.getGraphicsContext2D());
     }
 
-    public List<DrawableShape> getDrawnShapes() {
-        return drawnShapes;
+    public List<Node> getNodeList() {
+        return nodeList;
     }
 
-    public void setDrawnShapes(List<DrawableShape> drawnShapes) {
-        this.drawnShapes = drawnShapes;
+    public void setNodeList(List<Node> nodeList) {
+        this.nodeList = nodeList;
     }
 
     public boolean isCanvasChanged() {
@@ -162,10 +162,10 @@ public class CanvasController implements ChildController<Controller> {
 
     public Image getCanvasImage() {
         // Remove the bounding box around the selected shape when saving canvas to image
-        activeShape.setSelected(false);
+        activeNode.setSelected(false);
         redrawCanvas();
         Image image = canvasService.convertCanvasToImage(canvas);
-        activeShape.setSelected(true);
+        activeNode.setSelected(true);
         redrawCanvas();
 
         return image;
@@ -180,43 +180,42 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public void saveDrawLayer() {
-        if (activeShape != null) {
+        if (activeNode != null) {
             canvasService.saveState(canvas.getGraphicsContext2D(), canvasService.convertCanvasToImage(drawLayer));
             canvasService.clear(drawLayer.getGraphicsContext2D());
         }
     }
 
-    private void saveSelectionBox() {
+    private void saveSelectionBox(SelectionBox selectionBox) {
         canvasService.clear(drawLayer.getGraphicsContext2D());
 
-        for (DrawableShape shape : drawnShapes) {
-            if (selectionBox.contains(shape)) {
-                selectionBox.add(shape);
+        for (Node node : nodeList) {
+            if (selectionBox.contains(node)) {
+                selectionBox.addNode(node);
             }
         }
 
-        if (selectionBox.isEmpty()) {
+        if (selectionBox.getNodeList().isEmpty()) {
             return;
         }
 
         selectionBox.resize();
         selectionBox.optimize();
 
-        if (selectionBox.getSize() == 1) {
-            invoker.execute(new SelectCommand(this, activeShape, selectionBox.getShape(0)));
+        if (selectionBox.getNodeList().size() == 1) {
+            invoker.execute(new SelectCommand(this, activeNode, selectionBox.getNodeList().get(0)));
             return;
         }
 
-        for (DrawableShape shape : drawnShapes) {
-            if (shape.getShapeType() == ShapeType.SELECTION_BOX) {
-                if (selectionBox.isDuplicate((SelectionBox) shape)) {
-                    invoker.execute(new SelectCommand(this, activeShape, shape));
-                    return;
+        for (Node node : nodeList) {
+            if (node.getNodeType() == NodeType.SELECTION_BOX) {
+                if (selectionBox.isDuplicate((SelectionBox) node)) {
+                    invoker.execute(new SelectCommand(this, activeNode, node));
                 }
             }
         }
 
-        invoker.execute(new DrawShapeCommand(this, selectionBox, new SelectCommand(this, activeShape, selectionBox)));
+        invoker.execute(new DrawNodeCommand(this, selectionBox, new SelectCommand(this, activeNode, selectionBox)));
     }
 
     public double[] getCanvasDimension() {
@@ -231,13 +230,13 @@ public class CanvasController implements ChildController<Controller> {
         canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
     }
 
-    public void clearSnapgrid() {
+    public void clearSnapGrid() {
         snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
     }
 
-    public void activateSnapGrid() {
+    public void toggleSnapGrid() {
         if (snapGrid.isActive()) {
-            clearSnapgrid();
+            clearSnapGrid();
             snapGrid.setActive(false);
         } else {
             drawSnapGrid();
@@ -261,22 +260,22 @@ public class CanvasController implements ChildController<Controller> {
         return toolBarController;
     }
 
-    public DrawableShape getActiveShape() {
-        return activeShape;
+    public Node getActiveNode() {
+        return activeNode;
     }
 
-    public void setActiveShape(DrawableShape drawableShape) {
-        activeShape = drawableShape;
-        toolBarController.update(activeShape);
-        attributeController.update(activeShape);
+    public void setActiveNode(Node node) {
+        activeNode = node;
+        toolBarController.update(activeNode);
+        attributeController.update(activeNode);
         attributeController.setAttributeChangeListeners();
         toolBarController.setToolBarListeners();
     }
 
-    public void clearActiveShape() {
-        activeShape = null;
+    public void clearActiveNode() {
+        activeNode = null;
         attributeController.resetAttributes();
-        attributeController.unsetAttributeChangeListerners();
+        attributeController.unsetAttributeChangeListeners();
         toolBarController.unsetToolBarListeners();
     }
 
@@ -289,8 +288,8 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void changed(ObservableValue<? extends Color> observableValue, Color oldValue, Color newValue) {
-            if (activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
-                invoker.execute(new UpdateShapeCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
+            if (activeNode != null) {
+                invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, oldValue.toString(), newValue.toString()));
             }
         }
     }
@@ -304,23 +303,18 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-            if (activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
-                if (activeShape.getShapeType() == ShapeType.SELECTION_BOX) {
-                    ((SelectionBox) activeShape).update(attribute, newValue - oldValue);
-                    redrawCanvas();
-                } else {
-                    invoker.execute(new UpdateShapeCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
-                }
+            if (activeNode != null) {
+                invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, oldValue, newValue));
             }
         }
     }
 
-    public class GridSpinnerChangeListener implements ChangeListener<Double> {
+    public class SnapGridSizeListener implements ChangeListener<Double> {
         @Override
         public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-            snapGrid.setSpacing(newValue);
+            snapGrid.setSize(newValue);
             if (snapGrid.isActive()) {
-                clearSnapgrid();
+                clearSnapGrid();
                 drawSnapGrid();
             }
         }
@@ -329,10 +323,10 @@ public class CanvasController implements ChildController<Controller> {
     public class UngroupActionEvent implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-            if (activeShape.getShapeType() == ShapeType.SELECTION_BOX) {
-                ((SelectionBox) activeShape).clear();
-                drawnShapes.remove(activeShape);
-                activeShape.setSelected(false);
+            if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
+                activeNode.getNodeList().clear();
+                nodeList.remove(activeNode);
+                activeNode.setSelected(false);
                 attributeController.resetAttributes();
                 redrawCanvas();
             }
@@ -348,8 +342,8 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-            if (activeShape != null && activeShape.isSelected() && drawnShapes.contains(activeShape)) {
-                invoker.execute(new UpdateShapeCommand(CanvasController.this, activeShape, updateService.getAttributes(), attribute));
+            if (activeNode != null) {
+                invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, newValue, oldValue));
             }
         }
     }
@@ -363,8 +357,8 @@ public class CanvasController implements ChildController<Controller> {
 
         @Override
         public void handle(ActionEvent event) {
-            if (activeShape.getShapeType() == ShapeType.SELECTION_BOX) {
-                ((SelectionBox) activeShape).alignShapes(alignment);
+        	if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
+                ((SelectionBox) activeNode).alignShapes(alignment);
                 redrawCanvas();
             }
         }

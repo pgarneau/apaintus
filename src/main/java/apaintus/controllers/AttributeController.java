@@ -1,9 +1,9 @@
 package apaintus.controllers;
 
 import apaintus.models.Attribute;
-import apaintus.models.shapes.DrawableShape;
-import apaintus.models.shapes.ShapeType;
-import apaintus.models.shapes.ShapeAttributes;
+import apaintus.models.nodes.Node;
+import apaintus.models.nodes.NodeType;
+import apaintus.util.ReflectionUtil;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -54,6 +54,7 @@ public class AttributeController implements ChildController<Controller> {
         this.canvasController = controller.getCanvasController();
 
         ungroup.setOnAction(canvasController.new UngroupActionEvent());
+
         createListeners();
         fillListenerMap();
     }
@@ -111,7 +112,7 @@ public class AttributeController implements ChildController<Controller> {
         setListener(Attribute.TEXT);
     }
 
-    public void unsetAttributeChangeListerners() {
+    public void unsetAttributeChangeListeners() {
         unsetListener(Attribute.COORDINATE_X);
         unsetListener(Attribute.COORDINATE_Y);
         unsetListener(Attribute.ORIENTATION);
@@ -136,19 +137,21 @@ public class AttributeController implements ChildController<Controller> {
         return attributes.get(attribute).getValue().toString();
     }
 
-    public void setAttributes(ShapeAttributes shapeAttributes) {
-        shapeX.getValueFactory().setValue(shapeAttributes.getCoordinates().getX());
-        shapeY.getValueFactory().setValue(shapeAttributes.getCoordinates().getY());
-        shapeOrientation.getValueFactory().setValue(shapeAttributes.getOrientation());
-        shapeWidth.getValueFactory().setValue(shapeAttributes.getWidth());
-        shapeHeight.getValueFactory().setValue(shapeAttributes.getHeight());
-        text.setText(shapeAttributes.getText() == null ? "" : shapeAttributes.getText());
-    }
-
-    public void update(DrawableShape shape) {
+    public void update(Node node) {
         resetAttributes();
-        setAttributes(shape.getShapeAttributes());
-        ungroup.setVisible(shape.getShapeType() == ShapeType.SELECTION_BOX);
+
+        shapeX.getValueFactory().setValue(node.getCoordinates().getX());
+        shapeY.getValueFactory().setValue(node.getCoordinates().getY());
+        shapeWidth.getValueFactory().setValue(node.getWidth());
+        shapeHeight.getValueFactory().setValue(node.getHeight());
+        shapeOrientation.getValueFactory().setValue(node.getOrientation());
+
+        String tempText = ReflectionUtil.get(node, Attribute.TEXT.toString());
+
+        if (tempText != null)
+            text.setText(tempText);
+
+        ungroup.setVisible(node.getNodeType() == NodeType.SELECTION_BOX);
     }
 
     public void resetAttributes() {

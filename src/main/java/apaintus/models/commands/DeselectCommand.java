@@ -1,37 +1,37 @@
 package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
-import apaintus.models.shapes.DrawableShape;
+import apaintus.models.nodes.Node;
 
 import java.util.Optional;
 
 public class DeselectCommand implements Command {
     private CanvasController canvasController;
-    private Optional<DrawableShape> previousActiveShape;
-    private String description = "hello";
+    private Optional<Node> previousActiveNode;
+    private String description = "Deselected";
 
-    public DeselectCommand(CanvasController canvasController, DrawableShape previousActiveShape) {
+    public DeselectCommand(CanvasController canvasController, Node previousActiveNode) {
         this.canvasController = canvasController;
-        this.previousActiveShape = Optional.ofNullable(previousActiveShape);
+        this.previousActiveNode = Optional.ofNullable(previousActiveNode);
     }
 
     @Override
     public void execute() {
-        if (previousActiveShape.isPresent()) {
-            previousActiveShape.get().setSelected(false);
+        if (previousActiveNode.isPresent()) {
+            previousActiveNode.get().setSelected(false);
         }
 
-        canvasController.clearActiveShape();
+        canvasController.clearActiveNode();
         canvasController.redrawCanvas();
     }
 
     @Override
     public void undo() {
-        canvasController.clearActiveShape();
+        canvasController.clearActiveNode();
 
-        if (previousActiveShape.isPresent()) {
-            previousActiveShape.get().setSelected(true);
-            canvasController.setActiveShape(previousActiveShape.get());
+        if (previousActiveNode.isPresent()) {
+            previousActiveNode.get().setSelected(true);
+            canvasController.setActiveNode(previousActiveNode.get());
         }
 
         canvasController.redrawCanvas();

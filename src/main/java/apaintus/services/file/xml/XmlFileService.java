@@ -2,7 +2,7 @@ package apaintus.services.file.xml;
 
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Preference;
-import apaintus.models.shapes.DrawableShape;
+import apaintus.models.nodes.Node;
 import apaintus.models.xml.XmlContract;
 import apaintus.models.xml.XmlContractTranslator;
 import apaintus.services.file.FileService;
@@ -18,12 +18,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XmlFileService implements FileService<List<DrawableShape>, List<DrawableShape>> {
+public class XmlFileService implements FileService<List<Node>, List<Node>> {
 	private Path savePath;
 	private Path loadPath;
 
 	@Override
-	public void save(List<DrawableShape> shapeList) {
+	public void save(List<Node> nodeList) {
 		File file = getSaveFile();
 
 		if (file != null) {
@@ -33,7 +33,7 @@ public class XmlFileService implements FileService<List<DrawableShape>, List<Dra
 				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
 				// Wrapping our person data.
-				XmlContract xmlContract = XmlContractTranslator.translateTo(shapeList);
+				XmlContract xmlContract = XmlContractTranslator.translateTo(nodeList);
 
 				// Marshalling and saving XML to the file.
 				m.marshal(xmlContract, file);
@@ -49,7 +49,7 @@ public class XmlFileService implements FileService<List<DrawableShape>, List<Dra
 	}
 
 	@Override
-	public List<DrawableShape> load() {
+	public List<Node> load() {
 		File file = getLoadFile();
 
 		if (file != null) {

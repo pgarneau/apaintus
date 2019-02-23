@@ -4,9 +4,10 @@ import apaintus.models.Alignment;
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Attribute;
 import apaintus.models.Preference;
-import apaintus.models.shapes.DrawableShape;
+import apaintus.models.nodes.Node;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
+import apaintus.util.ReflectionUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -40,7 +41,7 @@ public class ToolBarController implements ChildController<Controller> {
     @FXML
     private ToggleButton snapGrid;
     @FXML
-    private Spinner<Double> spacingSize;
+    private Spinner<Double> snapGridSize;
     @FXML
     private Button alignLeft;
     @FXML
@@ -58,7 +59,7 @@ public class ToolBarController implements ChildController<Controller> {
     private CanvasController.ColorChangeListener fillColorListener;
     private CanvasController.ColorChangeListener strokeColorListener;
     private CanvasController.ShapeSpinnerChangeListener strokeSizeListener;
-    private CanvasController.GridSpinnerChangeListener gridSpacingListener;
+    private CanvasController.SnapGridSizeListener snapGridSizeListener;
 
     @Override
     public void injectParentController(Controller controller) {
@@ -70,7 +71,7 @@ public class ToolBarController implements ChildController<Controller> {
         alignTop.setOnAction(canvasController.new AlignmentActionEvent(Alignment.TOP));
 
         createListeners();
-        spacingSize.valueProperty().addListener(gridSpacingListener);
+        snapGridSize.valueProperty().addListener(snapGridSizeListener);
     }
 
     @Override
@@ -115,7 +116,7 @@ public class ToolBarController implements ChildController<Controller> {
             activeTool = ActiveTool.TEXT_BOX;
         });
 
-        snapGrid.setOnMouseClicked(event -> canvasController.activateSnapGrid());
+        snapGrid.setOnMouseClicked(event -> canvasController.toggleSnapGrid());
 
         strokeSize.setOnMouseClicked(event ->
                 applicationPreferences.setPreference(Preference.STROKE_SIZE, strokeSize.getValue().toString()));
@@ -138,7 +139,7 @@ public class ToolBarController implements ChildController<Controller> {
         fillColorListener = canvasController.new ColorChangeListener(Attribute.FILL_COLOR);
         strokeColorListener = canvasController.new ColorChangeListener(Attribute.STROKE_COLOR);
         strokeSizeListener = canvasController.new ShapeSpinnerChangeListener(Attribute.STROKE_SIZE);
-        gridSpacingListener = canvasController.new GridSpinnerChangeListener();
+        snapGridSizeListener = canvasController.new SnapGridSizeListener();
     }
 
     public void setToolBarListeners() {
@@ -153,10 +154,19 @@ public class ToolBarController implements ChildController<Controller> {
         strokeSize.valueProperty().removeListener(strokeSizeListener);
     }
 
-    public void update(DrawableShape shape) {
-        strokeSize.getValueFactory().setValue(shape.getStrokeSize());
-        setColorPicker(strokeColor, shape.getStrokeColor());
-        setColorPicker(fillColor, shape.getShapeAttributes().getFillColor());
+    public void update(Node node) {
+    	Double tempStrokeSize = ReflectionUtil.get(node, Attribute.STROKE_SIZE.toString());
+    	String tempStrokeColor = ReflectionUtil.get(node, Attribute.STROKE_COLOR.toString());
+    	String tempFillColor = ReflectionUtil.get(node, Attribute.FILL_COLOR.toString());
+
+    	if (tempStrokeSize != null)
+			strokeSize.getValueFactory().setValue(tempStrokeSize);
+
+    	if (tempStrokeColor != null)
+            setColorPicker(strokeColor, tempStrokeColor);
+
+    	if (tempFillColor != null)
+    	    setColorPicker(fillColor, tempFillColor);
     }
 
     // Binds the Toolbar's size to the main anchorpane
@@ -198,8 +208,8 @@ public class ToolBarController implements ChildController<Controller> {
         }
     }
 
-    public Double getGridSpacing() {
-        return spacingSize.getValue();
+    public Double getSnapGridSize() {
+        return snapGridSize.getValue();
     }
 
     public void setPreferences(ApplicationPreferences applicationPreferences) {
@@ -216,7 +226,7 @@ public class ToolBarController implements ChildController<Controller> {
         }
 
         if (preferenceFillColor != null) {
-            setStrokeColor(preferenceFillColor);
+            setFillColor(preferenceFillColor);
         }
     }
 }
