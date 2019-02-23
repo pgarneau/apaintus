@@ -7,7 +7,9 @@ public class LoggerFactory {
     private LoggerFactory() {}
 
     public static Logger createLogger() {
-        return new ConsoleLogger()
-                .setNext(new FileLogger());
+        Logger logger = new ConsoleLogger();
+        logger.setNext(new FileLogger());
+
+        return logger;
     }
 }

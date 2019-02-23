@@ -6,8 +6,6 @@ import apaintus.models.nodes.Node;
 import java.util.Optional;
 
 public class DeselectCommand implements Command {
-    private static final String DESCRIPTION = "Deselect";
-
     private CanvasController canvasController;
     private Optional<Node> previousActiveNode;
     private String description = "Deselected";
@@ -46,6 +44,6 @@ public class DeselectCommand implements Command {
 
     @Override
     public String getDescription() {
-        return DESCRIPTION;
+        return description;
     }
 }
