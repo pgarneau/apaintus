@@ -1,5 +1,6 @@
 package apaintus.controllers;
 
+import apaintus.uicomponents.Ruler;
 import apaintus.models.*;
 import apaintus.models.commands.*;
 import apaintus.models.nodes.Node;
