@@ -74,8 +74,8 @@ public class CanvasController implements ChildController<Controller> {
     @Override
     public void initialize() {
         boolean snapGridActive = Boolean.getBoolean(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID));
-        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight(),snapGridActive);
-        ruler = new Ruler(xRule, yRule,snapGridActive);
+        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight(), snapGridActive);
+        ruler = new Ruler(xRule, yRule, snapGridActive);
         ruler.setGrading(10.0);
 
         root.setOnMouseMoved(event -> {
