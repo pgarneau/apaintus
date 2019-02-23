@@ -1,12 +1,11 @@
 package apaintus.models;
 
-import apaintus.controllers.Controller;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class Ruler {
 
@@ -31,17 +30,14 @@ public class Ruler {
         mouseY.prefWidthProperty().bind(y.widthProperty());
         mouseY.prefHeightProperty().bind(y.heightProperty());
 
-        mouseX.setStyle("-fx-background-color: white; -fx-border-color: black");
-        mouseY.setStyle("-fx-background-color: white; -fx-border-color: black");
+
 
         mouseX.setLayoutX(25.0);
         mouseY.setLayoutY(25.0);
 
         x.setPrefHeight(25.0);
-        x.setStyle("-fx-border-color: lightgray");
 
         y.setPrefWidth(25.0);
-        y.setStyle("-fx-border-color: lightgray");
 
         xLine.setStroke(Color.BLACK);
         yLine.setStroke(Color.BLACK);
@@ -59,8 +55,22 @@ public class Ruler {
         });
     }
 
-    public void setActive(boolean active) {
+    public void toogleRulers(boolean active) {
         this.isActive = active;
+        if(active){
+            mouseX.setStyle("-fx-background-color: white; -fx-border-color: black");
+            mouseY.setStyle("-fx-background-color: white; -fx-border-color: black");
+
+            x.setStyle("-fx-border-color: lightgray");
+            y.setStyle("-fx-border-color: lightgray");
+        }
+        else{
+            mouseX.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+            mouseY.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+
+            x.setStyle("-fx-border-color: transparent");
+            y.setStyle("-fx-border-color: transparent");
+        }
     }
 
     public void update(double x, double y) {
@@ -71,14 +81,15 @@ public class Ruler {
 
         xLine.setStartY(0);
         xLine.setEndY(24);
-        xLine.setStartX(x + 10);
-        xLine.setEndX(x + 10);
+        xLine.setStartX(x >= 35? x - 25 : 10);
+        xLine.setEndX(x >= 35? x - 25 : 10);
+
         mouseX.getChildren().add(xLine);
 
         yLine.setStartX(0);
         yLine.setEndX(24);
-        yLine.setStartY(y + 10);
-        yLine.setEndY(y + 10);
+        yLine.setStartY(y >= 35 ? y - 25 : 10);
+        yLine.setEndY(y >= 35 ? y - 25 : 10);
         mouseY.getChildren().add(yLine);
     }
 
@@ -96,7 +107,8 @@ public class Ruler {
     }
 
     public void draw() {
-        AnchorPane root = (AnchorPane)x.getParent();
+        clear();
+        AnchorPane root = (AnchorPane) x.getParent();
 
         for (int i = 35; i < root.getWidth(); i += gradation) {
             Line line = new Line();
@@ -108,13 +120,15 @@ public class Ruler {
             line.setStroke(Color.BLACK);
             x.getChildren().add(line);
 
-            Text number = new Text(Integer.toString(i % 35));
-            number.setStyle("-fx-text-color: black");
-            StackPane numberHolder = new StackPane();
-            numberHolder.getChildren().add(number);
-            numberHolder.snapPositionX(i + 10);
-            numberHolder.snapPositionY(15);
-            x.getChildren().add(numberHolder);
+            if(i % 35 == 0) {
+                Text number = new Text(Integer.toString(i - 35));
+                number.setStyle("-fx-text-color: black");
+                TextFlow textFlow = new TextFlow();
+                textFlow.setLayoutX(i + 5);
+                textFlow.setLayoutY(0);
+                textFlow.getChildren().add(number);
+                x.getChildren().add(textFlow);
+            }
         }
 
         for (int i = 35; i < root.getHeight(); i += gradation) {
@@ -126,6 +140,16 @@ public class Ruler {
             line.setEndX(24);
             line.setStroke(Color.BLACK);
             y.getChildren().add(line);
+
+            if(i % 35 == 0) {
+                Text number = new Text(Integer.toString(i - 35));
+                number.setStyle("-fx-text-color: black");
+                TextFlow textFlow = new TextFlow();
+                textFlow.setLayoutY(i + 5);
+                textFlow.setLayoutX(0);
+                textFlow.getChildren().add(number);
+                y.getChildren().add(textFlow);
+            }
         }
     }
 
@@ -134,7 +158,7 @@ public class Ruler {
     }
 
     public void resizeUpdate() {
-        if(isActive)
+        if (isActive)
             draw();
     }
 }

@@ -38,6 +38,8 @@ public class CanvasController implements ChildController<Controller> {
     private Pane xRule;
     @FXML
     private Pane yRule;
+    @FXML
+    private Pane canvasHolder;
 
     private SnapGrid snapGrid;
     private Ruler ruler;
@@ -255,11 +257,15 @@ public class CanvasController implements ChildController<Controller> {
         if (snapGrid.isActive()) {
             clearSnapGrid();
             snapGrid.setActive(false);
-            ruler.setActive(false);
+            ruler.toogleRulers(false);
+            canvasHolder.setLayoutX(0);
+            canvasHolder.setLayoutY(0);
         } else {
             drawSnapGrid();
             snapGrid.setActive(true);
-            ruler.setActive(true);
+            ruler.toogleRulers(true);
+            canvasHolder.setLayoutX(35);
+            canvasHolder.setLayoutY(35);
         }
     }
 
