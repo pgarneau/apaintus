@@ -53,6 +53,9 @@
                                     </graphic>
                                 </ToggleButton>
                                 <ComboBox fx:id="gridGradation" editable="false" prefHeight="25.0" prefWidth="65.0">
+                                    <value>
+                                        <Double fx:value="10"/>
+                                    </value>
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                             <Double fx:value="10"/>
