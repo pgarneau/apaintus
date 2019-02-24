@@ -28,23 +28,23 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class CanvasController implements ChildController<Controller> {
-    @FXML
-    private AnchorPane root;
-    @FXML
-    private Canvas drawLayer;
-    @FXML
-    private Canvas canvas;
-    @FXML
-    private Canvas snapGridCanvas;
-    @FXML
-    private Pane xAxisRuler;
-    @FXML
-    private Pane yAxisRuler;
-    @FXML
-    private Pane canvasHolder;
+	@FXML
+	private AnchorPane root;
+	@FXML
+	private Canvas drawLayer;
+	@FXML
+	private Canvas canvas;
+	@FXML
+	private Canvas snapGridCanvas;
+	@FXML
+	private Pane xAxisRuler;
+	@FXML
+	private Pane yAxisRuler;
+	@FXML
+	private Pane canvasHolder;
 
-    private SnapGrid snapGrid;
-    private Ruler ruler;
+	private SnapGrid snapGrid;
+	private Ruler ruler;
 
 	private ToolBarController toolBarController;
 	private AttributeController attributeController;
@@ -64,46 +64,46 @@ public class CanvasController implements ChildController<Controller> {
 	private Invoker invoker;
 	private DeselectCommand deselectCommand;
 
-    @Override
-    public void injectParentController(Controller controller) {
-        this.toolBarController = controller.getToolBarController();
-        this.attributeController = controller.getAttributeController();
-        this.figureLogController = controller.getFigureLogController();
+	@Override
+	public void injectParentController(Controller controller) {
+		this.toolBarController = controller.getToolBarController();
+		this.attributeController = controller.getAttributeController();
+		this.figureLogController = controller.getFigureLogController();
 		this.zoomController = controller.getZoomController();
-        this.canvasService = new CanvasService(this.toolBarController);
-        invoker = controller.getInvoker();
-    }
+		this.canvasService = new CanvasService(this.toolBarController);
+		invoker = controller.getInvoker();
+	}
 
-    private void initCanvasViewComponents() {
-        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight());
-        ruler = new Ruler(xAxisRuler, yAxisRuler);
-        try {
-            boolean snapGridActive = Boolean.getBoolean(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID));
-            setSnapGridActive(snapGridActive);
-            if (snapGridActive) {
-                snapGrid.toggle();
-                ruler.toggle();
-            }
-            double gradation = Double.parseDouble(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID_GRADATION));
-            snapGrid.setGradation(gradation);
-            ruler.setGradation(gradation);
-        } catch (Exception e) {
-            snapGrid.setGradation(10.0);
-            ruler.setGradation(10.0);
-        }
-    }
+	private void initCanvasViewComponents() {
+		snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight());
+		ruler = new Ruler(xAxisRuler, yAxisRuler);
+		try {
+			boolean snapGridActive = Boolean.getBoolean(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID));
+			setSnapGridActive(snapGridActive);
+			if (snapGridActive) {
+				snapGrid.toggle();
+				ruler.toggle();
+			}
+			double gradation = Double.parseDouble(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID_GRADATION));
+			snapGrid.setGradation(gradation);
+			ruler.setGradation(gradation);
+		} catch (Exception e) {
+			snapGrid.setGradation(10.0);
+			ruler.setGradation(10.0);
+		}
+	}
 
-    @Override
-    public void initialize() {
-        initCanvasViewComponents();
+	@Override
+	public void initialize() {
+		initCanvasViewComponents();
 
-        root.setOnMouseMoved(event -> {
-            ruler.update(event.getX(), event.getY());
-        });
+		root.setOnMouseMoved(event -> {
+			ruler.update(event.getX(), event.getY());
+		});
 
-        canvas.setOnMousePressed(event -> {
-            lastMouseClickPosition = new Point(event.getX(), event.getY());
-            activeTool = toolBarController.getActiveTool();
+		canvas.setOnMousePressed(event -> {
+			lastMouseClickPosition = new Point(event.getX(), event.getY());
+			activeTool = toolBarController.getActiveTool();
 
 			if (activeTool == ActiveTool.SELECT) {
 				selectionBox = canvasService.createNode(activeTool, event, getCanvasDimension());
@@ -141,22 +141,21 @@ public class CanvasController implements ChildController<Controller> {
 				if (activeTool == ActiveTool.SELECT) {
 					saveSelectionBox((SelectionBox) tempActiveNode);
 				} else {
-					invoker.execute(new DrawNodeCommand(this, tempActiveNode,
-							new SelectCommand(this, activeNode, tempActiveNode)));
+					invoker.execute(new DrawNodeCommand(this, tempActiveNode, new SelectCommand(this, activeNode, tempActiveNode)));
 				}
 			}
 
 			canvasChanged = true;
 		});
 
-        canvas.setOnMouseDragged(event -> {
-            ruler.update(event.getX(), event.getY());
-            canvasService.updateNode(tempActiveNode, event, lastMouseClickPosition, getCanvasDimension(), snapGrid);
-            attributeController.update(tempActiveNode);
-            canvasService.clear(drawLayer.getGraphicsContext2D());
-            canvasService.drawNode(drawLayer.getGraphicsContext2D(), tempActiveNode);
-        });
-    }
+		canvas.setOnMouseDragged(event -> {
+			ruler.update(event.getX(), event.getY());
+			canvasService.updateNode(tempActiveNode, event, lastMouseClickPosition, getCanvasDimension(), snapGrid);
+			attributeController.update(tempActiveNode);
+			canvasService.clear(drawLayer.getGraphicsContext2D());
+			canvasService.drawNode(drawLayer.getGraphicsContext2D(), tempActiveNode);
+		});
+	}
 
 	public void redrawCanvas() {
 		canvasService.clear(canvas.getGraphicsContext2D());
@@ -208,9 +207,9 @@ public class CanvasController implements ChildController<Controller> {
 		return image;
 	}
 
-    public Canvas getCanvas() {
-        return this.canvas;
-    }
+	public Canvas getCanvas() {
+		return this.canvas;
+	}
 
 	public void setCanvasChanged(boolean canvasChanged) {
 		this.canvasChanged = canvasChanged;
@@ -263,32 +262,32 @@ public class CanvasController implements ChildController<Controller> {
 		return dimension;
 	}
 
-    public void drawSnapGrid() {
-        ruler.draw();
-        canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
-    }
+	public void drawSnapGrid() {
+		ruler.draw();
+		canvasService.drawSnapGrid(snapGridCanvas.getGraphicsContext2D(), snapGrid);
+	}
 
-    public void clearSnapGrid() {
-        ruler.clear();
-        snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
-    }
+	public void clearSnapGrid() {
+		ruler.clear();
+		snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
+	}
 
-    public void toggleSnapGrid() {
-        snapGrid.toggle();
-        ruler.toggle();
-    }
+	public void toggleSnapGrid() {
+		snapGrid.toggle();
+		ruler.toggle();
+	}
 
-    public void setSnapGridActive(boolean active) {
-        if (!active) {
-            clearSnapGrid();
-            canvasHolder.setLayoutX(0);
-            canvasHolder.setLayoutY(0);
-        } else {
-            drawSnapGrid();
-            canvasHolder.setLayoutX(35);
-            canvasHolder.setLayoutY(35);
-        }
-    }
+	public void setSnapGridActive(boolean active) {
+		if (!active) {
+			clearSnapGrid();
+			canvasHolder.setLayoutX(0);
+			canvasHolder.setLayoutY(0);
+		} else {
+			drawSnapGrid();
+			canvasHolder.setLayoutX(35);
+			canvasHolder.setLayoutY(35);
+		}
+	}
 
 	public Image getBaseImage() {
 		return baseImage;
@@ -325,16 +324,16 @@ public class CanvasController implements ChildController<Controller> {
 		toolBarController.unsetToolBarListeners();
 	}
 
-    public void update() {
-        ruler.redraw();
-    }
+	public void update() {
+		ruler.redraw();
+	}
 
 	public void setScale(double scale) {
-		canvasHolder.getTransforms().setAll(new Scale(scale,scale));
+		canvasHolder.getTransforms().setAll(new Scale(scale, scale));
 		ruler.setGradation(toolBarController.getGridGradation() * scale);
 		ruler.redraw();
 	}
-	
+
 	public class ColorChangeListener implements ChangeListener<Color> {
 		private Attribute attribute;
 
@@ -345,8 +344,7 @@ public class CanvasController implements ChildController<Controller> {
 		@Override
 		public void changed(ObservableValue<? extends Color> observableValue, Color oldValue, Color newValue) {
 			if (activeNode != null) {
-				invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, oldValue.toString(),
-						newValue.toString()));
+				invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, oldValue.toString(), newValue.toString()));
 			}
 		}
 	}
@@ -365,19 +363,19 @@ public class CanvasController implements ChildController<Controller> {
 			}
 		}
 	}
-	
+
 	public class GridComboBoxChangeListener implements ChangeListener<Double> {
-        @Override
-        public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-            snapGrid.setGradation(newValue);
-            ruler.setGradation(newValue);
-            if (snapGrid.isActive()) {
-                clearSnapGrid();
-                drawSnapGrid();
-            }
-            ApplicationPreferences.getInstance().setPreference(Preference.SNAP_GRID_GRADATION, newValue.toString());
-        }
-    }
+		@Override
+		public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
+			snapGrid.setGradation(newValue);
+			ruler.setGradation(newValue);
+			if (snapGrid.isActive()) {
+				clearSnapGrid();
+				drawSnapGrid();
+			}
+			ApplicationPreferences.getInstance().setPreference(Preference.SNAP_GRID_GRADATION, newValue.toString());
+		}
+	}
 
 	public class SnapGridSizeListener implements ChangeListener<Double> {
 		@Override

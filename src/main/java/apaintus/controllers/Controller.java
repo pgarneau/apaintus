@@ -32,13 +32,13 @@ public class Controller {
 	private Stage primaryStage;
 	private Invoker invoker = new Invoker();
 
-    public void initialize() {
-        canvasController.injectParentController(this);
-        menuController.injectParentController(this);
-        toolBarController.injectParentController(this);
-        attributeController.injectParentController(this);
-        figureLogController.injectParentController(this);
-        actionLogController.injectParentController(this);
+	public void initialize() {
+		canvasController.injectParentController(this);
+		menuController.injectParentController(this);
+		toolBarController.injectParentController(this);
+		attributeController.injectParentController(this);
+		figureLogController.injectParentController(this);
+		actionLogController.injectParentController(this);
 
 		zoomController.injectParentController(this);
 
@@ -50,9 +50,9 @@ public class Controller {
 		scrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent event) {
-				double zoomFactor = Math.round(zoomController.getZoomFactor()); 
+				double zoomFactor = Math.round(zoomController.getZoomFactor());
 				if (event.isControlDown() && event.getDeltaY() > 0 && zoomFactor < 150) {
-					zoomFactor = zoomFactor + 10; 
+					zoomFactor = zoomFactor + 10;
 				} else if (event.isControlDown() && event.getDeltaY() < 0 && zoomFactor > 50) {
 					zoomFactor = zoomFactor - 10;
 				}
@@ -68,34 +68,34 @@ public class Controller {
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}
-	
-    public CanvasController getCanvasController() {
-        return canvasController;
-    }
 
-    public MenuController getMenuController() {
-        return menuController;
-    }
+	public CanvasController getCanvasController() {
+		return canvasController;
+	}
 
-    public ToolBarController getToolBarController() {
-        return toolBarController;
-    }
+	public MenuController getMenuController() {
+		return menuController;
+	}
 
-    public AttributeController getAttributeController() {
-        return attributeController;
-    }
+	public ToolBarController getToolBarController() {
+		return toolBarController;
+	}
 
-    public Invoker getInvoker() {
-        return invoker;
-    }
+	public AttributeController getAttributeController() {
+		return attributeController;
+	}
 
-    public FigureLogController getFigureLogController() {
-        return figureLogController;
-    }
+	public Invoker getInvoker() {
+		return invoker;
+	}
 
-    public ActionLogController getActionLogController() {
-        return actionLogController;
-    }
+	public FigureLogController getFigureLogController() {
+		return figureLogController;
+	}
+
+	public ActionLogController getActionLogController() {
+		return actionLogController;
+	}
 
 	public ZoomController getZoomController() {
 		return zoomController;
