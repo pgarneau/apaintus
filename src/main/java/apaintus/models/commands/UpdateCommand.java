@@ -55,7 +55,7 @@ public class UpdateCommand<T> implements Command {
                 break;
 
             case COORDINATE_Y:
-                node.setCoordinates(new Point(node.getCoordinates().getY(), Double.valueOf(value.toString())));
+                node.setCoordinates(new Point(node.getCoordinates().getX(), Double.valueOf(value.toString())));
                 break;
 
             case WIDTH:
