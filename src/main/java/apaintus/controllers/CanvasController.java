@@ -49,7 +49,6 @@ public class CanvasController implements ChildController<Controller> {
 	private ToolBarController toolBarController;
 	private AttributeController attributeController;
 	private FigureLogController figureLogController;
-	private ZoomController zoomController;
 
 	private CanvasService canvasService;
 
@@ -69,7 +68,6 @@ public class CanvasController implements ChildController<Controller> {
 		this.toolBarController = controller.getToolBarController();
 		this.attributeController = controller.getAttributeController();
 		this.figureLogController = controller.getFigureLogController();
-		this.zoomController = controller.getZoomController();
 		this.canvasService = new CanvasService(this.toolBarController);
 		invoker = controller.getInvoker();
 	}
