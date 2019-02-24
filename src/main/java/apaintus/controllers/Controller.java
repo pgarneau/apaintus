@@ -46,19 +46,19 @@ public class Controller {
 		menuController.bindTo(mainPane);
 		toolBarController.bindTo(mainPane);
 
-		scrollPane.setOnKeyPressed(event -> {
-			if (event.getCode().equals(KeyCode.CONTROL)) {
-				scrollPane.setOnScroll(scrollEvent -> {
-					double zoomFactor = Math.round(canvasController.getCanvas().getScaleX() * 100);
+		
+		scrollPane.setOnKeyPressed(event -> { 
+			if(event.getCode().equals(KeyCode.CONTROL)) {
+				scrollPane.setOnScroll(scrollEvent -> { 
+					double zoomFactor = Math.round(zoomController.getZoomFactor()); 
 					double deltaY = scrollEvent.getDeltaY();
-
-					if (deltaY < 0 && zoomFactor > 50)
-						zoomFactor = zoomFactor - 10;
-					else if (deltaY > 0 && zoomFactor < 150)
+					if (deltaY < 0 && zoomFactor > 50) 
+						zoomFactor = zoomFactor - 10; 
+					else if (deltaY > 0 && zoomFactor < 150) 
 						zoomFactor = zoomFactor + 10;
-
-					canvasController.setScale(zoomFactor / 100);
-				});
+		  
+					zoomController.setZoomFactor(zoomFactor);
+				}); 
 			}
 		});
 	}
@@ -70,11 +70,7 @@ public class Controller {
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
+	
     public CanvasController getCanvasController() {
         return canvasController;
     }

@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -327,26 +328,11 @@ public class CanvasController implements ChildController<Controller> {
     public void update() {
         ruler.redraw();
     }
-    
-	public double getScale() {
-		return root.getScaleX();
-	}
 
 	public void setScale(double scale) {
-		canvas.setScaleX(scale);
-		canvas.setScaleY(scale);
-		drawLayer.setScaleX(scale);
-		drawLayer.setScaleY(scale);
-		snapGridCanvas.setScaleX(scale);
-		snapGridCanvas.setScaleY(scale);
-		zoomController.setZoomFactor(scale);
-		root.setPrefSize(canvas.getWidth() * scale, canvas.getHeight() * scale);
+		canvasHolder.getTransforms().setAll(new Scale(scale,scale));
 	}
 	
-	public AnchorPane getParent() {
-		return root;
-	}
-
 	public class ColorChangeListener implements ChangeListener<Color> {
 		private Attribute attribute;
 
@@ -394,7 +380,7 @@ public class CanvasController implements ChildController<Controller> {
 	public class SnapGridSizeListener implements ChangeListener<Double> {
 		@Override
 		public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-			snapGrid.setSize(newValue);
+			snapGrid.setGradation(newValue);
 			if (snapGrid.isActive()) {
 				clearSnapGrid();
 				drawSnapGrid();
