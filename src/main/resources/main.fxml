@@ -38,7 +38,7 @@
                   <fx:include fx:id="attribute" source="Attribute.fxml" />
                   <BorderPane prefHeight="47.0" prefWidth="139.0" HBox.hgrow="ALWAYS">
                      <right>
-                  	 	<fx:include fx:id="zoomSlider" source="Zoom.fxml" BorderPane.alignment="BOTTOM_RIGHT" />
+                  	 	<fx:include fx:id="zoom" source="Zoom.fxml" BorderPane.alignment="BOTTOM_RIGHT" />
                      </right>
                   </BorderPane>
                </children>

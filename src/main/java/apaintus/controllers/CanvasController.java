@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,28 +46,30 @@ public class CanvasController implements ChildController<Controller> {
     private SnapGrid snapGrid;
     private Ruler ruler;
 
-    private ToolBarController toolBarController;
-    private AttributeController attributeController;
-    private FigureLogController figureLogController;
+	private ToolBarController toolBarController;
+	private AttributeController attributeController;
+	private FigureLogController figureLogController;
+	private ZoomController zoomController;
 
-    private CanvasService canvasService;
+	private CanvasService canvasService;
 
-    private Point lastMouseClickPosition;
-    private Node activeNode;
-    private Node tempActiveNode;
-    private SelectionBox selectionBox;
-    private List<Node> nodeList = new ArrayList<>();
-    private Image baseImage;
-    private boolean canvasChanged;
-    private ActiveTool activeTool;
-    private Invoker invoker;
-    private DeselectCommand deselectCommand;
+	private Point lastMouseClickPosition;
+	private Node activeNode;
+	private Node tempActiveNode;
+	private SelectionBox selectionBox;
+	private List<Node> nodeList = new ArrayList<>();
+	private Image baseImage;
+	private boolean canvasChanged;
+	private ActiveTool activeTool;
+	private Invoker invoker;
+	private DeselectCommand deselectCommand;
 
     @Override
     public void injectParentController(Controller controller) {
         this.toolBarController = controller.getToolBarController();
         this.attributeController = controller.getAttributeController();
         this.figureLogController = controller.getFigureLogController();
+		this.zoomController = controller.getZoomController();
         this.canvasService = new CanvasService(this.toolBarController);
         invoker = controller.getInvoker();
     }
@@ -102,48 +105,49 @@ public class CanvasController implements ChildController<Controller> {
             lastMouseClickPosition = new Point(event.getX(), event.getY());
             activeTool = toolBarController.getActiveTool();
 
-            if (activeTool == ActiveTool.SELECT) {
-                selectionBox = canvasService.createNode(activeTool, event, getCanvasDimension());
-                tempActiveNode = selectionBox;
-            } else {
-                tempActiveNode = canvasService.createNode(activeTool, event, getCanvasDimension());
-            }
+			if (activeTool == ActiveTool.SELECT) {
+				selectionBox = canvasService.createNode(activeTool, event, getCanvasDimension());
+				tempActiveNode = selectionBox;
+			} else {
+				tempActiveNode = canvasService.createNode(activeTool, event, getCanvasDimension());
+			}
 
-            deselectCommand = new DeselectCommand(this, activeNode);
-            deselectCommand.execute();
-        });
+			deselectCommand = new DeselectCommand(this, activeNode);
+			deselectCommand.execute();
+		});
 
-        canvas.setOnMouseReleased(event -> {
-            deselectCommand.undo();
+		canvas.setOnMouseReleased(event -> {
+			deselectCommand.undo();
 
-            if (event.getX() == lastMouseClickPosition.getX() && event.getY() == lastMouseClickPosition.getY()) {
-                if (activeTool == ActiveTool.SELECT) {
-                    ListIterator<Node> iterator = nodeList.listIterator(nodeList.size());
+			if (event.getX() == lastMouseClickPosition.getX() && event.getY() == lastMouseClickPosition.getY()) {
+				if (activeTool == ActiveTool.SELECT) {
+					ListIterator<Node> iterator = nodeList.listIterator(nodeList.size());
 
-                    while (iterator.hasPrevious()) {
-                        Node node = iterator.previous();
+					while (iterator.hasPrevious()) {
+						Node node = iterator.previous();
 
-                        if (node.getBoundingBox().contains(lastMouseClickPosition)) {
-                            invoker.execute(new SelectCommand(this, activeNode, node));
+						if (node.getBoundingBox().contains(lastMouseClickPosition)) {
+							invoker.execute(new SelectCommand(this, activeNode, node));
 
-                            return;
-                        }
-                    }
+							return;
+						}
+					}
 
-                    if (activeNode != null) {
-                        invoker.execute(new DeselectCommand(this, activeNode));
-                    }
-                }
-            } else {
-                if (activeTool == ActiveTool.SELECT) {
-                    saveSelectionBox((SelectionBox) tempActiveNode);
-                } else {
-                    invoker.execute(new DrawNodeCommand(this, tempActiveNode, new SelectCommand(this, activeNode, tempActiveNode)));
-                }
-            }
+					if (activeNode != null) {
+						invoker.execute(new DeselectCommand(this, activeNode));
+					}
+				}
+			} else {
+				if (activeTool == ActiveTool.SELECT) {
+					saveSelectionBox((SelectionBox) tempActiveNode);
+				} else {
+					invoker.execute(new DrawNodeCommand(this, tempActiveNode,
+							new SelectCommand(this, activeNode, tempActiveNode)));
+				}
+			}
 
-            canvasChanged = true;
-        });
+			canvasChanged = true;
+		});
 
         canvas.setOnMouseDragged(event -> {
             ruler.update(event.getX(), event.getY());
@@ -154,110 +158,110 @@ public class CanvasController implements ChildController<Controller> {
         });
     }
 
-    public void redrawCanvas() {
-        canvasService.clear(canvas.getGraphicsContext2D());
+	public void redrawCanvas() {
+		canvasService.clear(canvas.getGraphicsContext2D());
 
-        if (baseImage != null) {
-            drawImage(baseImage);
-        }
+		if (baseImage != null) {
+			drawImage(baseImage);
+		}
 
-        for (Node node : nodeList) {
-            canvasService.drawNode(canvas.getGraphicsContext2D(), node);
-        }
+		for (Node node : nodeList) {
+			canvasService.drawNode(canvas.getGraphicsContext2D(), node);
+		}
 
-        figureLogController.updateFigureList(nodeList);
-        figureLogController.selectFigureListItem(activeNode);
-    }
+		figureLogController.updateFigureList(nodeList);
+		figureLogController.selectFigureListItem(activeNode);
+	}
 
-    public void drawImage(Image image) {
-        baseImage = image;
-        canvasService.saveState(canvas.getGraphicsContext2D(), image);
-    }
+	public void drawImage(Image image) {
+		baseImage = image;
+		canvasService.saveState(canvas.getGraphicsContext2D(), image);
+	}
 
-    public void clearCanvas() {
-        nodeList.clear();
-        figureLogController.updateFigureList(nodeList);
-        canvasService.clear(drawLayer.getGraphicsContext2D());
-        canvasService.clear(canvas.getGraphicsContext2D());
-    }
+	public void clearCanvas() {
+		nodeList.clear();
+		figureLogController.updateFigureList(nodeList);
+		canvasService.clear(drawLayer.getGraphicsContext2D());
+		canvasService.clear(canvas.getGraphicsContext2D());
+	}
 
-    public List<Node> getNodeList() {
-        return nodeList;
-    }
+	public List<Node> getNodeList() {
+		return nodeList;
+	}
 
-    public void setNodeList(List<Node> nodeList) {
-        this.nodeList = nodeList;
-    }
+	public void setNodeList(List<Node> nodeList) {
+		this.nodeList = nodeList;
+	}
 
-    public boolean isCanvasChanged() {
-        return canvasChanged;
-    }
+	public boolean isCanvasChanged() {
+		return canvasChanged;
+	}
 
-    public Image getCanvasImage() {
-        // Remove the bounding box around the selected shape when saving canvas to image
-        activeNode.setSelected(false);
-        redrawCanvas();
-        Image image = canvasService.convertCanvasToImage(canvas);
-        activeNode.setSelected(true);
-        redrawCanvas();
+	public Image getCanvasImage() {
+		// Remove the bounding box around the selected shape when saving canvas to image
+		activeNode.setSelected(false);
+		redrawCanvas();
+		Image image = canvasService.convertCanvasToImage(canvas);
+		activeNode.setSelected(true);
+		redrawCanvas();
 
-        return image;
-    }
+		return image;
+	}
 
     public Canvas getCanvas() {
         return this.canvas;
     }
 
-    public void setCanvasChanged(boolean canvasChanged) {
-        this.canvasChanged = canvasChanged;
-    }
+	public void setCanvasChanged(boolean canvasChanged) {
+		this.canvasChanged = canvasChanged;
+	}
 
-    public void saveDrawLayer() {
-        if (activeNode != null) {
-            canvasService.saveState(canvas.getGraphicsContext2D(), canvasService.convertCanvasToImage(drawLayer));
-            canvasService.clear(drawLayer.getGraphicsContext2D());
-        }
-    }
+	public void saveDrawLayer() {
+		if (activeNode != null) {
+			canvasService.saveState(canvas.getGraphicsContext2D(), canvasService.convertCanvasToImage(drawLayer));
+			canvasService.clear(drawLayer.getGraphicsContext2D());
+		}
+	}
 
-    private void saveSelectionBox(SelectionBox selectionBox) {
-        canvasService.clear(drawLayer.getGraphicsContext2D());
+	private void saveSelectionBox(SelectionBox selectionBox) {
+		canvasService.clear(drawLayer.getGraphicsContext2D());
 
-        for (Node node : nodeList) {
-            if (selectionBox.contains(node)) {
-                selectionBox.addNode(node);
-            }
-        }
+		for (Node node : nodeList) {
+			if (selectionBox.contains(node)) {
+				selectionBox.addNode(node);
+			}
+		}
 
-        if (selectionBox.getNodeList().isEmpty()) {
-            return;
-        }
+		if (selectionBox.getNodeList().isEmpty()) {
+			return;
+		}
 
-        selectionBox.resize();
-        selectionBox.optimize();
+		selectionBox.resize();
+		selectionBox.optimize();
 
-        if (selectionBox.getNodeList().size() == 1) {
-            invoker.execute(new SelectCommand(this, activeNode, selectionBox.getNodeList().get(0)));
-            return;
-        }
+		if (selectionBox.getNodeList().size() == 1) {
+			invoker.execute(new SelectCommand(this, activeNode, selectionBox.getNodeList().get(0)));
+			return;
+		}
 
-        for (Node node : nodeList) {
-            if (node.getNodeType() == NodeType.SELECTION_BOX) {
-                if (selectionBox.isDuplicate((SelectionBox) node)) {
-                    invoker.execute(new SelectCommand(this, activeNode, node));
-                }
-            }
-        }
+		for (Node node : nodeList) {
+			if (node.getNodeType() == NodeType.SELECTION_BOX) {
+				if (selectionBox.isDuplicate((SelectionBox) node)) {
+					invoker.execute(new SelectCommand(this, activeNode, node));
+				}
+			}
+		}
 
-        invoker.execute(new DrawNodeCommand(this, selectionBox, new SelectCommand(this, activeNode, selectionBox)));
-    }
+		invoker.execute(new DrawNodeCommand(this, selectionBox, new SelectCommand(this, activeNode, selectionBox)));
+	}
 
-    public double[] getCanvasDimension() {
-        double[] dimension = new double[2];
-        dimension[0] = canvas.getWidth();
-        dimension[1] = canvas.getHeight();
+	public double[] getCanvasDimension() {
+		double[] dimension = new double[2];
+		dimension[0] = canvas.getWidth();
+		dimension[1] = canvas.getHeight();
 
-        return dimension;
-    }
+		return dimension;
+	}
 
     public void drawSnapGrid() {
         ruler.draw();
@@ -286,76 +290,88 @@ public class CanvasController implements ChildController<Controller> {
         }
     }
 
-    public Image getBaseImage() {
-        return baseImage;
-    }
+	public Image getBaseImage() {
+		return baseImage;
+	}
 
-    public void setBaseImage(Image baseImage) {
-        this.baseImage = baseImage;
-    }
+	public void setBaseImage(Image baseImage) {
+		this.baseImage = baseImage;
+	}
 
-    public AttributeController getAttributeController() {
-        return attributeController;
-    }
+	public AttributeController getAttributeController() {
+		return attributeController;
+	}
 
-    public ToolBarController getToolBarController() {
-        return toolBarController;
-    }
+	public ToolBarController getToolBarController() {
+		return toolBarController;
+	}
 
-    public Node getActiveNode() {
-        return activeNode;
-    }
+	public Node getActiveNode() {
+		return activeNode;
+	}
 
-    public void setActiveNode(Node node) {
-        activeNode = node;
-        toolBarController.update(activeNode);
-        attributeController.update(activeNode);
-        attributeController.setAttributeChangeListeners();
-        toolBarController.setToolBarListeners();
-    }
+	public void setActiveNode(Node node) {
+		activeNode = node;
+		toolBarController.update(activeNode);
+		attributeController.update(activeNode);
+		attributeController.setAttributeChangeListeners();
+		toolBarController.setToolBarListeners();
+	}
 
-    public void clearActiveNode() {
-        activeNode = null;
-        attributeController.resetAttributes();
-        attributeController.unsetAttributeChangeListeners();
-        toolBarController.unsetToolBarListeners();
-    }
+	public void clearActiveNode() {
+		activeNode = null;
+		attributeController.resetAttributes();
+		attributeController.unsetAttributeChangeListeners();
+		toolBarController.unsetToolBarListeners();
+	}
 
     public void update() {
         ruler.redraw();
     }
+    
+	public double getScale() {
+		return root.getScaleX();
+	}
 
-    public class ColorChangeListener implements ChangeListener<Color> {
-        private Attribute attribute;
+	public void setScale(double scale) {
+		Scale zoomFactor = new Scale(scale, scale);
+		root.getTransforms().setAll(zoomFactor);
+		canvas.setScaleX(scale);
+		zoomController.setZoomFactor(scale);
+	}
 
-        public ColorChangeListener(Attribute attribute) {
-            this.attribute = attribute;
-        }
+	public class ColorChangeListener implements ChangeListener<Color> {
+		private Attribute attribute;
 
-        @Override
-        public void changed(ObservableValue<? extends Color> observableValue, Color oldValue, Color newValue) {
-            if (activeNode != null) {
-                invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, oldValue.toString(), newValue.toString()));
-            }
-        }
-    }
+		public ColorChangeListener(Attribute attribute) {
+			this.attribute = attribute;
+		}
 
-    public class ShapeSpinnerChangeListener implements ChangeListener<Double> {
-        private Attribute attribute;
+		@Override
+		public void changed(ObservableValue<? extends Color> observableValue, Color oldValue, Color newValue) {
+			if (activeNode != null) {
+				invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, oldValue.toString(),
+						newValue.toString()));
+			}
+		}
+	}
 
-        public ShapeSpinnerChangeListener(Attribute attribute) {
-            this.attribute = attribute;
-        }
+	public class ShapeSpinnerChangeListener implements ChangeListener<Double> {
+		private Attribute attribute;
 
-        @Override
-        public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
-            if (activeNode != null) {
-                invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, oldValue, newValue));
-            }
-        }
-    }
+		public ShapeSpinnerChangeListener(Attribute attribute) {
+			this.attribute = attribute;
+		}
 
-    public class GridComboBoxChangeListener implements ChangeListener<Double> {
+		@Override
+		public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
+			if (activeNode != null) {
+				invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, oldValue, newValue));
+			}
+		}
+	}
+	
+	public class GridComboBoxChangeListener implements ChangeListener<Double> {
         @Override
         public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
             snapGrid.setGradation(newValue);
@@ -368,47 +384,58 @@ public class CanvasController implements ChildController<Controller> {
         }
     }
 
-    public class UngroupActionEvent implements EventHandler<ActionEvent> {
-        @Override
-        public void handle(ActionEvent event) {
-            if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
-                activeNode.getNodeList().clear();
-                nodeList.remove(activeNode);
-                activeNode.setSelected(false);
-                attributeController.resetAttributes();
-                redrawCanvas();
-            }
-        }
-    }
+	public class SnapGridSizeListener implements ChangeListener<Double> {
+		@Override
+		public void changed(ObservableValue<? extends Double> observableValue, Double oldValue, Double newValue) {
+			snapGrid.setSize(newValue);
+			if (snapGrid.isActive()) {
+				clearSnapGrid();
+				drawSnapGrid();
+			}
+		}
+	}
 
-    public class TextAreaChangeListener implements ChangeListener<String> {
-        private Attribute attribute;
+	public class UngroupActionEvent implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
+				activeNode.getNodeList().clear();
+				nodeList.remove(activeNode);
+				activeNode.setSelected(false);
+				attributeController.resetAttributes();
+				redrawCanvas();
+			}
+		}
+	}
 
-        public TextAreaChangeListener(Attribute attribute) {
-            this.attribute = attribute;
-        }
+	public class TextAreaChangeListener implements ChangeListener<String> {
+		private Attribute attribute;
 
-        @Override
-        public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-            if (activeNode != null) {
-                invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, newValue, oldValue));
-            }
-        }
-    }
+		public TextAreaChangeListener(Attribute attribute) {
+			this.attribute = attribute;
+		}
 
-    public class AlignmentActionEvent implements EventHandler<ActionEvent> {
-        private Alignment alignment;
+		@Override
+		public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+			if (activeNode != null) {
+				invoker.execute(new UpdateCommand(CanvasController.this, activeNode, attribute, newValue, oldValue));
+			}
+		}
+	}
 
-        public AlignmentActionEvent(Alignment alignment) {
-            this.alignment = alignment;
-        }
+	public class AlignmentActionEvent implements EventHandler<ActionEvent> {
+		private Alignment alignment;
 
-        @Override
-        public void handle(ActionEvent event) {
-            if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
-                ((SelectionBox) activeNode).alignShapes(alignment);
-                redrawCanvas();
-            }
-        }
-    }
+		public AlignmentActionEvent(Alignment alignment) {
+			this.alignment = alignment;
+		}
+
+		@Override
+		public void handle(ActionEvent event) {
+			if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
+				((SelectionBox) activeNode).alignShapes(alignment);
+				redrawCanvas();
+			}
+		}
+	}
 }

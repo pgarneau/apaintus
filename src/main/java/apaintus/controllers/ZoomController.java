@@ -16,10 +16,12 @@ public class ZoomController implements ChildController<Controller> {
 
 	@Override
 	public void initialize() {
-		/*zoomSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+		zoomSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+			canvasController.setScale(newValue.doubleValue() / 100);
+		});
+	}
 
-            int dab = newValue.intValue();
-            System.out.println(dab);
-        });*/
+	public void setZoomFactor(double zoomFactor) {
+		zoomSlider.setValue(zoomFactor * 100);
 	}
 }

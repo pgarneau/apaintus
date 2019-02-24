@@ -2,25 +2,31 @@ package apaintus.controllers;
 
 import apaintus.models.commands.Invoker;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Controller {
-    @FXML
-    private CanvasController canvasController;
-    @FXML
-    private MenuController menuController;
-    @FXML
-    private ToolBarController toolBarController;
-    @FXML
-    private AttributeController attributeController;
-    @FXML
-    private FigureLogController figureLogController;
-    @FXML
-    private ActionLogController actionLogController;
-    @FXML
-    private AnchorPane mainPane;
-	@FXML private ZoomController zoomController;
+	@FXML
+	private CanvasController canvasController;
+	@FXML
+	private MenuController menuController;
+	@FXML
+	private ToolBarController toolBarController;
+	@FXML
+	private AttributeController attributeController;
+	@FXML
+	private FigureLogController figureLogController;
+	@FXML
+	private ActionLogController actionLogController;
+	@FXML
+	private ZoomController zoomController;
+
+	@FXML
+	private AnchorPane mainPane;
+	@FXML
+	private ScrollPane scrollPane;
 
 	private Stage primaryStage;
 	private Invoker invoker = new Invoker();
@@ -34,16 +40,40 @@ public class Controller {
         actionLogController.injectParentController(this);
 
 		zoomController.injectParentController(this);
-		
+
 		invoker.setActionLogController(actionLogController);
 
-        menuController.bindTo(mainPane);
-        toolBarController.bindTo(mainPane);
-    }
+		menuController.bindTo(mainPane);
+		toolBarController.bindTo(mainPane);
 
-    public void injectPrimaryStage(Stage stage) {
-        primaryStage = stage;
-    }
+		scrollPane.setOnKeyPressed(event -> {
+			if (event.getCode().equals(KeyCode.CONTROL)) {
+				scrollPane.setOnScroll(scrollEvent -> {
+
+					double zoomFactor = Math.round(canvasController.getCanvas().getScaleX() * 100);
+					System.out.println("ScaleX = " + zoomFactor);
+					double deltaY = scrollEvent.getDeltaY();
+					System.out.println("DeltaY = " + deltaY);
+
+					if (deltaY < 0 && zoomFactor > 50)
+						zoomFactor = zoomFactor - 10;
+					else if (deltaY > 0 && zoomFactor < 150)
+						zoomFactor = zoomFactor + 10;
+
+					System.out.println("ZoomFactor = " + zoomFactor);
+					canvasController.setScale(zoomFactor / 100);
+				});
+			}
+		});
+	}
+
+	public void injectPrimaryStage(Stage stage) {
+		primaryStage = stage;
+	}
+
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
 
     public Stage getPrimaryStage() {
         return primaryStage;
@@ -81,4 +111,3 @@ public class Controller {
 		return zoomController;
 	}
 }
-
