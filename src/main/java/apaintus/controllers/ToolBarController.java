@@ -7,8 +7,6 @@ import apaintus.models.Preference;
 import apaintus.models.nodes.Node;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import apaintus.util.ReflectionUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -87,11 +85,6 @@ public class ToolBarController implements ChildController<Controller> {
         activeToolToggleGroup.add(smiley);
         activeToolToggleGroup.add(textBox);
 
-        ObservableList<Double> gradationValues = FXCollections.observableArrayList(10.0,20.0,40.0);
-        gridGradation.setItems(gradationValues);
-        gridGradation.setValue(gradationValues.get(0));
-        gridGradation.setEditable(false);
-
         select.setOnMouseClicked(event -> {
             toolBarService.toggle(select, activeToolToggleGroup);
             activeTool = ActiveTool.SELECT;
@@ -123,7 +116,8 @@ public class ToolBarController implements ChildController<Controller> {
         });
 
         snapGrid.setOnMouseClicked(event -> {
-            canvasController.toggleSnapGrid(snapGrid.isSelected());
+            canvasController.setSnapGridActive(snapGrid.isSelected());
+            canvasController.toggleSnapGrid();
             applicationPreferences.setPreference(Preference.SNAP_GRID, String.valueOf(snapGrid.isSelected()));
         });
 
@@ -134,7 +128,7 @@ public class ToolBarController implements ChildController<Controller> {
                 applicationPreferences.setPreference(Preference.STROKE_COLOR, strokeColor.getValue().toString()));
 
         fillColor.setOnAction(event ->
-            applicationPreferences.setPreference(Preference.FILL_COLOR, fillColor.getValue().toString()));
+                applicationPreferences.setPreference(Preference.FILL_COLOR, fillColor.getValue().toString()));
 
 
         // DEFAULT SETTINGS
@@ -164,18 +158,18 @@ public class ToolBarController implements ChildController<Controller> {
     }
 
     public void update(Node node) {
-    	Double tempStrokeSize = ReflectionUtil.get(node, Attribute.STROKE_SIZE.toString());
-    	String tempStrokeColor = ReflectionUtil.get(node, Attribute.STROKE_COLOR.toString());
-    	String tempFillColor = ReflectionUtil.get(node, Attribute.FILL_COLOR.toString());
+        Double tempStrokeSize = ReflectionUtil.get(node, Attribute.STROKE_SIZE.toString());
+        String tempStrokeColor = ReflectionUtil.get(node, Attribute.STROKE_COLOR.toString());
+        String tempFillColor = ReflectionUtil.get(node, Attribute.FILL_COLOR.toString());
 
-    	if (tempStrokeSize != null)
-			strokeSize.getValueFactory().setValue(tempStrokeSize);
+        if (tempStrokeSize != null)
+            strokeSize.getValueFactory().setValue(tempStrokeSize);
 
-    	if (tempStrokeColor != null)
+        if (tempStrokeColor != null)
             setColorPicker(strokeColor, tempStrokeColor);
 
-    	if (tempFillColor != null)
-    	    setColorPicker(fillColor, tempFillColor);
+        if (tempFillColor != null)
+            setColorPicker(fillColor, tempFillColor);
     }
 
     // Binds the Toolbar's size to the main anchorpane
@@ -207,7 +201,9 @@ public class ToolBarController implements ChildController<Controller> {
         fillColor.setValue(Color.valueOf(color));
     }
 
-    private void setGridGradation(String gradation) {gridGradation.setValue(Double.parseDouble(gradation));}
+    private void setGridGradation(String gradation) {
+        gridGradation.setValue(Double.parseDouble(gradation));
+    }
 
     public ActiveTool getActiveTool() {
         return activeTool;
@@ -241,7 +237,7 @@ public class ToolBarController implements ChildController<Controller> {
             setFillColor(preferenceFillColor);
         }
 
-        if(preferenceSnapGridGradation != null){
+        if (preferenceSnapGridGradation != null) {
             setGridGradation(preferenceSnapGridGradation);
         }
     }

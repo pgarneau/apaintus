@@ -16,6 +16,9 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ComboBox?>
+<?import java.lang.Double?>
+<?import javafx.collections.FXCollections?>
+
 <AnchorPane fx:id="root" prefHeight="45.0" prefWidth="812.0" xmlns="http://javafx.com/javafx/10.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.ToolBarController">
     <fx:define>
@@ -49,7 +52,15 @@
                                         <ImageView image="$gridBtn"/>
                                     </graphic>
                                 </ToggleButton>
-                                <ComboBox fx:id="gridGradation" editable="true" prefHeight="25.0" prefWidth="65.0"/>
+                                <ComboBox fx:id="gridGradation" editable="false" prefHeight="25.0" prefWidth="65.0">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <Double fx:value="10"/>
+                                            <Double fx:value="20"/>
+                                            <Double fx:value="40"/>
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
                             </children>
                         </HBox>
                     </children>

@@ -36,9 +36,9 @@ public class CanvasController implements ChildController<Controller> {
     @FXML
     private Canvas snapGridCanvas;
     @FXML
-    private Pane xRule;
+    private Pane xAxisRuler;
     @FXML
-    private Pane yRule;
+    private Pane yAxisRuler;
     @FXML
     private Pane canvasHolder;
 
@@ -69,28 +69,30 @@ public class CanvasController implements ChildController<Controller> {
         this.figureLogController = controller.getFigureLogController();
         this.canvasService = new CanvasService(this.toolBarController);
         invoker = controller.getInvoker();
+    }
 
-        toggleSnapGrid(snapGrid.isActive());
+    private void initCanvasViewComponents() {
+        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight());
+        ruler = new Ruler(xAxisRuler, yAxisRuler);
+        try {
+            boolean snapGridActive = Boolean.getBoolean(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID));
+            setSnapGridActive(snapGridActive);
+            if (snapGridActive) {
+                snapGrid.toggle();
+                ruler.toggle();
+            }
+            double gradation = Double.parseDouble(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID_GRADATION));
+            snapGrid.setGradation(gradation);
+            ruler.setGradation(gradation);
+        } catch (Exception e) {
+            snapGrid.setGradation(10.0);
+            ruler.setGradation(10.0);
+        }
     }
 
     @Override
     public void initialize() {
-        snapGrid = new SnapGrid(canvas.getWidth(), canvas.getHeight());
-        ruler = new Ruler(xRule, yRule);
-        try {
-            boolean snapGridActive = Boolean.getBoolean(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID));
-            snapGrid.toggle(snapGridActive);
-            double gradation =  Double.parseDouble(ApplicationPreferences.getInstance().getPreference(Preference.SNAP_GRID_GRADATION));
-            snapGrid.setGradation(gradation);
-            ruler.setGradation(gradation);
-        } catch (NumberFormatException e) {
-            snapGrid.setGradation(10.0);
-            ruler.setGradation(10.0);
-            //TODO: link logger here.
-        }catch (NullPointerException e){
-            snapGrid.setGradation(10.0);
-            ruler.setGradation(10.0);
-        }
+        initCanvasViewComponents();
 
         root.setOnMouseMoved(event -> {
             ruler.update(event.getX(), event.getY());
@@ -267,17 +269,18 @@ public class CanvasController implements ChildController<Controller> {
         snapGridCanvas.getGraphicsContext2D().clearRect(0, 0, snapGridCanvas.getWidth(), snapGridCanvas.getHeight());
     }
 
-    public void toggleSnapGrid(boolean toggle) {
-        if (!toggle) {
+    public void toggleSnapGrid() {
+        snapGrid.toggle();
+        ruler.toggle();
+    }
+
+    public void setSnapGridActive(boolean active) {
+        if (!active) {
             clearSnapGrid();
-            snapGrid.toggle(false);
-            ruler.togleRulers(false);
             canvasHolder.setLayoutX(0);
             canvasHolder.setLayoutY(0);
         } else {
             drawSnapGrid();
-            snapGrid.toggle(true);
-            ruler.togleRulers(true);
             canvasHolder.setLayoutX(35);
             canvasHolder.setLayoutY(35);
         }
@@ -319,7 +322,7 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public void update() {
-        ruler.resizeUpdate();
+        ruler.resizeEventUpdate();
     }
 
     public class ColorChangeListener implements ChangeListener<Color> {
@@ -361,7 +364,7 @@ public class CanvasController implements ChildController<Controller> {
                 clearSnapGrid();
                 drawSnapGrid();
             }
-            ApplicationPreferences.getInstance().setPreference(Preference.SNAP_GRID_GRADATION,newValue.toString());
+            ApplicationPreferences.getInstance().setPreference(Preference.SNAP_GRID_GRADATION, newValue.toString());
         }
     }
 

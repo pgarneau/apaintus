@@ -2,7 +2,6 @@ package apaintus.controllers;
 
 import apaintus.models.commands.Invoker;
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -21,11 +20,10 @@ public class Controller {
     private ActionLogController actionLogController;
     @FXML
     private AnchorPane mainPane;
-    @FXML
-    private ScrollPane scrollPane;
 
 	private Stage primaryStage;
 	private Invoker invoker = new Invoker();
+
     public void initialize() {
         canvasController.injectParentController(this);
         menuController.injectParentController(this);

@@ -21,6 +21,7 @@ public class Ruler {
     public Ruler(Pane x, Pane y) {
         this.x = x;
         this.y = y;
+        isActive = false;
 
         mouseX = new Pane();
         mouseY = new Pane();
@@ -43,25 +44,23 @@ public class Ruler {
         y.getChildren().add(mouseY);
 
         x.widthProperty().addListener((observable, oldValue, newValue) -> {
-            resizeUpdate();
+            resizeEventUpdate();
         });
         y.heightProperty().addListener((observable, oldValue, newValue) -> {
-            resizeUpdate();
+            resizeEventUpdate();
         });
-
-        togleRulers(false); //We do not want to show at the creation.
     }
 
-    public void togleRulers(boolean active) {
-        this.isActive = active;
-        if(active){
+    public void toggle() {
+        if (!isActive) {
+            isActive = true;
             mouseX.setStyle("-fx-background-color: white; -fx-border-color: black");
             mouseY.setStyle("-fx-background-color: white; -fx-border-color: black");
 
             x.setStyle("-fx-border-color: lightgray");
             y.setStyle("-fx-border-color: lightgray");
-        }
-        else{
+        } else {
+            isActive = false;
             mouseX.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
             mouseY.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
 
@@ -78,8 +77,8 @@ public class Ruler {
 
         xLine.setStartY(0);
         xLine.setEndY(24);
-        xLine.setStartX(x >= 35? x - 25 : 10);
-        xLine.setEndX(x >= 35? x - 25 : 10);
+        xLine.setStartX(x >= 35 ? x - 25 : 10);
+        xLine.setEndX(x >= 35 ? x - 25 : 10);
 
         mouseX.getChildren().add(xLine);
 
@@ -117,7 +116,7 @@ public class Ruler {
             line.setStroke(Color.BLACK);
             x.getChildren().add(line);
 
-            if(i % 35 == 0) {
+            if (i % 35 == 0) {
                 Text number = new Text(Integer.toString(i - 35));
                 number.setStyle("-fx-text-color: black");
                 TextFlow textFlow = new TextFlow();
@@ -138,7 +137,7 @@ public class Ruler {
             line.setStroke(Color.BLACK);
             y.getChildren().add(line);
 
-            if(i % 35 == 0) {
+            if (i % 35 == 0) {
                 Text number = new Text(Integer.toString(i - 35));
                 number.setStyle("-fx-text-color: black");
                 TextFlow textFlow = new TextFlow();
@@ -154,7 +153,7 @@ public class Ruler {
         gradation = newValue;
     }
 
-    public void resizeUpdate() {
+    public void resizeEventUpdate() {
         if (isActive)
             draw();
     }
