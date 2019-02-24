@@ -427,7 +427,6 @@ public class CanvasController implements ChildController<Controller> {
         public void handle(ActionEvent event) {
         	if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
                 invoker.execute(new AlignCommand(CanvasController.this, (SelectionBox) activeNode, alignment));
-                //redrawCanvas();
             }
 		}
 	}
