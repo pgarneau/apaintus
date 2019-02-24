@@ -331,6 +331,8 @@ public class CanvasController implements ChildController<Controller> {
 
 	public void setScale(double scale) {
 		canvasHolder.getTransforms().setAll(new Scale(scale,scale));
+		ruler.setGradation(toolBarController.getGridGradation() * scale);
+		ruler.redraw();
 	}
 	
 	public class ColorChangeListener implements ChangeListener<Color> {

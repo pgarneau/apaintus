@@ -29,7 +29,6 @@ public class ZoomController implements ChildController<Controller> {
 
 	public void setZoomFactor(double zoomFactor) {
 		zoomSlider.setValue(zoomFactor);
-		canvasController.setScale(zoomFactor / 100);
 	}
 	
 	public double getZoomFactor() {
