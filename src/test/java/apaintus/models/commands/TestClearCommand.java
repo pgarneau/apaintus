@@ -1,124 +1,74 @@
 package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
-import apaintus.models.shapes.DrawableShape;
-import apaintus.models.nodes.shapes.Circle;
+import apaintus.models.nodes.Node;
 import apaintus.models.nodes.shapes.Rectangle;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class TestClearCommand {
     @Test
-    public void testCreateClearCommand() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        ClearCommand test = new ClearCommand(testCanvasController);
+    public void executeThenSuccessful() {
+        // Given
+        CanvasController canvasController = mock(CanvasController.class);
+        ClearCommand clearCommand = new ClearCommand(canvasController);
 
-        assertNotNull(test);
+        // When
+        clearCommand.execute();
+
+        // Then
+        verify(canvasController, times(1)).clearCanvas();
     }
 
     @Test
-    public void testExecuteClearCommand() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        List<DrawableShape> testDrawnShapes = new ArrayList<DrawableShape>();
+    public void undoWhenExecuteWasDoneThenSuccessful() {
+        // Given
+        List<Node> expectedNodeList = new ArrayList<>();
+        expectedNodeList.add(mock(Rectangle.class));
 
-        Rectangle shape1 = mock(Rectangle.class);
-        Rectangle shape2 = mock(Rectangle.class);
-        Circle shape3 = mock(Circle.class);
+        CanvasController canvasController = mock(CanvasController.class);
+        when(canvasController.getNodeList()).thenReturn(expectedNodeList);
 
-        testDrawnShapes.add(shape1);
-        testDrawnShapes.add(shape2);
-        testDrawnShapes.add(shape3);
+        ClearCommand clearCommand = new ClearCommand(canvasController);
 
-        //We are not mocking these since we actually need them to be used as is.
-        doCallRealMethod().when(testCanvasController).setDrawnShapes(anyList());
-        doCallRealMethod().when(testCanvasController).getDrawnShapes();
+        // When
+        clearCommand.execute();
+        clearCommand.undo();
 
-        //Mocking the clearCanvas methods since we don't mock the canvasService.
-        doAnswer((i) -> {
-            testCanvasController.getDrawnShapes().clear();
-            return null;
-        }).when(testCanvasController).clearCanvas();
-
-        testCanvasController.setDrawnShapes(testDrawnShapes);
-
-        ClearCommand test = new ClearCommand(testCanvasController);
-        test.execute();
-        assertTrue(testCanvasController.getDrawnShapes().size() == 0);
+        // Then
+        assertEquals(expectedNodeList, canvasController.getNodeList());
     }
 
     @Test
-    public void testUndoClearCommand() {
+    public void redoThenSuccessful() {
+        // Given
+        CanvasController canvasController = mock(CanvasController.class);
+        ClearCommand clearCommand = new ClearCommand(canvasController);
 
-        CanvasController testCanvasController = mock(CanvasController.class);
-        List<DrawableShape> testDrawnShapes = new ArrayList<DrawableShape>();
+        // When
+        clearCommand.redo();
 
-        Rectangle shape1 = mock(Rectangle.class);
-        Rectangle shape2 = mock(Rectangle.class);
-        Circle shape3 = mock(Circle.class);
-
-        testDrawnShapes.add(shape1);
-        testDrawnShapes.add(shape2);
-        testDrawnShapes.add(shape3);
-
-        //We are not mocking these since we actually need them to be used as is.
-        doCallRealMethod().when(testCanvasController).setDrawnShapes(anyList());
-        doCallRealMethod().when(testCanvasController).getDrawnShapes();
-
-        //Mocking the clearCanvas methods since we don't mock the canvasService.
-        doAnswer((i) -> {
-            testCanvasController.getDrawnShapes().clear();
-            return null;
-        }).when(testCanvasController).clearCanvas();
-
-        testCanvasController.setDrawnShapes(testDrawnShapes);
-
-        ClearCommand test = new ClearCommand(testCanvasController);
-        test.execute();
-
-        test.undo();
-        assertArrayEquals(testDrawnShapes.toArray(), testCanvasController.getDrawnShapes().toArray());
+        // Then
+        verify(canvasController, times(1)).clearCanvas();
     }
 
     @Test
-    public void testRedoClearCommand(){
-        CanvasController testCanvasController = mock(CanvasController.class);
-        List<DrawableShape> testDrawnShapes = new ArrayList<DrawableShape>();
+    public void getDescriptionThenSuccessful() {
+        // Given
+        CanvasController canvasController = mock(CanvasController.class);
+        ClearCommand clearCommand = new ClearCommand(canvasController);
 
-        Rectangle shape1 = mock(Rectangle.class);
-        Rectangle shape2 = mock(Rectangle.class);
-        Circle shape3 = mock(Circle.class);
+        String expectedDescription = "Clear Canvas";
 
-        testDrawnShapes.add(shape1);
-        testDrawnShapes.add(shape2);
-        testDrawnShapes.add(shape3);
+        // When
+        String description = clearCommand.getDescription();
 
-        //We are not mocking these since we actually need them to be used as is.
-        doCallRealMethod().when(testCanvasController).setDrawnShapes(anyList());
-        doCallRealMethod().when(testCanvasController).getDrawnShapes();
-
-        //Mocking the clearCanvas methods since we don't mock the canvasService.
-        doAnswer((i) -> {
-            testCanvasController.getDrawnShapes().clear();
-            return null;
-        }).when(testCanvasController).clearCanvas();
-
-        testCanvasController.setDrawnShapes(testDrawnShapes);
-
-        ClearCommand test = new ClearCommand(testCanvasController);
-        test.execute();
-        test.undo();
-        test.redo();
-
-        assertTrue(testCanvasController.getDrawnShapes().size() == 0);
-    }
-
-    @Test
-    public void testUndoRedoClearCommand(){
-
+        // Then
+        assertEquals(expectedDescription, description);
     }
 }

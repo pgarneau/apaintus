@@ -1,66 +1,89 @@
 package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
-import apaintus.models.shapes.DrawableShape;
+import apaintus.models.nodes.Node;
+import apaintus.models.nodes.shapes.Rectangle;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class TestDeselectCommand {
     @Test
-    public void testCreate() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        DrawableShape testShape = mock(DrawableShape.class);
-        DeselectCommand test = new DeselectCommand(testCanvasController,testShape);
-        assertNotNull(test);
+    public void executeWhenPreviousNodeExistsThenSuccessful() {
+        // Given
+        CanvasController canvasController = mock(CanvasController.class);
+        Node node = mock(Rectangle.class);
+        DeselectCommand deselectCommand = new DeselectCommand(canvasController, node);
+
+        // When
+        deselectCommand.execute();
+
+        // Then
+        verify(canvasController, times(1)).clearActiveNode();
+        assertFalse(node.isSelected());
     }
 
     @Test
-    void testExecute() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        DrawableShape testShape = mock(DrawableShape.class);
-        testShape.setSelected(true);
+    public void executeWhenNoPreviousNodeThenSuccessful() {
+        // Given
+        CanvasController canvasController = mock(CanvasController.class);
+        DeselectCommand deselectCommand = new DeselectCommand(canvasController, null);
 
-        doCallRealMethod().when(testShape).isSelected();
+        // When
+        deselectCommand.execute();
 
-        DeselectCommand test = new DeselectCommand(testCanvasController,testShape);
-
-        test.execute();
-        assertFalse(testShape.isSelected());
+        // Then
+        verify(canvasController, times(1)).clearActiveNode();
     }
 
     @Test
-    void testUndo() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        DrawableShape testShape = mock(DrawableShape.class);
-        testShape.setSelected(true);
+    public void undoWhenPreviousNodeExistsThenSuccessful() {
+        // Given
+        CanvasController canvasController = mock(CanvasController.class);
+        Node node = mock(Rectangle.class);
+        DeselectCommand deselectCommand = new DeselectCommand(canvasController, node);
 
-        doCallRealMethod().when(testShape).isSelected();
-        doCallRealMethod().when(testShape).setSelected(anyBoolean());
+        // When
+        deselectCommand.execute();
+        deselectCommand.undo();
 
-        DeselectCommand test = new DeselectCommand(testCanvasController,testShape);
-
-        test.execute();
-        test.undo();
-        assertTrue(testShape.isSelected());
+        // Then
+        verify(canvasController, times(1)).setActiveNode(node);
+        verify(node, times(1)).setSelected(true);
     }
 
     @Test
-    void testRedo() {
+    public void redoWhenPreviousNodeExistsThenSuccessful() {
+        // Given
+        CanvasController canvasController = mock(CanvasController.class);
+        Node node = mock(Rectangle.class);
+        DeselectCommand deselectCommand = new DeselectCommand(canvasController, node);
 
-        CanvasController testCanvasController = mock(CanvasController.class);
-        DrawableShape testShape = mock(DrawableShape.class);
-        testShape.setSelected(true);
+        // When
+        deselectCommand.redo();
 
-        doCallRealMethod().when(testShape).isSelected();
-        doCallRealMethod().when(testShape).setSelected(anyBoolean());
+        // Then
+        verify(canvasController, times(1)).clearActiveNode();
+        assertFalse(node.isSelected());
+    }
 
-        DeselectCommand test = new DeselectCommand(testCanvasController,testShape);
+    @Test
+    public void getDescriptionThenSuccessful() {
+        // Given
+        CanvasController canvasController = mock(CanvasController.class);
+        Node node = mock(Rectangle.class);
+        DeselectCommand deselectCommand = new DeselectCommand(canvasController, node);
 
-        test.execute();
-        test.undo();
-        test.redo();
-        assertFalse(testShape.isSelected());
+        String expectedDescription = "Clear Canvas";
+
+        // When
+        String description = clearCommand.getDescription();
+
+        // Then
+        assertEquals(expectedDescription, description);
     }
 }
