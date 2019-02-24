@@ -47,6 +47,10 @@ public class Controller {
 		menuController.bindTo(mainPane);
 		toolBarController.bindTo(mainPane);
 
+		addCtrlScrollEventHandler();
+	}
+
+	private void addCtrlScrollEventHandler() {
 		scrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent event) {
