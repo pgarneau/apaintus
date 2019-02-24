@@ -20,6 +20,7 @@ public class Controller {
     private ActionLogController actionLogController;
     @FXML
     private AnchorPane mainPane;
+	@FXML private ZoomController zoomController;
 
 	private Stage primaryStage;
 	private Invoker invoker = new Invoker();
@@ -32,7 +33,9 @@ public class Controller {
         figureLogController.injectParentController(this);
         actionLogController.injectParentController(this);
 
-        invoker.setActionLogController(actionLogController);
+		zoomController.injectParentController(this);
+		
+		invoker.setActionLogController(actionLogController);
 
         menuController.bindTo(mainPane);
         toolBarController.bindTo(mainPane);
@@ -73,5 +76,9 @@ public class Controller {
     public ActionLogController getActionLogController() {
         return actionLogController;
     }
+
+	public ZoomController getZoomController() {
+		return zoomController;
+	}
 }
 

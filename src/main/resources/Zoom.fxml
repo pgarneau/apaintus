@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apaintus.controllers.ZoomController">
+<children>
+	<Slider fx:id="zoomSlider" 
+		blockIncrement="12.5" majorTickUnit="12.5" max="150.0" min="50.0"
+		minorTickCount="0" prefHeight="38.0" prefWidth="134.0"
+		showTickLabels="true" showTickMarks="true" snapToTicks="true"
+		translateX="-5.0" value="100.0" />
+</children>
+</AnchorPane>
+
+
