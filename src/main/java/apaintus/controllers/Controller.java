@@ -1,9 +1,10 @@
 package apaintus.controllers;
 
 import apaintus.models.commands.Invoker;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.KeyCode;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -46,19 +47,16 @@ public class Controller {
 		menuController.bindTo(mainPane);
 		toolBarController.bindTo(mainPane);
 
-		
-		scrollPane.setOnKeyPressed(event -> { 
-			if(event.getCode().equals(KeyCode.CONTROL)) {
-				scrollPane.setOnScroll(scrollEvent -> { 
-					double zoomFactor = Math.round(zoomController.getZoomFactor()); 
-					double deltaY = scrollEvent.getDeltaY();
-					if (deltaY < 0 && zoomFactor > 50) 
-						zoomFactor = zoomFactor - 10; 
-					else if (deltaY > 0 && zoomFactor < 150) 
-						zoomFactor = zoomFactor + 10;
-		  
-					zoomController.setZoomFactor(zoomFactor);
-				}); 
+		scrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				double zoomFactor = Math.round(zoomController.getZoomFactor()); 
+				if (event.isControlDown() && event.getDeltaY() > 0 && zoomFactor < 150) {
+					zoomFactor = zoomFactor + 10; 
+				} else if (event.isControlDown() && event.getDeltaY() < 0 && zoomFactor > 50) {
+					zoomFactor = zoomFactor - 10;
+				}
+				zoomController.setZoomFactor(zoomFactor);
 			}
 		});
 	}
