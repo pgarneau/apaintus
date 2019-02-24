@@ -114,27 +114,32 @@ public class AlignCommand implements Command {
         double width = node.getCenter().getX() - node.getCoordinates().getX();
         double height = node.getCenter().getY() - node.getCoordinates().getY();
 
-        strokeSize += 2;
+        double extremityWidth = Math.abs((node.getBoundingBox().getVertices()[0].getX()
+                - node.getBoundingBox().getVertices()[3].getX())) / 2.0;
+        double extremityHeight = Math.abs(node.getBoundingBox().getVertices()[0].getY()
+                - node.getBoundingBox().getVertices()[3].getY()) / 2.0;
 
         if (alignment == Alignment.LEFT) {
             newValue = (width < 0) ?
-                    selectionBox.getCoordinates().getX() + Math.abs(2.0 * width) + strokeSize :
-                    selectionBox.getCoordinates().getX() + strokeSize;
+                    selectionBox.getCoordinates().getX() + Math.abs(2.0 * width) + strokeSize + extremityWidth :
+                    selectionBox.getCoordinates().getX() + strokeSize + extremityWidth;
             oldValue = node.getCoordinates().getX();
         } else if (alignment == Alignment.RIGHT) {
             newValue = (width <= 0) ?
-                    selectionBox.getCoordinates().getX() + selectionBox.getWidth() - strokeSize :
-                    selectionBox.getCoordinates().getX() + selectionBox.getWidth() - Math.abs(2.0 * width) - strokeSize;
+                    selectionBox.getCoordinates().getX() + selectionBox.getWidth() - strokeSize - extremityWidth :
+                    selectionBox.getCoordinates().getX() + selectionBox.getWidth() - Math.abs(2.0 * width)
+                            - strokeSize - extremityWidth;
             oldValue = node.getCoordinates().getX();
         } else if (alignment == Alignment.TOP) {
             newValue = (height < 0) ?
-                    selectionBox.getCoordinates().getY() + Math.abs(2.0 * height) + strokeSize :
-                    selectionBox.getCoordinates().getY() + strokeSize;
+                    selectionBox.getCoordinates().getY() + Math.abs(2.0 * height) + strokeSize + extremityHeight :
+                    selectionBox.getCoordinates().getY() + strokeSize + extremityHeight;
             oldValue = node.getCoordinates().getY();
         } else {
             newValue = (height <= 0) ?
-                    selectionBox.getCoordinates().getY() + selectionBox.getHeight() - strokeSize :
-                    selectionBox.getCoordinates().getY() + selectionBox.getHeight() - Math.abs(2.0 * height) - strokeSize;
+                    selectionBox.getCoordinates().getY() + selectionBox.getHeight() - strokeSize - extremityHeight :
+                    selectionBox.getCoordinates().getY() + selectionBox.getHeight() - Math.abs(2.0 * height)
+                            - strokeSize - extremityHeight;
             oldValue = node.getCoordinates().getY();
         }
 
