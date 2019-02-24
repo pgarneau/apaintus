@@ -153,10 +153,6 @@ public class Ruler {
         gradation = newValue;
     }
     
-    public double getGradation() {
-        return gradation;
-    }
-
     public void redraw() {
         if (isActive)
             draw();
