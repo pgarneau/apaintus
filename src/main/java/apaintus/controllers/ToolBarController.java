@@ -49,6 +49,10 @@ public class ToolBarController implements ChildController<Controller> {
     private Button alignRight;
     @FXML
     private Button alignBottom;
+    @FXML
+    private Button flipVertical;
+    @FXML
+    private Button flipHorizontal;
 
     private CanvasController canvasController;
 
@@ -130,6 +134,17 @@ public class ToolBarController implements ChildController<Controller> {
         fillColor.setOnAction(event ->
                 applicationPreferences.setPreference(Preference.FILL_COLOR, fillColor.getValue().toString()));
 
+        flipVertical.setOnMouseClicked( event -> {
+            if(canvasController.getActiveNode() != null){
+                canvasController.flipVertical();
+            }
+        });
+
+        flipHorizontal.setOnMouseClicked( event -> {
+            if(canvasController.getActiveNode() != null){
+                canvasController.flipHorizontal();
+            }
+        });
 
         // DEFAULT SETTINGS
         select.setSelected(true);

@@ -33,13 +33,15 @@
         <Image fx:id="alignRightBtn" url="@icons/alignRight.png"/>
         <Image fx:id="alignTopBtn" url="@icons/alignTop.png"/>
         <Image fx:id="alignDownBtn" url="@icons/alignDown.png"/>
+        <Image fx:id="flipVerticalBtn" url="@icons/flipVertical.png"/>
+        <Image fx:id="flipHorizontalBtn" url="@icons/flipHorizontal.png"/>
     </fx:define>
 
     <children>
         <ToolBar fx:id="toolBar">
             <items>
                 <Separator/>
-                <VBox prefHeight="42.0">
+                <VBox prefHeight="40.0">
                     <children>
                         <Label alignment="CENTER" text="Spacing"/>
                         <HBox prefHeight="25.0">
@@ -193,6 +195,22 @@
                                     <graphic>
                                         <ImageView image="$alignDownBtn"/>
                                     </graphic>
+                                </Button>
+                                <Button fx:id="flipVertical">
+                                    <graphic>
+                                        <ImageView image="$flipVerticalBtn" preserveRatio="true" fitWidth="16" fitHeight="16"/>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Flip vertically the current image"/>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="flipHorizontal">
+                                    <graphic>
+                                        <ImageView image="$flipHorizontalBtn" preserveRatio="true" fitWidth="16" fitHeight="16"/>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Flip Horizontally the current image"/>
+                                    </tooltip>
                                 </Button>
                             </children>
                         </HBox>
