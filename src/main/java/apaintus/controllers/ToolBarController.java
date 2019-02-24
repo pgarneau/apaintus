@@ -19,7 +19,6 @@ import java.util.List;
 public class ToolBarController implements ChildController<Controller> {
     @FXML
     private ToolBar toolBar;
-
     @FXML
     private Spinner<Double> strokeSize;
     @FXML
@@ -41,7 +40,7 @@ public class ToolBarController implements ChildController<Controller> {
     @FXML
     private ToggleButton snapGrid;
     @FXML
-    private Spinner<Double> snapGridSize;
+    private ComboBox<Double> gridGradation;
     @FXML
     private Button alignLeft;
     @FXML
@@ -59,7 +58,7 @@ public class ToolBarController implements ChildController<Controller> {
     private CanvasController.ColorChangeListener fillColorListener;
     private CanvasController.ColorChangeListener strokeColorListener;
     private CanvasController.ShapeSpinnerChangeListener strokeSizeListener;
-    private CanvasController.SnapGridSizeListener snapGridSizeListener;
+    private CanvasController.GridComboBoxChangeListener gridSpacingListener;
 
     @Override
     public void injectParentController(Controller controller) {
@@ -71,7 +70,7 @@ public class ToolBarController implements ChildController<Controller> {
         alignTop.setOnAction(canvasController.new AlignmentActionEvent(Alignment.TOP));
 
         createListeners();
-        snapGridSize.valueProperty().addListener(snapGridSizeListener);
+        gridGradation.valueProperty().addListener(gridSpacingListener);
     }
 
     @Override
@@ -116,7 +115,11 @@ public class ToolBarController implements ChildController<Controller> {
             activeTool = ActiveTool.TEXT_BOX;
         });
 
-        snapGrid.setOnMouseClicked(event -> canvasController.toggleSnapGrid());
+        snapGrid.setOnMouseClicked(event -> {
+            canvasController.setSnapGridActive(snapGrid.isSelected());
+            canvasController.toggleSnapGrid();
+            applicationPreferences.setPreference(Preference.SNAP_GRID, String.valueOf(snapGrid.isSelected()));
+        });
 
         strokeSize.setOnMouseClicked(event ->
                 applicationPreferences.setPreference(Preference.STROKE_SIZE, strokeSize.getValue().toString()));
@@ -125,21 +128,21 @@ public class ToolBarController implements ChildController<Controller> {
                 applicationPreferences.setPreference(Preference.STROKE_COLOR, strokeColor.getValue().toString()));
 
         fillColor.setOnAction(event ->
-            applicationPreferences.setPreference(Preference.FILL_COLOR, fillColor.getValue().toString()));
+                applicationPreferences.setPreference(Preference.FILL_COLOR, fillColor.getValue().toString()));
 
 
         // DEFAULT SETTINGS
         select.setSelected(true);
         activeTool = ActiveTool.SELECT;
 
-        snapGrid.setSelected(false);
+        snapGrid.setSelected(Boolean.valueOf(applicationPreferences.getInstance().getPreference(Preference.SNAP_GRID)));
     }
 
     private void createListeners() {
         fillColorListener = canvasController.new ColorChangeListener(Attribute.FILL_COLOR);
         strokeColorListener = canvasController.new ColorChangeListener(Attribute.STROKE_COLOR);
         strokeSizeListener = canvasController.new ShapeSpinnerChangeListener(Attribute.STROKE_SIZE);
-        snapGridSizeListener = canvasController.new SnapGridSizeListener();
+        gridSpacingListener = canvasController.new GridComboBoxChangeListener();
     }
 
     public void setToolBarListeners() {
@@ -155,18 +158,18 @@ public class ToolBarController implements ChildController<Controller> {
     }
 
     public void update(Node node) {
-    	Double tempStrokeSize = ReflectionUtil.get(node, Attribute.STROKE_SIZE.toString());
-    	String tempStrokeColor = ReflectionUtil.get(node, Attribute.STROKE_COLOR.toString());
-    	String tempFillColor = ReflectionUtil.get(node, Attribute.FILL_COLOR.toString());
+        Double tempStrokeSize = ReflectionUtil.get(node, Attribute.STROKE_SIZE.toString());
+        String tempStrokeColor = ReflectionUtil.get(node, Attribute.STROKE_COLOR.toString());
+        String tempFillColor = ReflectionUtil.get(node, Attribute.FILL_COLOR.toString());
 
-    	if (tempStrokeSize != null)
-			strokeSize.getValueFactory().setValue(tempStrokeSize);
+        if (tempStrokeSize != null)
+            strokeSize.getValueFactory().setValue(tempStrokeSize);
 
-    	if (tempStrokeColor != null)
+        if (tempStrokeColor != null)
             setColorPicker(strokeColor, tempStrokeColor);
 
-    	if (tempFillColor != null)
-    	    setColorPicker(fillColor, tempFillColor);
+        if (tempFillColor != null)
+            setColorPicker(fillColor, tempFillColor);
     }
 
     // Binds the Toolbar's size to the main anchorpane
@@ -198,6 +201,10 @@ public class ToolBarController implements ChildController<Controller> {
         fillColor.setValue(Color.valueOf(color));
     }
 
+    private void setGridGradation(String gradation) {
+        gridGradation.setValue(Double.parseDouble(gradation));
+    }
+
     public ActiveTool getActiveTool() {
         return activeTool;
     }
@@ -209,13 +216,14 @@ public class ToolBarController implements ChildController<Controller> {
     }
 
     public Double getSnapGridSize() {
-        return snapGridSize.getValue();
+        return gridGradation.getValue();
     }
 
     public void setPreferences(ApplicationPreferences applicationPreferences) {
         String preferenceStrokeSize = applicationPreferences.getPreference(Preference.STROKE_SIZE);
         String preferenceStrokeColor = applicationPreferences.getPreference(Preference.STROKE_COLOR);
         String preferenceFillColor = applicationPreferences.getPreference(Preference.FILL_COLOR);
+        String preferenceSnapGridGradation = applicationPreferences.getPreference(Preference.SNAP_GRID_GRADATION);
 
         if (preferenceStrokeSize != null) {
             setStrokeSize(Double.valueOf(preferenceStrokeSize));
@@ -227,6 +235,10 @@ public class ToolBarController implements ChildController<Controller> {
 
         if (preferenceFillColor != null) {
             setFillColor(preferenceFillColor);
+        }
+
+        if (preferenceSnapGridGradation != null) {
+            setGridGradation(preferenceSnapGridGradation);
         }
     }
 }

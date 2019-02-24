@@ -5,50 +5,48 @@ import apaintus.models.Point;
 import java.util.ArrayList;
 
 public class SnapGrid {
-	private double size;
-	private double drawingAreaWidth;
-	private double drawingAreaHeight;
+    private double gradation = 10;
+    private double drawingAreaWidth;
+    private double drawingAreaHeight;
 
-	private boolean isActive;
+    private boolean isActive;
 
-	private ArrayList<Point> snapGridPoints;
+    private ArrayList<Point> snapGridPoints = new ArrayList<>();
 
-	public SnapGrid(double size, double drawingAreaWidth, double drawingAreaHeight, boolean active) {
-		this.size = size * 10;
-		this.drawingAreaWidth = drawingAreaWidth;
-		this.drawingAreaHeight = drawingAreaHeight;
-		this.isActive = active;
-		this.snapGridPoints = new ArrayList<>();
-		computeAllPointInGrid();
-	}
+    public SnapGrid(double drawingAreaWidth, double drawingAreaHeight) {
+        this.drawingAreaWidth = drawingAreaWidth;
+        this.drawingAreaHeight = drawingAreaHeight;
+        isActive = false;
+    }
 
-	private void computeAllPointInGrid() {
-		snapGridPoints.clear();
-		for (int y = 0; y <= drawingAreaHeight; y += (size)) {
-			for (int x = 0; x <= drawingAreaWidth; x += (size)) {
-				snapGridPoints.add(new Point(x, y));
-			}
-		}
-	}
+    private void computeAllPointInGrid() {
+        snapGridPoints.clear();
+        for (int y = 0; y <= drawingAreaHeight; y += (gradation)) {
+            for (int x = 0; x <= drawingAreaWidth; x += (gradation)) {
+                snapGridPoints.add(new Point(x, y));
+            }
+        }
+    }
 
-	public double getSize() {
-		return size;
-	}
+    public double getGradation() {
+        return gradation;
+    }
 
-	public void setSize(double size) {
-		this.size = size;
-	}
+    public void setGradation(double size) {
+        this.gradation = size;
+        computeAllPointInGrid();
+    }
 
-	public boolean isActive() {
-		return isActive;
-	}
+    public boolean isActive() {
+        return isActive;
+    }
 
-	public void setActive(boolean active) {
-		isActive = active;
-	}
+    public void toggle() {
+        isActive = !isActive;
+    }
 
-	public ArrayList<Point> getSnapGridPoints() {
-		return snapGridPoints;
-	}
+    public ArrayList<Point> getSnapGridPoints() {
+        return snapGridPoints;
+    }
 }
 	
