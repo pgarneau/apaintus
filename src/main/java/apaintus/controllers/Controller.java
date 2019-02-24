@@ -49,18 +49,14 @@ public class Controller {
 		scrollPane.setOnKeyPressed(event -> {
 			if (event.getCode().equals(KeyCode.CONTROL)) {
 				scrollPane.setOnScroll(scrollEvent -> {
-
 					double zoomFactor = Math.round(canvasController.getCanvas().getScaleX() * 100);
-					System.out.println("ScaleX = " + zoomFactor);
 					double deltaY = scrollEvent.getDeltaY();
-					System.out.println("DeltaY = " + deltaY);
 
 					if (deltaY < 0 && zoomFactor > 50)
 						zoomFactor = zoomFactor - 10;
 					else if (deltaY > 0 && zoomFactor < 150)
 						zoomFactor = zoomFactor + 10;
 
-					System.out.println("ZoomFactor = " + zoomFactor);
 					canvasController.setScale(zoomFactor / 100);
 				});
 			}

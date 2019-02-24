@@ -21,7 +21,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Scale;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -334,10 +333,18 @@ public class CanvasController implements ChildController<Controller> {
 	}
 
 	public void setScale(double scale) {
-		Scale zoomFactor = new Scale(scale, scale);
-		root.getTransforms().setAll(zoomFactor);
 		canvas.setScaleX(scale);
+		canvas.setScaleY(scale);
+		drawLayer.setScaleX(scale);
+		drawLayer.setScaleY(scale);
+		snapGridCanvas.setScaleX(scale);
+		snapGridCanvas.setScaleY(scale);
 		zoomController.setZoomFactor(scale);
+		root.setPrefSize(canvas.getWidth() * scale, canvas.getHeight() * scale);
+	}
+	
+	public AnchorPane getParent() {
+		return root;
 	}
 
 	public class ColorChangeListener implements ChangeListener<Color> {
