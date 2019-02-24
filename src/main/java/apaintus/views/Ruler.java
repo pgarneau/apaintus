@@ -44,10 +44,10 @@ public class Ruler {
         y.getChildren().add(mouseY);
 
         x.widthProperty().addListener((observable, oldValue, newValue) -> {
-            resizeEventUpdate();
+            redraw();
         });
         y.heightProperty().addListener((observable, oldValue, newValue) -> {
-            resizeEventUpdate();
+            redraw();
         });
     }
 
@@ -153,7 +153,7 @@ public class Ruler {
         gradation = newValue;
     }
 
-    public void resizeEventUpdate() {
+    public void redraw() {
         if (isActive)
             draw();
     }

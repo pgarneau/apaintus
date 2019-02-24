@@ -322,7 +322,7 @@ public class CanvasController implements ChildController<Controller> {
     }
 
     public void update() {
-        ruler.resizeEventUpdate();
+        ruler.redraw();
     }
 
     public class ColorChangeListener implements ChangeListener<Color> {
