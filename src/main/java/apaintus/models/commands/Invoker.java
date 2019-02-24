@@ -3,22 +3,28 @@ package apaintus.models.commands;
 import java.util.Stack;
 
 import apaintus.controllers.ActionLogController;
+import apaintus.logger.Logger;
+import apaintus.logger.LoggerFactory;
 
 public class Invoker {
     private final Stack<Command> undoStack;
     private final Stack<Command> redoStack;
+    private final Logger logger;
     
     private ActionLogController actionLogController;
 
     public Invoker() {
         undoStack = new Stack<>();
         redoStack = new Stack<>();
+
+        logger = LoggerFactory.createLogger();
     }
 
     public void execute(Command command) {
         undoStack.push(command);
         redoStack.clear();
         command.execute();
+        log(command.getDescription());
         actionLogController.updateActionList();
     }
 
@@ -27,6 +33,7 @@ public class Invoker {
             Command command = undoStack.pop();
             command.undo();
             redoStack.push(command);
+            log("Undo " + command.getDescription());
             actionLogController.updateActionList();
         }
     }
@@ -36,6 +43,7 @@ public class Invoker {
             Command command = redoStack.pop();
             command.redo();
             undoStack.push(command);
+            log("Redo" + command.getDescription());
             actionLogController.updateActionList();
         }
     }
@@ -56,5 +64,9 @@ public class Invoker {
     
     public Stack<Command> getRedoStack(){
     	return redoStack;
+    }
+
+    private void log(String message) {
+        logger.message(message);
     }
 }

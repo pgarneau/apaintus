@@ -2,6 +2,7 @@ package apaintus;
 
 import apaintus.controllers.Controller;
 import apaintus.controllers.MenuController;
+import apaintus.logger.Logger;
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Preference;
 import javafx.application.Application;
@@ -9,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.util.HashMap;
 
 public class Main extends Application {
     private static final double MIN_WIDTH = 800;
@@ -82,6 +85,14 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        HashMap<String, String> argsMap = new HashMap<>();
+        for (String arg : args) {
+            String[] split = arg.split("=");
+            argsMap.put(split[0].toLowerCase(), split[1]);
+        }
+
+        Logger.setVerboseLevel(argsMap.containsKey("verbose") ? Integer.parseInt(argsMap.get("verbose")) : 0);
+
         launch(args);
     }
 }
