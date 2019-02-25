@@ -108,43 +108,6 @@ public class SelectionBox extends Node {
 		}
 	}
 
-	public void setSelected(boolean selected) {
-		super.setSelected(selected);
-		resize();
-	}
-
-	public void alignShapes(Alignment alignment) {
-		switch (alignment) {
-			case TOP:
-			case BOTTOM:
-				alignVertically(alignment);
-				break;
-
-			case RIGHT:
-			case LEFT:
-				alignHorizontally(alignment);
-				break;
-			default:
-				break;
-		}
-
-		resize();
-	}
-
-	private void alignHorizontally(Alignment alignment) {
-		for (Node node : nodeList) {
-			double x = (alignment == Alignment.LEFT) ? coordinates.getX() : (coordinates.getX() + width) - node.getWidth();
-			node.setCoordinates(new Point(x, node.getCoordinates().getY()));
-		}
-	}
-
-	private void alignVertically(Alignment alignment) {
-		for (Node node : nodeList) {
-			double y = (alignment == Alignment.TOP) ? coordinates.getY() : (coordinates.getY() + height) - node.getHeight();
-			node.setCoordinates(new Point(node.getCoordinates().getX(), y));
-		}
-	}
-
 	private void updateNodeCoordinates(Node node, double orientation) {
 		double radianOrientation = Math.toRadians(orientation);
 
