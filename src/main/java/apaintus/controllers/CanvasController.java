@@ -414,20 +414,18 @@ public class CanvasController implements ChildController<Controller> {
 		}
 	}
 
-        
-    
 	public class AlignmentActionEvent implements EventHandler<ActionEvent> {
 		private Alignment alignment;
 
 		public AlignmentActionEvent(Alignment alignment) {
 			this.alignment = alignment;
 		}
-		
-        @Override
-        public void handle(ActionEvent event) {
-        	if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
-                invoker.execute(new AlignCommand(CanvasController.this, (SelectionBox) activeNode, alignment));
-            }
+
+		@Override
+		public void handle(ActionEvent event) {
+			if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
+				invoker.execute(new AlignCommand(CanvasController.this, (SelectionBox) activeNode, alignment));
+			}
 		}
 	}
 }
