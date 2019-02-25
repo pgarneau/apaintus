@@ -424,8 +424,7 @@ public class CanvasController implements ChildController<Controller> {
 		@Override
 		public void handle(ActionEvent event) {
 			if (activeNode.getNodeType() == NodeType.SELECTION_BOX) {
-				((SelectionBox) activeNode).alignShapes(alignment);
-				redrawCanvas();
+				invoker.execute(new AlignCommand(CanvasController.this, (SelectionBox) activeNode, alignment));
 			}
 		}
 	}

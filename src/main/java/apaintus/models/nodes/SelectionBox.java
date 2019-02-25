@@ -1,6 +1,5 @@
 package apaintus.models.nodes;
 
-import apaintus.models.Alignment;
 import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
 import apaintus.services.draw.selectionBox.SelectionBoxDrawService;
@@ -105,43 +104,6 @@ public class SelectionBox extends Node {
 
 		for (Node node : nodeList) {
 			nodeOriginalCoordinates.put(node, node.getCoordinates());
-		}
-	}
-
-	public void setSelected(boolean selected) {
-		super.setSelected(selected);
-		resize();
-	}
-
-	public void alignShapes(Alignment alignment) {
-		switch (alignment) {
-			case TOP:
-			case BOTTOM:
-				alignVertically(alignment);
-				break;
-
-			case RIGHT:
-			case LEFT:
-				alignHorizontally(alignment);
-				break;
-			default:
-				break;
-		}
-
-		resize();
-	}
-
-	private void alignHorizontally(Alignment alignment) {
-		for (Node node : nodeList) {
-			double x = (alignment == Alignment.LEFT) ? coordinates.getX() : (coordinates.getX() + width) - node.getWidth();
-			node.setCoordinates(new Point(x, node.getCoordinates().getY()));
-		}
-	}
-
-	private void alignVertically(Alignment alignment) {
-		for (Node node : nodeList) {
-			double y = (alignment == Alignment.TOP) ? coordinates.getY() : (coordinates.getY() + height) - node.getHeight();
-			node.setCoordinates(new Point(node.getCoordinates().getX(), y));
 		}
 	}
 
