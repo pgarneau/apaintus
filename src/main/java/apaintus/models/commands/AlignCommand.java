@@ -7,7 +7,6 @@ import apaintus.models.nodes.Node;
 import apaintus.models.nodes.NodeType;
 import apaintus.models.nodes.SelectionBox;
 import apaintus.util.ReflectionUtil;
-import org.w3c.dom.Attr;
 
 import java.util.Stack;
 

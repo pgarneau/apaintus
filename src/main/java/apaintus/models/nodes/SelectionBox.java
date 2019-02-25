@@ -1,6 +1,5 @@
 package apaintus.models.nodes;
 
-import apaintus.models.Alignment;
 import apaintus.models.Point;
 import apaintus.services.draw.DrawService;
 import apaintus.services.draw.selectionBox.SelectionBoxDrawService;
