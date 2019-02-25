@@ -6,6 +6,7 @@ import apaintus.models.nodes.shapes.Rectangle;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -78,10 +79,10 @@ class TestDeselectCommand {
         Node node = mock(Rectangle.class);
         DeselectCommand deselectCommand = new DeselectCommand(canvasController, node);
 
-        String expectedDescription = "Clear Canvas";
+        String expectedDescription = "Deselected";
 
         // When
-        String description = clearCommand.getDescription();
+        String description = deselectCommand.getDescription();
 
         // Then
         assertEquals(expectedDescription, description);

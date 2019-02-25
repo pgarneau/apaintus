@@ -8,57 +8,56 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestDrawImageCommand {
-    @Test
-    public void testCreateCommand(){
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Image testImage = mock(Image.class);
-        DrawImageCommand test = new DrawImageCommand(testCanvasController,testImage);
-        assertNotNull(test);
-    }
+	@Test
+	public void testCreateCommand() {
+		CanvasController testCanvasController = mock(CanvasController.class);
+		Image testImage = mock(Image.class);
+		DrawImageCommand test = new DrawImageCommand(testCanvasController, testImage);
+		assertNotNull(test);
+	}
 
-    @Test
-    void testExecute() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Image testImage = mock(Image.class);
+	@Test
+	void testExecute() {
+		CanvasController testCanvasController = mock(CanvasController.class);
+		Image testImage = mock(Image.class);
 
-        doCallRealMethod().when(testCanvasController).getBaseImage();
-        doCallRealMethod().when(testCanvasController).setBaseImage(nullable(Image.class));
-        DrawImageCommand test = new DrawImageCommand(testCanvasController,testImage);
+		doCallRealMethod().when(testCanvasController).getBaseImage();
+		doCallRealMethod().when(testCanvasController).setBaseImage(nullable(Image.class));
+		DrawImageCommand test = new DrawImageCommand(testCanvasController, testImage);
 
-        test.execute();
+		test.execute();
 
-        assertNotNull(testCanvasController.getBaseImage());
-    }
+		assertNotNull(testCanvasController.getBaseImage());
+	}
 
-    @Test
-    void testUndo() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Image testImage = mock(Image.class);
+	@Test
+	void testUndo() {
+		CanvasController testCanvasController = mock(CanvasController.class);
+		Image testImage = mock(Image.class);
 
-        doCallRealMethod().when(testCanvasController).getBaseImage();
-        doCallRealMethod().when(testCanvasController).setBaseImage(nullable(Image.class));
-        DrawImageCommand test = new DrawImageCommand(testCanvasController,testImage);
+		doCallRealMethod().when(testCanvasController).getBaseImage();
+		doCallRealMethod().when(testCanvasController).setBaseImage(nullable(Image.class));
+		DrawImageCommand test = new DrawImageCommand(testCanvasController, testImage);
 
-        test.execute();
-        test.undo();
+		test.execute();
+		test.undo();
 
-        assertNull(testCanvasController.getBaseImage());
-    }
+		assertNull(testCanvasController.getBaseImage());
+	}
 
-    @Test
-    void testRedo() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Image testImage = mock(Image.class);
+	@Test
+	void testRedo() {
+		CanvasController testCanvasController = mock(CanvasController.class);
+		Image testImage = mock(Image.class);
 
-        doCallRealMethod().when(testCanvasController).getBaseImage();
-        doCallRealMethod().when(testCanvasController).setBaseImage(nullable(Image.class));
-        DrawImageCommand test = new DrawImageCommand(testCanvasController,testImage);
+		doCallRealMethod().when(testCanvasController).getBaseImage();
+		doCallRealMethod().when(testCanvasController).setBaseImage(nullable(Image.class));
+		DrawImageCommand test = new DrawImageCommand(testCanvasController, testImage);
 
-        test.execute();
-        test.undo();
-        test.redo();
+		test.execute();
+		test.undo();
+		test.redo();
 
-        assertEquals(testCanvasController.getBaseImage(),testImage);
-
-    }
+		assertEquals(testCanvasController.getBaseImage(), testImage);
+	}
 }
