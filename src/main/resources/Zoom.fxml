@@ -16,7 +16,7 @@
 				prefHeight="38.0" prefWidth="134.0" showTickLabels="true"
 				showTickMarks="true" snapToTicks="true" translateY="5.0"
 				value="100.0" />
-			<Label fx:id="sliderLabel" prefHeight="29.0" prefWidth="53.0" />
+			<Label fx:id="sliderLabel" text="100%" prefHeight="29.0" prefWidth="53.0" />
 		</HBox>
 	</children>
 </AnchorPane>
