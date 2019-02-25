@@ -49,8 +49,8 @@ public class Invoker {
     }
 
     public void clear() {
-        undoStack.empty();
-        redoStack.empty();
+        undoStack.clear();
+        redoStack.clear();
         actionLogController.updateActionList();
     }
     

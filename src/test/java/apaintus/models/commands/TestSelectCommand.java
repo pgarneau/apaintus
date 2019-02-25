@@ -3,153 +3,122 @@ package apaintus.models.commands;
 import apaintus.controllers.CanvasController;
 import apaintus.models.nodes.Node;
 import apaintus.models.nodes.NodeType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
-class TestSelectCommand {
-    @Test
-    public void testCreateSelectCommandWithPreviousShape() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Node testPreviousActiveShape = mock(Node.class);
-        Node testShape = mock(Node.class);
-        doCallRealMethod().when(testShape).getNodeType();
-        SelectCommand test = new SelectCommand(testCanvasController,testPreviousActiveShape,testShape);
+public class TestSelectCommand {
+	@Test
+	void executeWhenPreviousNodeExistsThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Node previousNode = mock(Node.class);
+		Node node = mock(Node.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		SelectCommand selectCommand = new SelectCommand(canvasController, previousNode, node);
 
-        assertNotNull(test);
-    }
+		// When
+		selectCommand.execute();
 
-    @Test
-    void testExecuteWithPreviousShape() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Node testPreviousActiveShape = mock(Node.class);
-        Node testShape = mock(Node.class);
+		// Then
+		verify(canvasController, times(1)).redrawCanvas();
+		assertEquals(false, previousNode.isSelected());
+	}
 
-        doCallRealMethod().when(testShape).getNodeType();
+	@Test
+	void executeWhenNoPreviousNodeThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Node node = mock(Node.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		SelectCommand selectCommand = new SelectCommand(canvasController, null, node);
 
-        doCallRealMethod().when(testShape).setSelected(anyBoolean());
-        doCallRealMethod().when(testPreviousActiveShape).setSelected(anyBoolean());
-        doCallRealMethod().when(testShape).isSelected();
-        doCallRealMethod().when(testPreviousActiveShape).isSelected();
+		// When
+		selectCommand.execute();
 
-        SelectCommand test = new SelectCommand(testCanvasController,testPreviousActiveShape,testShape);
+		// Then
+		verify(canvasController, times(1)).redrawCanvas();
+	}
 
-        test.execute();
+	@Test
+	void undoWhenPreviousNodeExistsThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Node previousNode = mock(Node.class);
+		Node node = mock(Node.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		SelectCommand selectCommand = new SelectCommand(canvasController, previousNode, node);
 
-        assertFalse(testPreviousActiveShape.isSelected());
-        assertTrue(testShape.isSelected());
-    }
+		// When
+		selectCommand.undo();
 
-    @Test
-    void testUndoWithPreviousShape() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Node testPreviousActiveShape = mock(Node.class);
-        Node testShape = mock(Node.class);
+		// Then
+		verify(canvasController, times(1)).redrawCanvas();
+		verify(previousNode, times(1)).setSelected(true);
+	}
 
-        doCallRealMethod().when(testShape).getNodeType();
+	@Test
+	void undoWhenNoPreviousNodeThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Node node = mock(Node.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		SelectCommand selectCommand = new SelectCommand(canvasController, null, node);
 
-        doCallRealMethod().when(testShape).setSelected(anyBoolean());
-        doCallRealMethod().when(testPreviousActiveShape).setSelected(anyBoolean());
-        doCallRealMethod().when(testShape).isSelected();
-        doCallRealMethod().when(testPreviousActiveShape).isSelected();
+		// When
+		selectCommand.undo();
 
-        SelectCommand test = new SelectCommand(testCanvasController,testPreviousActiveShape,testShape);
+		// Then
+		verify(canvasController, times(1)).redrawCanvas();
+	}
 
-        test.execute();
-        test.undo();
+	@Test
+	void redoWhenPreviousNodeExistsThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Node previousNode = mock(Node.class);
+		Node node = mock(Node.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		SelectCommand selectCommand = new SelectCommand(canvasController, previousNode, node);
 
-        assertFalse(testShape.isSelected());
-        assertTrue(testPreviousActiveShape.isSelected());
-    }
+		// When
+		selectCommand.redo();
 
-    @Test
-    void testRedoWithPreviousShape() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Node testPreviousActiveShape = mock(Node.class);
-        Node testShape = mock(Node.class);
+		// Then
+		verify(canvasController, times(1)).redrawCanvas();
+		assertEquals(false, previousNode.isSelected());
+	}
 
-        doCallRealMethod().when(testShape).getNodeType();
+	@Test
+	void redoWhenNoPreviousNodeThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Node node = mock(Node.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		SelectCommand selectCommand = new SelectCommand(canvasController, null, node);
 
-        doCallRealMethod().when(testShape).setSelected(anyBoolean());
-        doCallRealMethod().when(testPreviousActiveShape).setSelected(anyBoolean());
-        doCallRealMethod().when(testShape).isSelected();
-        doCallRealMethod().when(testPreviousActiveShape).isSelected();
+		// When
+		selectCommand.redo();
 
-        SelectCommand test = new SelectCommand(testCanvasController,testPreviousActiveShape,testShape);
+		// Then
+		verify(canvasController, times(1)).redrawCanvas();
+	}
 
-        test.execute();
-        test.undo();
-        test.redo();
+	@Test
+	void getDescriptionThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Node node = mock(Node.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		SelectCommand selectCommand = new SelectCommand(canvasController, null, node);
 
-        assertTrue(testShape.isSelected());
-        assertFalse(testPreviousActiveShape.isSelected());
-    }
+		String expectedDescription = "Selected RECTANGLE";
 
-    @Test
-    public void testCreateSelectCommandWithNullPreviousShape() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Node testShape = mock(Node.class);
+		// When
+		String description = selectCommand.getDescription();
 
-        doCallRealMethod().when(testShape).getNodeType();
-
-        SelectCommand test = new SelectCommand(testCanvasController,null,testShape);
-
-        assertNotNull(test);
-    }
-
-    @Test
-    void testExecuteWithNullPreviousShape() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Node testShape = mock(Node.class);
-
-        doCallRealMethod().when(testShape).getNodeType();
-        doCallRealMethod().when(testShape).setSelected(anyBoolean());
-        doCallRealMethod().when(testShape).isSelected();
-
-        SelectCommand test = new SelectCommand(testCanvasController,null,testShape);
-        test.execute();
-
-        assertTrue(testShape.isSelected());
-    }
-
-    @Test
-    void testUndoWithNullPreviousShape() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Node testShape = mock(Node.class);
-
-        doCallRealMethod().when(testShape).getNodeType();
-
-        doCallRealMethod().when(testShape).setSelected(anyBoolean());
-        doCallRealMethod().when(testShape).isSelected();
-
-        SelectCommand test = new SelectCommand(testCanvasController,null,testShape);
-        test.execute();
-        test.undo();
-
-        assertFalse(testShape.isSelected());
-    }
-
-    @Test
-    void testRedoWithNullPreviousShape() {
-        CanvasController testCanvasController = mock(CanvasController.class);
-        Node testShape = mock(Node.class);
-
-        doCallRealMethod().when(testShape).getNodeType();
-
-        doCallRealMethod().when(testShape).setSelected(anyBoolean());
-        doCallRealMethod().when(testShape).isSelected();
-
-        SelectCommand test = new SelectCommand(testCanvasController,null,testShape);
-
-        test.execute();
-        test.undo();
-        test.redo();
-
-        assertTrue(testShape.isSelected());
-    }
+		// Then
+		assertEquals(expectedDescription, description);
+	}
 }

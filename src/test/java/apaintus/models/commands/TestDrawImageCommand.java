@@ -9,55 +9,77 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestDrawImageCommand {
 	@Test
-	public void testCreateCommand() {
-		CanvasController testCanvasController = mock(CanvasController.class);
-		Image testImage = mock(Image.class);
-		DrawImageCommand test = new DrawImageCommand(testCanvasController, testImage);
-		assertNotNull(test);
+	void executeThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Image image = mock(Image.class);
+		DrawImageCommand drawImageCommand = new DrawImageCommand(canvasController, image);
+
+		// When
+		drawImageCommand.execute();
+
+		// Then
+		verify(canvasController, times(1)).drawImage(image);
 	}
 
 	@Test
-	void testExecute() {
-		CanvasController testCanvasController = mock(CanvasController.class);
-		Image testImage = mock(Image.class);
+	void undoWhenNullOldImageThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Image image = mock(Image.class);
+		DrawImageCommand drawImageCommand = new DrawImageCommand(canvasController, image);
 
-		doCallRealMethod().when(testCanvasController).getBaseImage();
-		doCallRealMethod().when(testCanvasController).setBaseImage(nullable(Image.class));
-		DrawImageCommand test = new DrawImageCommand(testCanvasController, testImage);
+		// When
+		drawImageCommand.execute();
+		drawImageCommand.undo();
 
-		test.execute();
-
-		assertNotNull(testCanvasController.getBaseImage());
+		// Then
+		verify(canvasController, times(1)).setBaseImage(null);
 	}
 
 	@Test
-	void testUndo() {
-		CanvasController testCanvasController = mock(CanvasController.class);
-		Image testImage = mock(Image.class);
+	void undoWhenExistingOldImageThenSuccessful() {
+		// Given
+		Image image = mock(Image.class);
+		Image oldImage = mock(Image.class);
+		CanvasController canvasController = mock(CanvasController.class);
+		when(canvasController.getBaseImage()).thenReturn(oldImage);
+		DrawImageCommand drawImageCommand = new DrawImageCommand(canvasController, image);
 
-		doCallRealMethod().when(testCanvasController).getBaseImage();
-		doCallRealMethod().when(testCanvasController).setBaseImage(nullable(Image.class));
-		DrawImageCommand test = new DrawImageCommand(testCanvasController, testImage);
+		// When
+		drawImageCommand.undo();
 
-		test.execute();
-		test.undo();
-
-		assertNull(testCanvasController.getBaseImage());
+		// Then
+		verify(canvasController, times(1)).setBaseImage(oldImage);
 	}
 
 	@Test
-	void testRedo() {
-		CanvasController testCanvasController = mock(CanvasController.class);
-		Image testImage = mock(Image.class);
+	void redoThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Image image = mock(Image.class);
+		DrawImageCommand drawImageCommand = new DrawImageCommand(canvasController, image);
 
-		doCallRealMethod().when(testCanvasController).getBaseImage();
-		doCallRealMethod().when(testCanvasController).setBaseImage(nullable(Image.class));
-		DrawImageCommand test = new DrawImageCommand(testCanvasController, testImage);
+		// When
+		drawImageCommand.redo();
 
-		test.execute();
-		test.undo();
-		test.redo();
+		// Then
+		verify(canvasController, times(1)).setBaseImage(image);
+	}
 
-		assertEquals(testCanvasController.getBaseImage(), testImage);
+	@Test
+	void getDescription() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		Image image = mock(Image.class);
+		DrawImageCommand drawImageCommand = new DrawImageCommand(canvasController, image);
+
+		String expectedDescription = "Draw Image";
+
+		// When
+		String description = drawImageCommand.getDescription();
+
+		// Then
+		assertEquals(expectedDescription, description);
 	}
 }
