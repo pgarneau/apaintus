@@ -1,77 +1,107 @@
 package apaintus.controllers;
 
 import apaintus.models.commands.Invoker;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Controller {
-    @FXML
-    private CanvasController canvasController;
-    @FXML
-    private MenuController menuController;
-    @FXML
-    private ToolBarController toolBarController;
-    @FXML
-    private AttributeController attributeController;
-    @FXML
-    private FigureLogController figureLogController;
-    @FXML
-    private ActionLogController actionLogController;
-    @FXML
-    private AnchorPane mainPane;
+	@FXML
+	private CanvasController canvasController;
+	@FXML
+	private MenuController menuController;
+	@FXML
+	private ToolBarController toolBarController;
+	@FXML
+	private AttributeController attributeController;
+	@FXML
+	private FigureLogController figureLogController;
+	@FXML
+	private ActionLogController actionLogController;
+	@FXML
+	private ZoomController zoomController;
+
+	@FXML
+	private AnchorPane mainPane;
+	@FXML
+	private ScrollPane scrollPane;
 
 	private Stage primaryStage;
 	private Invoker invoker = new Invoker();
 
-    public void initialize() {
-        canvasController.injectParentController(this);
-        menuController.injectParentController(this);
-        toolBarController.injectParentController(this);
-        attributeController.injectParentController(this);
-        figureLogController.injectParentController(this);
-        actionLogController.injectParentController(this);
+	public void initialize() {
+		canvasController.injectParentController(this);
+		menuController.injectParentController(this);
+		toolBarController.injectParentController(this);
+		attributeController.injectParentController(this);
+		figureLogController.injectParentController(this);
+		actionLogController.injectParentController(this);
 
-        invoker.setActionLogController(actionLogController);
+		zoomController.injectParentController(this);
 
-        menuController.bindTo(mainPane);
-        toolBarController.bindTo(mainPane);
-    }
+		invoker.setActionLogController(actionLogController);
 
-    public void injectPrimaryStage(Stage stage) {
-        primaryStage = stage;
-    }
+		menuController.bindTo(mainPane);
+		toolBarController.bindTo(mainPane);
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
+		addCtrlScrollEventHandler();
+	}
 
-    public CanvasController getCanvasController() {
-        return canvasController;
-    }
+	private void addCtrlScrollEventHandler() {
+		scrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				double zoomFactor = Math.round(zoomController.getZoomFactor());
+				if (event.isControlDown() && event.getDeltaY() > 0 && zoomFactor < 150) {
+					zoomFactor = zoomFactor + 10;
+				} else if (event.isControlDown() && event.getDeltaY() < 0 && zoomFactor > 50) {
+					zoomFactor = zoomFactor - 10;
+				}
+				zoomController.setZoomFactor(zoomFactor);
+			}
+		});
+	}
 
-    public MenuController getMenuController() {
-        return menuController;
-    }
+	public void injectPrimaryStage(Stage stage) {
+		primaryStage = stage;
+	}
 
-    public ToolBarController getToolBarController() {
-        return toolBarController;
-    }
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
 
-    public AttributeController getAttributeController() {
-        return attributeController;
-    }
+	public CanvasController getCanvasController() {
+		return canvasController;
+	}
 
-    public Invoker getInvoker() {
-        return invoker;
-    }
+	public MenuController getMenuController() {
+		return menuController;
+	}
 
-    public FigureLogController getFigureLogController() {
-        return figureLogController;
-    }
+	public ToolBarController getToolBarController() {
+		return toolBarController;
+	}
 
-    public ActionLogController getActionLogController() {
-        return actionLogController;
-    }
+	public AttributeController getAttributeController() {
+		return attributeController;
+	}
+
+	public Invoker getInvoker() {
+		return invoker;
+	}
+
+	public FigureLogController getFigureLogController() {
+		return figureLogController;
+	}
+
+	public ActionLogController getActionLogController() {
+		return actionLogController;
+	}
+
+	public ZoomController getZoomController() {
+		return zoomController;
+	}
 }
-

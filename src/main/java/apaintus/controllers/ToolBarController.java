@@ -200,6 +200,10 @@ public class ToolBarController implements ChildController<Controller> {
     public void setFillColor(String color) {
         fillColor.setValue(Color.valueOf(color));
     }
+    
+    public double getGridGradation() {
+    	return gridGradation.getValue();
+    }
 
     private void setGridGradation(String gradation) {
         gridGradation.setValue(Double.parseDouble(gradation));

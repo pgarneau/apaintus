@@ -152,7 +152,7 @@ public class Ruler {
     public void setGradation(Double newValue) {
         gradation = newValue;
     }
-
+    
     public void redraw() {
         if (isActive)
             draw();
