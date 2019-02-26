@@ -18,6 +18,7 @@ public class Ruler {
     private double gradation;
     private boolean isActive = false;
 
+
     public Ruler(Pane x, Pane y) {
         this.x = x;
         this.y = y;
@@ -105,54 +106,58 @@ public class Ruler {
     public void draw() {
         clear();
         AnchorPane root = (AnchorPane) x.getParent();
-
-        for (int i = 35; i < root.getWidth(); i += gradation) {
+        int count = 0;
+        for (int i = 0; i < root.getWidth(); i += gradation) {
             Line line = new Line();
-            line.setStartX(i);
-            line.setEndX(i);
-            double length = i % 35 == 0 ? 12.5 : 20;
+            line.setStartX(i + 35);
+            line.setEndX(i + 35);
+            double length = (count % 10) == 0 ? 12.5 : 20;
             line.setStartY(length);
             line.setEndY(24);
             line.setStroke(Color.BLACK);
             x.getChildren().add(line);
 
-            if (i % 35 == 0) {
-                Text number = new Text(Integer.toString(i - 35));
-                number.setStyle("-fx-text-color: black");
+            if (count == 0) {
+                count = 10;
+                Text number = new Text(Integer.toString(i/(int)gradation * 10));
+                number.setStyle("-fx-text-color: black; -fx-font-size:10");
                 TextFlow textFlow = new TextFlow();
-                textFlow.setLayoutX(i + 5);
+                textFlow.setLayoutX(i + 40);
                 textFlow.setLayoutY(0);
                 textFlow.getChildren().add(number);
                 x.getChildren().add(textFlow);
             }
+            count--;
         }
-
-        for (int i = 35; i < root.getHeight(); i += gradation) {
+        count = 0;
+        for (int i = 0; i < root.getHeight(); i += gradation) {
             Line line = new Line();
-            line.setStartY(i);
-            line.setEndY(i);
-            double length = i % 35 == 0 ? 12.5 : 20;
+            line.setStartY(i + 35);
+            line.setEndY(i + 35);
+            double length = (count % 10)== 0 ? 12.5 : 20;
             line.setStartX(length);
             line.setEndX(24);
             line.setStroke(Color.BLACK);
             y.getChildren().add(line);
 
-            if (i % 35 == 0) {
-                Text number = new Text(Integer.toString(i - 35));
-                number.setStyle("-fx-text-color: black");
+            if (count == 0) {
+                count = 10;
+                Text number = new Text(Integer.toString(i/(int)gradation * 10));
+                number.setStyle("-fx-text-color: black; -fx-font-size:10");
                 TextFlow textFlow = new TextFlow();
-                textFlow.setLayoutY(i + 5);
+                textFlow.setLayoutY(i + 40);
                 textFlow.setLayoutX(0);
                 textFlow.getChildren().add(number);
                 y.getChildren().add(textFlow);
             }
+            count--;
         }
     }
 
-    public void setGradation(Double newValue) {
+    public void setGradation(double newValue) {
         gradation = newValue;
     }
-    
+
     public void redraw() {
         if (isActive)
             draw();
