@@ -17,11 +17,13 @@ public class Ruler {
     private Line yLine = new Line();
     private double gradation;
     private boolean isActive = false;
+    private double scale;
 
 
     public Ruler(Pane x, Pane y) {
         this.x = x;
         this.y = y;
+        this.scale = 1;
         isActive = false;
 
         mouseX = new Pane();
@@ -107,7 +109,7 @@ public class Ruler {
         clear();
         AnchorPane root = (AnchorPane) x.getParent();
         int count = 0;
-        for (int i = 0; i < root.getWidth(); i += gradation) {
+        for (int i = 0; i < root.getWidth(); i += gradation * scale) {
             Line line = new Line();
             line.setStartX(i + 35);
             line.setEndX(i + 35);
@@ -119,7 +121,7 @@ public class Ruler {
 
             if (count == 0) {
                 count = 10;
-                Text number = new Text(Integer.toString(i/(int)gradation * 10));
+                Text number = new Text(Integer.toString((i/(int)(gradation*scale) * 10 * (int)gradation/10)));
                 number.setStyle("-fx-text-color: black; -fx-font-size:10");
                 TextFlow textFlow = new TextFlow();
                 textFlow.setLayoutX(i + 40);
@@ -130,7 +132,7 @@ public class Ruler {
             count--;
         }
         count = 0;
-        for (int i = 0; i < root.getHeight(); i += gradation) {
+        for (int i = 0; i < root.getHeight(); i += gradation * scale) {
             Line line = new Line();
             line.setStartY(i + 35);
             line.setEndY(i + 35);
@@ -142,7 +144,7 @@ public class Ruler {
 
             if (count == 0) {
                 count = 10;
-                Text number = new Text(Integer.toString(i/(int)gradation * 10));
+                Text number = new Text(Integer.toString((i/(int)(gradation*scale) * 10 * (int)gradation/10)));
                 number.setStyle("-fx-text-color: black; -fx-font-size:10");
                 TextFlow textFlow = new TextFlow();
                 textFlow.setLayoutY(i + 40);
@@ -161,5 +163,9 @@ public class Ruler {
     public void redraw() {
         if (isActive)
             draw();
+    }
+
+    public void setScale(double scale) {
+        this.scale = scale;
     }
 }
