@@ -26,7 +26,6 @@ public class FileLogger extends Logger {
         try {
             Files.write(eventsFile, msg.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -37,7 +36,6 @@ public class FileLogger extends Logger {
         try {
             Files.createDirectories(eventsFile.getParent());
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

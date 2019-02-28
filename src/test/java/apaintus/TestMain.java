@@ -29,7 +29,7 @@ public class TestMain {
                 });
             }
         });
-        thread.run();
+        thread.start();
         Thread.sleep(1000);
     }
 }

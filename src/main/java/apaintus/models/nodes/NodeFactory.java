@@ -10,7 +10,7 @@ import apaintus.models.toolbar.ActiveTool;
 import java.util.List;
 
 public class NodeFactory {
-	public static double[] dimensions = new double[]{0, 0};
+	private static double[] dimensions = new double[]{0, 0};
 	private static Point coordinates;
 
 	private NodeFactory() {

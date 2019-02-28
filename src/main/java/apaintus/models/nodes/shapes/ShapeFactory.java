@@ -7,7 +7,7 @@ import apaintus.models.nodes.util.FactoryUtil;
 import apaintus.models.toolbar.ActiveTool;
 
 public class ShapeFactory {
-	public static double[] dimensions = new double[]{0, 0};
+	private static double[] dimensions = new double[]{0, 0};
 	private static Point coordinates;
 	private static double orientation;
 
