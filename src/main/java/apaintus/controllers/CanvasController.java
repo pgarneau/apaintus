@@ -328,6 +328,10 @@ public class CanvasController implements ChildController<Controller> {
 
     public void setScale(double scale) {
         canvasHolder.getTransforms().setAll(new Scale(scale, scale));
+		if(scale > 1)
+			canvasHolder.setPrefSize(800*scale, 600*scale);
+		else
+			canvasHolder.setPrefSize(800, 600);
         ruler.setScale(scale);
         ruler.redraw();
     }
