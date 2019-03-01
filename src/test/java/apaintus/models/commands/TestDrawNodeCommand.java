@@ -3,86 +3,76 @@ package apaintus.models.commands;
 import apaintus.controllers.CanvasController;
 import apaintus.models.nodes.Node;
 import apaintus.models.nodes.NodeType;
-import org.junit.Test;
+import apaintus.models.nodes.shapes.Rectangle;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
-class TestDrawNodeCommand {
+public class TestDrawNodeCommand {
 	@Test
-	void bonjour() {
-		assertEquals(true, true);
+	void executeThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		SelectCommand selectCommand = mock(SelectCommand.class);
+		Node node = mock(Rectangle.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		DrawNodeCommand drawNodeCommand = new DrawNodeCommand(canvasController, node, selectCommand);
+
+		// When
+		drawNodeCommand.execute();
+
+		// Then
+		verify(canvasController, times(1)).redrawCanvas();
 	}
-//	void testCreateDrawShapeCommand() {
-//		CanvasController testCanvasController = mock(CanvasController.class);
-//		Node testShape = mock(Node.class);
-//		SelectCommand testSelectCommand = mock(SelectCommand.class);
-//
-//		doCallRealMethod().when(testShape).getNodeType();
-//
-//		DrawNodeCommand test = new DrawNodeCommand(testCanvasController, testShape, testSelectCommand);
-//
-//		assertNotNull(test);
-//	}
-//
-//	@Test
-//	void testExecute() {
-//		CanvasController testCanvasController = mock(CanvasController.class);
-//		Node testShape = mock(Node.class);
-//		SelectCommand testSelectCommand = mock(SelectCommand.class);
-//
-//		doCallRealMethod().when(testCanvasController).saveDrawLayer();
-//
-//		when(testShape.getNodeType()).thenReturn(NodeType.RECTANGLE);
-//
-//		doAnswer((i) -> {
-//			return null;
-//		}).when(testSelectCommand).execute();
-//
-//		DrawNodeCommand test = new DrawNodeCommand(testCanvasController, testShape, testSelectCommand);
-//		test.execute();
-//
-//		//Need to check later what assertion we do want to do.
-//		//assertFalse(testCanvasController.getDrawnShapes().isEmpty());
-//	}
-//
-//	@Test
-//	void testUndo() {
-//		CanvasController testCanvasController = mock(CanvasController.class);
-//		Node testShape = mock(Node.class);
-//		SelectCommand testSelectCommand = mock(SelectCommand.class);
-//
-//		doCallRealMethod().when(testCanvasController).saveDrawLayer();
-//
-//		when(testShape.getNodeType()).thenReturn(NodeType.RECTANGLE);
-//
-//		doAnswer((i) -> {
-//			return null;
-//		}).when(testSelectCommand).execute();
-//
-//		DrawNodeCommand test = new DrawNodeCommand(testCanvasController, testShape, testSelectCommand);
-//		test.execute();
-//		test.undo();
-//	}
-//
-//	@Test
-//	void testRedo() {
-//		CanvasController testCanvasController = mock(CanvasController.class);
-//		Node testShape = mock(Node.class);
-//		SelectCommand testSelectCommand = mock(SelectCommand.class);
-//
-//		doCallRealMethod().when(testCanvasController).saveDrawLayer();
-//
-//		when(testShape.getNodeType()).thenReturn(NodeType.RECTANGLE);
-//
-//		doAnswer((i) -> {
-//			return null;
-//		}).when(testSelectCommand).execute();
-//
-//		DrawNodeCommand test = new DrawNodeCommand(testCanvasController, testShape, testSelectCommand);
-//		test.execute();
-//		test.undo();
-//		test.redo();
-//	}
+
+	@Test
+	void undoThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		SelectCommand selectCommand = mock(SelectCommand.class);
+		Node node = mock(Rectangle.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		DrawNodeCommand drawNodeCommand = new DrawNodeCommand(canvasController, node, selectCommand);
+
+		// When
+		drawNodeCommand.undo();
+
+		// Then
+		verify(canvasController, times(1)).redrawCanvas();
+	}
+
+	@Test
+	void redoThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		SelectCommand selectCommand = mock(SelectCommand.class);
+		Node node = mock(Rectangle.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		DrawNodeCommand drawNodeCommand = new DrawNodeCommand(canvasController, node, selectCommand);
+
+		// When
+		drawNodeCommand.redo();
+
+		// Then
+		verify(canvasController, times(1)).redrawCanvas();
+	}
+
+	@Test
+	void getDescriptionThenSuccessful() {
+		// Given
+		CanvasController canvasController = mock(CanvasController.class);
+		SelectCommand selectCommand = mock(SelectCommand.class);
+		Node node = mock(Rectangle.class);
+		when(node.getNodeType()).thenReturn(NodeType.RECTANGLE);
+		DrawNodeCommand drawNodeCommand = new DrawNodeCommand(canvasController, node, selectCommand);
+
+		String expectedDescription = "Draw " + NodeType.RECTANGLE.toString();
+
+		// When
+		String description = drawNodeCommand.getDescription();
+
+		// Then
+		assertEquals(expectedDescription, description);
+	}
 }

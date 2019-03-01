@@ -52,7 +52,7 @@ public class UpdateCommand<T> implements Command {
         switch (attribute) {
             case COORDINATE_X:
                 node.setCoordinates(new Point(Double.valueOf(value.toString()), node.getCoordinates().getY()));
-                break;
+            break;
 
             case COORDINATE_Y:
                 node.setCoordinates(new Point(node.getCoordinates().getX(), Double.valueOf(value.toString())));
