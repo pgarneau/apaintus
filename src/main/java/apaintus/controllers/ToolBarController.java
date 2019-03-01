@@ -4,6 +4,7 @@ import apaintus.models.Alignment;
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Attribute;
 import apaintus.models.Preference;
+import apaintus.models.commands.FlipCommand;
 import apaintus.models.nodes.Node;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
@@ -136,13 +137,13 @@ public class ToolBarController implements ChildController<Controller> {
 
         flipVertical.setOnMouseClicked( event -> {
             if(canvasController.getActiveNode() != null){
-                canvasController.flipVertical();
+                canvasController.flip(FlipCommand.Flip.VERTICAL);
             }
         });
 
         flipHorizontal.setOnMouseClicked( event -> {
             if(canvasController.getActiveNode() != null){
-                canvasController.flipHorizontal();
+                canvasController.flip(FlipCommand.Flip.HORIZONTAL);
             }
         });
 

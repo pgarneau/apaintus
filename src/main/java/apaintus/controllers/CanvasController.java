@@ -324,27 +324,19 @@ public class CanvasController implements ChildController<Controller> {
         ruler.redraw();
     }
 
-    public void flipVertical() {
-        Node node = getActiveNode();
-        invoker.execute(new FlipCommand(this,node, FlipCommand.Params.VERTICAL));
-        redrawCanvas();
-    }
-
     public void setScale(double scale) {
         canvasHolder.getTransforms().setAll(new Scale(scale, scale));
-		if(scale > 1)
-			canvasHolder.setPrefSize(800*scale, 600*scale);
-		else
-			canvasHolder.setPrefSize(800, 600);
+        if (scale > 1)
+            canvasHolder.setPrefSize(800 * scale, 600 * scale);
+        else
+            canvasHolder.setPrefSize(800, 600);
         ruler.setScale(scale);
         ruler.redraw();
     }
-	
-    public void flipHorizontal() {
-        Node node = getActiveNode();
-        invoker.execute(new FlipCommand(this,node, FlipCommand.Params.HORIZONTAL));
-        redrawCanvas();
 
+    public void flip(FlipCommand.Flip flip) {
+        invoker.execute(new FlipCommand(this, activeNode, flip));
+        redrawCanvas();
     }
 
     public class ColorChangeListener implements ChangeListener<Color> {

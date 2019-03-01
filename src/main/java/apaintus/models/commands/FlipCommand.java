@@ -1,28 +1,27 @@
 package apaintus.models.commands;
 
 import apaintus.controllers.CanvasController;
-import apaintus.models.Point;
 import apaintus.models.nodes.Node;
 
 public class FlipCommand implements Command {
 
-    private double newValue,oldValue;
+    private double newValue, oldValue;
     private Node node;
     private String description;
     private CanvasController canvasController;
-    private Params param;
+    private Flip flip;
 
-    public FlipCommand(CanvasController canvasController, Node node, Params param) {
+    public FlipCommand(CanvasController canvasController, Node node, Flip flip) {
         this.node = node;
-        this.param = param;
+        this.flip = flip;
         this.canvasController = canvasController;
-        description = "Flip " + param.toString() + " " + node.getNodeType().toString();
+        description = "Flip " + flip.toString() + " " + node.getNodeType().toString();
     }
 
     @Override
     public void execute() {
         oldValue = node.getOrientation();
-        switch (param){
+        switch (flip) {
             case VERTICAL:
                 newValue = 360 - oldValue;
                 node.setOrientation(newValue);
@@ -50,7 +49,7 @@ public class FlipCommand implements Command {
         return description;
     }
 
-    public enum Params {
+    public enum Flip {
         VERTICAL,
         HORIZONTAL
     }
