@@ -4,6 +4,7 @@ import apaintus.models.Alignment;
 import apaintus.models.ApplicationPreferences;
 import apaintus.models.Attribute;
 import apaintus.models.Preference;
+import apaintus.models.commands.FlipCommand;
 import apaintus.models.nodes.Node;
 import apaintus.models.toolbar.ActiveTool;
 import apaintus.services.ToolBarService;
@@ -49,6 +50,10 @@ public class ToolBarController implements ChildController<Controller> {
     private Button alignRight;
     @FXML
     private Button alignBottom;
+    @FXML
+    private Button flipVertical;
+    @FXML
+    private Button flipHorizontal;
 
     private CanvasController canvasController;
 
@@ -130,6 +135,17 @@ public class ToolBarController implements ChildController<Controller> {
         fillColor.setOnAction(event ->
                 applicationPreferences.setPreference(Preference.FILL_COLOR, fillColor.getValue().toString()));
 
+        flipVertical.setOnMouseClicked( event -> {
+            if(canvasController.getActiveNode() != null){
+                canvasController.flip(FlipCommand.Flip.VERTICAL);
+            }
+        });
+
+        flipHorizontal.setOnMouseClicked( event -> {
+            if(canvasController.getActiveNode() != null){
+                canvasController.flip(FlipCommand.Flip.HORIZONTAL);
+            }
+        });
 
         // DEFAULT SETTINGS
         select.setSelected(true);

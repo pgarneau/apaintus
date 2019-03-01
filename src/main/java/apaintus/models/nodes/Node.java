@@ -51,8 +51,8 @@ public abstract class Node {
 
 	public void computeCenter() {
 		double radianOrientation = Math.toRadians(orientation);
-		double tempWidth = width / 2;
-		double tempHeight = height / 2;
+		double tempWidth =  Math.abs(width / 2);
+		double tempHeight = Math.abs(height / 2);
 
 		center = new Point(
 				coordinates.getX() + (tempWidth * Math.cos(radianOrientation) + tempHeight * Math.sin(radianOrientation)),
@@ -62,8 +62,8 @@ public abstract class Node {
 
 	public void computeCoordinates() {
 		double radianOrientation = Math.toRadians(orientation);
-		double tempWidth = -width / 2;
-		double tempHeight = -height / 2;
+		double tempWidth = - Math.abs(width / 2);
+		double tempHeight = -Math.abs(height / 2);
 
 		coordinates = new Point(
 				center.getX() + (tempWidth * Math.cos(radianOrientation) + tempHeight * Math.sin(radianOrientation)),

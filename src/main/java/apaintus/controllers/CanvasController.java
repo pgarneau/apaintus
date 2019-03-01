@@ -23,9 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class CanvasController implements ChildController<Controller> {
     @FXML
@@ -328,12 +326,17 @@ public class CanvasController implements ChildController<Controller> {
 
     public void setScale(double scale) {
         canvasHolder.getTransforms().setAll(new Scale(scale, scale));
-		if(scale > 1)
-			canvasHolder.setPrefSize(800*scale, 600*scale);
-		else
-			canvasHolder.setPrefSize(800, 600);
+        if (scale > 1)
+            canvasHolder.setPrefSize(800 * scale, 600 * scale);
+        else
+            canvasHolder.setPrefSize(800, 600);
         ruler.setScale(scale);
         ruler.redraw();
+    }
+
+    public void flip(FlipCommand.Flip flip) {
+        invoker.execute(new FlipCommand(this, activeNode, flip));
+        redrawCanvas();
     }
 
     public class ColorChangeListener implements ChangeListener<Color> {
